@@ -1,0 +1,58 @@
+@page "/Leads"
+@using Domain.Entities
+@using Application.Services.Leads
+
+@inject ILeadService LeadService
+<PageTitle>Leads</PageTitle>
+<h1>Leads</h1>
+
+<div class="card mt-3"> 
+     <div class="card-header d-flex justify-content-between align-items-center">
+        <a href="/Leads/create" class="btn btn-secondary">Add Lead</a>
+    </div>
+    </div>
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>CompanyName</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Source</th>
+                <th>Status</th>
+                <th>Date</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lead in _leads)
+            {
+                <tr>
+                    <td>@lead.Id</td>
+                    <td>@lead.FirstName</td>
+                    <td>@lead.LastName</td>
+                    <td>@lead.CompanyName</td>
+                    <td>@lead.Email</td>
+                    <td>@lead.Phone</td>
+                    <td>@lead.Source</td>
+                    <td>@lead.Status</td>
+                    <td>@lead.CreatedAt</td>
+                    <td><a href="/Leads/@lead.Id" class="btn btn-primary">Details</a></td>
+                    <td><a href="/Leads/edit/@lead.Id" class="btn btn-primary">Edit</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @code {
+    // lead related logic will go here
+
+   List<Lead> _leads = new List<Lead>();
+    protected override async Task OnInitializedAsync()
+    {
+        _leads = LeadService.GetAllLeads();
+    }
+
+}

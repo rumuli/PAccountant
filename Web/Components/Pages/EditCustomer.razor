@@ -1,0 +1,158 @@
+@page "/Customers/Edit/{Id:int}"
+@using Application.Services.Customers
+@rendermode InteractiveServer
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+@using Application.DTO 
+@using System.ComponentModel.DataAnnotations
+
+<PageTitle>Edit Customer</PageTitle>
+
+<!-- MudContainer: Responsive container with max-width constraint -->
+<MudContainer MaxWidth="MaxWidth.Small" Class="py-8">
+    
+    <!-- Header Section with Title and Back Button -->
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <MudText Typo="Typo.h4" Class="font-weight-bold">Edit Customer</MudText>
+        <MudButton 
+            Variant="Variant.Text" 
+            Color="Color.Secondary" 
+            StartIcon="@Icons.Material.Filled.ArrowBack"
+            Href="/Customers">
+            Back to List
+        </MudButton>
+    </div>
+
+    <!-- MudCard: Main form container with elevation shadow -->
+    <MudCard Class="elevation-1">
+        <MudCardContent>
+            
+            <!-- EditForm: Blazor's form validation framework -->
+            @if (Model != null)
+            {
+            <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+                <!-- DataAnnotationsValidator: Enables server-side validation based on DTO attributes -->
+                <DataAnnotationsValidator />
+                
+                
+                <!-- Name Field -->
+                <MudTextField 
+                    T="string"
+                    Label="Customer Name"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.Name"
+                    Placeholder="Enter customer name"
+                    HelperText="Full name of the customer"
+                    For="@(() => Model.Name)"
+                    Class="mb-4" />
+                <ValidationMessage For="@(() => Model.Name)" />
+
+                <!-- Phone Field -->
+                <MudTextField 
+                    T="string"
+                    Label="Phone Number"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.Phone"
+                    Placeholder="Enter phone number"
+                    HelperText="Customer contact number"
+                    For="@(() => Model.Phone)"
+                    Class="mb-4" />
+                <ValidationMessage For="@(() => Model.Phone)" />
+
+                <!-- Address Field -->
+                <MudTextField 
+                    T="string"
+                    Label="Street Address"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.Address"
+                    Placeholder="123 Main Street"
+                    HelperText="Full street address"
+                    For="@(() => Model.Address)"
+                    Class="mb-4" />
+                <ValidationMessage For="@(() => Model.Address)" />
+
+                <!-- City Field -->
+                <MudTextField 
+                    T="string"
+                    Label="City"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.City"
+                    Placeholder="New York"
+                    HelperText="City name"
+                    For="@(() => Model.City)"
+                    Class="mb-6" />
+                <ValidationMessage For="@(() => Model.City)" />
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-3 justify-content-center mt-6">
+                    <!-- Submit Button: Saves customer changes on valid form submission -->
+                    <MudButton 
+                        Variant="Variant.Filled" 
+                        Color="Color.Primary" 
+                        Size="Size.Medium"
+                        StartIcon="@Icons.Material.Filled.Save"
+                        ButtonType="ButtonType.Submit">
+                        Save Changes
+                    </MudButton>
+                    
+                    <!-- Cancel Button: Returns to customer list without saving -->
+                    <MudButton 
+                        Variant="Variant.Outlined" 
+                        Color="Color.Default" 
+                        Size="Size.Medium"
+                        StartIcon="@Icons.Material.Filled.Cancel"
+                        Href="/Customers">
+                        Cancel
+                    </MudButton>
+                </div>
+                
+            </EditForm>
+            }
+            else
+            {
+                <MudText Typo="Typo.body1" Color="Color.Error">Customer not found.</MudText>
+            }
+
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private UpdateCustomerDTO? Model { get; set; } = new();
+
+    private bool loaded;
+    private bool ShowErrors { get; set; } = false;
+
+    //retrieve the customer
+    protected override void OnParametersSet()
+    {
+        var customer = CustomerService.GetCustomerById(Id);
+        if (customer != null)
+        {
+            Model = new UpdateCustomerDTO
+            {
+                Name = customer.Name ?? "",
+                Phone = customer.Phone ?? "",
+                Address = customer.Address ?? "",
+                City = customer.City ?? ""
+            };
+            loaded = true;
+        }
+    }
+
+    /// <summary>
+    /// Executes after form validation passes
+    /// Updates customer and navigates back to list
+    /// </summary>
+    private void OnValidSubmit()
+    { 
+        if (Model != null) 
+        {
+            CustomerService.UpdateCustomer(Id, Model);
+            NavigationManager.NavigateTo("/Customers");
+        }
+    }
+}

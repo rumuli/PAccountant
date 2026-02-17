@@ -1,0 +1,96 @@
+@page "/SupportTickets/{Id:int}"
+@using Domain.Entities
+@using Application.Services.SupportTickets
+
+@inject ISupportTicketService SupportTicketService 
+@inject NavigationManager NavigationManager
+
+<PageTitle>Support Ticket Details</PageTitle>
+
+<!-- MudContainer: Responsive container for the entire page -->
+<MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
+    
+    <!-- Header Section with Title and Back Button -->
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <MudText Typo="Typo.h4" Class="font-weight-bold">Support Ticket Details</MudText>
+        <MudButton 
+            Variant="Variant.Text" 
+            Color="Color.Secondary" 
+            StartIcon="@Icons.Material.Filled.ArrowBack"
+            Href="/SupportTickets">
+            Back to List
+        </MudButton>
+    </div>
+
+    @if (supportTicket != null)
+    {
+        <!-- MudCard: Main details container -->
+        <MudCard Class="elevation-1">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6" Class="font-weight-bold">
+                    Ticket #@supportTicket.Id - @supportTicket.Subject
+                </MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <!-- Details Grid -->
+                <MudGrid Spacing="2" Class="mb-4">
+                    
+                    <!-- ID Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Ticket ID</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@supportTicket.Id</MudText>
+                    </MudItem>
+
+                    <!-- Customer ID Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Customer ID</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@supportTicket.CustomerId</MudText>
+                    </MudItem>
+
+                    <!-- Subject Field -->
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Subject</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@supportTicket.Subject</MudText>
+                    </MudItem>
+
+                    <!-- Description Field -->
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Description</MudText>
+                        <MudText Typo="Typo.body2" Style="white-space: pre-wrap; line-height: 1.6;">@supportTicket.Description</MudText>
+                    </MudItem>
+
+                    <!-- Created At Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Created At</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@supportTicket.CreatedAt.ToString("MM/dd/yyyy HH:mm")</MudText>
+                    </MudItem>
+
+                    <!-- Status Field -->
+                
+
+                </MudGrid>
+            </MudCardContent>
+
+        </MudCard>
+    }
+    else
+    {
+        <!-- Alert for when ticket is not found -->
+        <MudAlert Severity="Severity.Error" Variant="Variant.Filled">
+            Support ticket not found.
+        </MudAlert>
+    }
+</MudContainer>
+
+@code{
+
+    [Parameter]
+    public int Id { get; set; }
+    
+    private SupportTicket? supportTicket;
+    
+    protected override void OnInitialized()
+    {
+        supportTicket = SupportTicketService.GetSupportTicketById(Id);
+    }
+}

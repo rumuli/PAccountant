@@ -1,0 +1,177 @@
+@page "/RegisterUser"
+@layout EmptyLayout
+@using Application.DTO
+@rendermode InteractiveServer
+@using Application.Interfaces
+@using Application.Interfaces.Users
+@using Application.Services.Users
+@using System.ComponentModel.DataAnnotations
+@inject IIdentityService IdentityService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Register</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-flex justify-center align-center" Style="min-height:100vh;">
+    <MudCard Elevation="6" Class="pa-8" Style="width:100%; max-width:450px;">
+        <!-- Header Section -->
+        <MudCardHeader>
+            <div class="d-flex flex-column align-center w-100">
+                <MudAvatar Icon="@Icons.Material.Filled.PersonAdd" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h5" Align="Align.Center" Class="font-weight-bold">Create Account</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary" Align="Align.Center">Join us today and get started</MudText>
+            </div>
+        </MudCardHeader>
+
+        <MudCardContent>
+            <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <!-- Error Alert -->
+                @if (!string.IsNullOrEmpty(ErrorMessage))
+                {
+                    <MudAlert Severity="Severity.Error" Class="mb-4" Icon="@Icons.Material.Filled.Error">
+                        @ErrorMessage
+                    </MudAlert>
+                }
+
+                <div class="d-flex flex-column gap-4">
+                    <!-- Name Row -->
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string"
+                                          @bind-Value="Model.FirstName"
+                                          Label="First Name"
+                                          Placeholder="John"
+                                          Variant="Variant.Outlined"
+                                          Adornment="Adornment.Start"
+                                          AdornmentIcon="@Icons.Material.Filled.Person"
+                                          FullWidth="true"
+                                          Required="true" />
+                            <ValidationMessage For="@(() => Model.FirstName)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="6">
+                            <MudTextField T="string"
+                                          @bind-Value="Model.LastName"
+                                          Label="Last Name"
+                                          Placeholder="Doe"
+                                          Variant="Variant.Outlined"
+                                          Adornment="Adornment.Start"
+                                          AdornmentIcon="@Icons.Material.Filled.Person"
+                                          FullWidth="true"
+                                          Required="true" />
+                            <ValidationMessage For="@(() => Model.LastName)" />
+                        </MudItem>
+                    </MudGrid>
+
+                    <!-- Email Field -->
+                    <MudTextField T="string"
+                                  @bind-Value="Model.Email"
+                                  Label="Email Address"
+                                  InputType="InputType.Email"
+                                  Placeholder="john.doe@example.com"
+                                  Variant="Variant.Outlined"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Email"
+                                  FullWidth="true"
+                                  Required="true" />
+                    <ValidationMessage For="@(() => Model.Email)" />
+
+                    <!-- Phone Field -->
+                    <MudTextField T="string"
+                                  @bind-Value="Model.PhoneNumber"
+                                  Label="Phone Number"
+                                  Placeholder="+1 (555) 000-0000"
+                                  Variant="Variant.Outlined"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Phone"
+                                  FullWidth="true" />
+                    <ValidationMessage For="@(() => Model.PhoneNumber)" />
+
+                    
+
+                    <!-- Password Field -->
+                    <MudTextField T="string"
+                                  @bind-Value="Model.Password"
+                                  Label="Password"
+                                  Placeholder="Enter a strong password"
+                                  Variant="Variant.Outlined"
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@(_showPassword ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                                  OnAdornmentClick="TogglePasswordVisibility"
+                                  InputType="@(_showPassword ? InputType.Text : InputType.Password)"
+                                  FullWidth="true"
+                                  Required="true" />
+                    <ValidationMessage For="@(() => Model.Password)" />
+
+                   
+
+                <!-- Action Buttons -->
+                <div class="d-flex flex-column gap-2 mt-6">
+                    <MudButton ButtonType="ButtonType.Submit" 
+                               href="/login"
+                               Variant="Variant.Filled" 
+                               Color="Color.Primary" 
+                               Size="Size.Medium" 
+                               FullWidth="true"
+                               StartIcon="@Icons.Material.Filled.PersonAdd">
+                        Create Account
+                    </MudButton>
+                    <MudButton Href="/account/login" 
+                               Variant="Variant.Outlined" 
+                               Color="Color.Secondary" 
+                               Size="Size.Medium" 
+                               FullWidth="true">
+                        Cancel
+                    </MudButton>
+                </div>
+
+                <!-- Sign In Link -->
+                <div class="d-flex justify-center mt-4">
+                    <MudText Typo="Typo.body2">Already have an account? <MudLink Href="/">Sign in here</MudLink></MudText>
+                </div>
+                </div>
+            </EditForm>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+
+@code {
+    private RegisterUserDTO Model { get; set; } = new();
+    private string ErrorMessage { get; set; } = string.Empty;
+    private bool _showPassword = false;
+   
+
+    private void TogglePasswordVisibility()
+    {
+        _showPassword = !_showPassword;
+    }
+
+    private async Task OnValidSubmit()
+    {
+        try
+        {
+            ErrorMessage = string.Empty;
+
+            // Validate terms agreement
+           
+
+            // Validate password strength (minimum 6 characters)
+            if (string.IsNullOrWhiteSpace(Model.Password) || Model.Password.Length < 6)
+            {
+                ErrorMessage = "Password must be at least 6 characters long.";
+                return;
+            }
+
+            // Call the registration service
+            await IdentityService.RegisterUser(Model);
+
+            // Redirect to login page on successful registration
+            NavigationManager.NavigateTo("/Users", forceLoad: true);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Registration failed: {ex.Message}";
+        }
+    }
+}

@@ -1,0 +1,103 @@
+@page "/Campaigns/{Id:int}"
+@using Domain.Entities
+@using Application.Services.Campaigns
+@inject ICampaignService CampaignService
+@inject NavigationManager NavigationManager
+<PageTitle>Campaign Details</PageTitle>
+
+<!-- MudContainer: Responsive container for the entire page -->
+<MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
+    
+    <!-- Header Section with Title and Back Button -->
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <MudText Typo="Typo.h4" Class="font-weight-bold">Campaign Details</MudText>
+        <MudButton 
+            Variant="Variant.Text" 
+            Color="Color.Secondary" 
+            StartIcon="@Icons.Material.Filled.ArrowBack"
+            Href="/Campaigns">
+            Back to List
+        </MudButton>
+    </div>
+
+    @if (campaign != null)
+    {
+        <!-- MudCard: Main details container -->
+        <MudCard Class="elevation-1">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6" Class="font-weight-bold">
+                    @campaign.Title
+                </MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <!-- Details Grid -->
+                <MudGrid Spacing="2" Class="mb-4">
+                    
+                    <!-- ID Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Campaign ID</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@campaign.Id</MudText>
+                    </MudItem>
+
+                    <!-- Title Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Title</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@campaign.Title</MudText>
+                    </MudItem>
+
+                    <!-- Description Field -->
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Description</MudText>
+                        <MudText Typo="Typo.body2" Style="white-space: pre-wrap; line-height: 1.6;">@campaign.Description</MudText>
+                    </MudItem>
+
+                    <!-- Start Date Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Start Date</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@campaign.StartDate.ToString("MM/dd/yyyy")</MudText>
+                    </MudItem>
+
+                    <!-- End Date Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">End Date</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@campaign.EndDate.ToString("MM/dd/yyyy")</MudText>
+                    </MudItem>
+
+                    <!-- Budget Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Budget</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@($"${campaign.Budget:N2}")</MudText>
+                    </MudItem>
+
+                    <!-- Created At Field -->
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.caption" Style="opacity: 0.65;">Created At</MudText>
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">@campaign.CreatedAt.ToString("MM/dd/yyyy HH:mm")</MudText>
+                    </MudItem>
+
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    }
+    else
+    {
+        <!-- Alert for when campaign is not found -->
+        <MudAlert Severity="Severity.Error" Variant="Variant.Filled">
+            Campaign not found.
+        </MudAlert>
+    }
+
+</MudContainer>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private Campaign? campaign;
+    
+    protected override void OnInitialized()
+    {
+        campaign = CampaignService.GetCampaignById(Id);
+    }
+}

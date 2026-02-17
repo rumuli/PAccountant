@@ -1,0 +1,141 @@
+@page "/Campaigns/Create"
+@using Application.Services.Campaigns
+@inject ICampaignService CampaignService
+@rendermode InteractiveServer
+@using Application.DTO
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+
+
+
+<!-- MudContainer: Responsive container with max-width constraint -->
+<MudContainer MaxWidth="MaxWidth.Small" Class="py-8">
+    
+    <!-- Header Section with Title and Back Button -->
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <MudText Typo="Typo.h4" Class="font-weight-bold">Create New Campaign</MudText>
+        <MudButton 
+            Variant="Variant.Text" 
+            Color="Color.Secondary" 
+            StartIcon="@Icons.Material.Filled.ArrowBack"
+            Href="/Campaigns">
+            Back to List
+        </MudButton>
+    </div>
+
+<!-- MudCard: Main form container with elevation shadow -->
+    <MudCard Class="elevation-1">
+        <MudCardContent>
+            
+            <!-- EditForm: Blazor's form validation framework -->
+            <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+                <!-- DataAnnotationsValidator: Enables server-side validation based on DTO attributes -->
+                <DataAnnotationsValidator />
+                 <!-- Name Field -->
+                <MudTextField 
+                    T="string"
+                    Label="Campaign Title"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.Title"
+                    Placeholder="Enter campaign title"
+                    HelperText="Title of the campaign"
+                    For="@(() => Model.Title)"
+                    Class="mb-4" />
+                <ValidationMessage For="@(() => Model.Title)" />
+ 
+                <MudTextField 
+                    T="string"
+                    Label="Campaign Description"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.Description"
+                    Placeholder="Enter campaign description"
+                    HelperText="Description of the campaign"
+                    For="@(() => Model.Description)"
+                    Lines="5"
+                    Class="mb-4" />
+                <ValidationMessage For="@(() => Model.Description)" />
+
+     
+     <!-- Start Date Field -->
+                <MudDatePicker 
+                    Label="Campaign Start Date"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.StartDate"
+                    Placeholder="Enter campaign start date"
+                    HelperText="Start date of the campaign"
+                    Class="mb-4" />
+                <ValidationMessage For="@(() => Model.StartDate)" />
+
+     <!-- End Date Field -->
+                <MudDatePicker 
+                    Label="Campaign End Date"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.EndDate"
+                    Placeholder="Enter campaign end date"
+                    HelperText="End date of the campaign"
+                    Class="mb-4" />
+                <ValidationMessage For="@(() => Model.EndDate)" />
+
+     <!-- Budget Field -->
+                <MudTextField 
+                    T="decimal"
+                    Label="Campaign Budget"
+                    Variant="Variant.Outlined"
+                    @bind-Value="Model.Budget"
+                    Placeholder="Enter campaign budget"
+                    HelperText="Budget of the campaign"
+                    For="@(() => Model.Budget)"
+                    Class="mb-4" />
+                <ValidationMessage For="@(() => Model.Budget)" />
+
+
+<!-- Action Buttons -->
+                <div class="d-flex gap-3 justify-content-center mt-6">
+                    <!-- Submit Button: Creates campaign on valid form submission -->
+                    <MudButton 
+                        Variant="Variant.Filled" 
+                        Color="Color.Primary" 
+                        Size="Size.Medium"
+                        StartIcon="@Icons.Material.Filled.Save"
+                        ButtonType="ButtonType.Submit">
+                        Create Campaign
+                    </MudButton>
+                    
+                    <!-- Cancel Button: Returns to customer list without saving -->
+                    <MudButton 
+                        Variant="Variant.Outlined" 
+                        Color="Color.Default" 
+                        Size="Size.Medium"
+                        StartIcon="@Icons.Material.Filled.Cancel"
+                        Href="/Campaigns">
+                        Cancel
+                    </MudButton>
+                </div>
+                
+            </EditForm>
+
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+
+
+
+
+@code{
+    private CreateCampaignDTO Model {get; set; } = new();
+   private bool ShowErrors { get; set; } = false;
+    private void OnValidSubmit()
+    { 
+        try
+        {
+        CampaignService.CreateCampaign(Model);
+        NavigationManager.NavigateTo("/Campaigns");
+       
+    }
+    catch
+    {
+        
+        ShowErrors = true;
+    }
+}
+}

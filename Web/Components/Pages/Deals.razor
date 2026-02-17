@@ -1,0 +1,59 @@
+@page "/Deals"
+@using Domain.Entities
+@using Application.Services.Deals
+
+@inject IDealService DealService
+
+<PageTitle>Deals</PageTitle>
+
+
+<h1>Deals</h1>
+
+<div class="card mt-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+<a href="/Deals/create" class="btn btn-secondary">Add Deal</a>
+    </div>
+</div>
+    
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DealName</th>
+                <th>CustomerId</th>
+                <th>Value</th>
+                <th>Stage</th>
+                <th>CloseDate</th>
+                <th>CreatedAt</th>
+        
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var deal in _deals)
+            {
+                <tr>
+                    <td>@deal.Id</td>
+                    <td>@deal.DealName</td>
+                    <td>@deal.CustomerId</td>
+                    <td>@deal.Value</td>
+                    <td>@deal.Stage</td>
+                    <td>@deal.CloseDate</td>
+                    <td>@deal.CreatedAt</td>
+                   <td><a href="/Deals/@deal.Id" class="btn btn-primary">Details</a></td>
+                    <td><a href="/Deals/edit/@deal" class="btn btn-secondary">Edit</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+@code {
+
+    List<Deal> _deals = new List<Deal>();
+    protected override void OnInitialized()
+    {
+        _deals = DealService.GetAllDeals();
+    }
+
+        
+    
+}   

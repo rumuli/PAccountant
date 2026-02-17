@@ -1,0 +1,78 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<MudThemeProvider 
+    DefaultScrollbar="true" 
+    @bind-IsDarkMode="_isDarkMode" 
+    Theme="_theme" />
+
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+
+    <MudAppBar>
+        <MudIconButton 
+            Icon="@Icons.Material.Filled.Menu" 
+            Color="Color.Inherit" 
+            Edge="Edge.Start" 
+            OnClick="DrawerToggle" />
+
+        CRM Demo
+
+        <MudSpacer />
+
+        <MudIconButton
+            Icon="@(_isDarkMode 
+                ? Icons.Material.Filled.LightMode 
+                : Icons.Material.Filled.DarkMode)"
+            Color="Color.Inherit"
+            OnClick="ToggleTheme" />
+
+        <MudIconButton
+            Icon="@Icons.Material.Filled.Logout"
+            Color="Color.Inherit"
+            OnClick="Logout" />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen">
+        <NavMenu />
+    </MudDrawer>
+
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+
+</MudLayout>
+
+@code {
+
+    bool _drawerOpen = true;
+    bool _isDarkMode = false;
+
+    private MudTheme _theme = new()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = Colors.Blue.Default,
+            Secondary = Colors.Green.Accent4,
+            AppbarBackground = "#008AE1",
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1,
+            Secondary = Colors.Green.Lighten2,
+            AppbarBackground = Colors.Shades.Black,
+        },
+    };
+
+    void DrawerToggle() => _drawerOpen = !_drawerOpen;
+
+    void ToggleTheme() => _isDarkMode = !_isDarkMode;
+
+    void Logout()
+    {
+        NavigationManager.NavigateTo("/account/logout");
+    }
+}

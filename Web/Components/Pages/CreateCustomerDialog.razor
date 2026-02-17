@@ -1,0 +1,118 @@
+@using Application.DTO
+@using Application.Services.Customers
+@using MudBlazor
+@using System.ComponentModel.DataAnnotations
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+
+
+<MudDialog>
+
+    <DialogContent>
+
+        <MudText Typo="Typo.h6" Class="mb-4 fw-bold">
+            Create New Customer
+        </MudText>
+
+        <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudStack Spacing="2">
+
+                <MudTextField T="string"
+                              Label="Customer Name"
+                              Variant="Variant.Outlined"
+                              Dense="true"
+                              @bind-Value="Model.Name"
+                              For="@(() => Model.Name)"
+                              FullWidth="true" />
+
+                <MudTextField T="string"
+                              Label="Email Address"
+                              Variant="Variant.Outlined"
+                              Dense="true"
+                              @bind-Value="Model.Email"
+                              For="@(() => Model.Email)"
+                              FullWidth="true" />
+
+                <MudTextField T="string"
+                              Label="Phone Number"
+                              Variant="Variant.Outlined"
+                              Dense="true"
+                              @bind-Value="Model.Phone"
+                              For="@(() => Model.Phone)"
+                              FullWidth="true" />
+
+                <MudTextField T="string"
+                              Label="Street Address"
+                              Variant="Variant.Outlined"
+                              Dense="true"
+                              @bind-Value="Model.Address"
+                              FullWidth="true" />
+
+                <MudTextField T="string"
+                              Label="City"
+                              Variant="Variant.Outlined"
+                              Dense="true"
+                              @bind-Value="Model.City"
+                              FullWidth="true" />
+
+            </MudStack>
+
+        </EditForm>
+
+    </DialogContent>
+
+    <DialogActions>
+
+        @* <MudButton Variant="Variant.Outlined"
+        Href="/Customers"
+                   OnClick="Cancel">
+            Cancel
+        </MudButton> *@
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="OnValidSubmit">   
+
+            Create
+        </MudButton>
+
+    </DialogActions>
+
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    private IDialogReference DialogReference { get; set; } = default!;
+
+    private CreateCustomerDTO Model { get; set; } = new();
+
+    private bool ShowErrors { get; set; } = false;
+
+   
+    private void OnValidSubmit()
+    {
+        try
+        {
+            
+            CustomerService.CreateCustomer(Model);
+            
+           
+            NavigationManager.NavigateTo("/Customers");
+        }
+        catch
+        {
+            ShowErrors = true;
+        }
+    }
+
+    private void Cancel()
+    {
+        DialogReference.Close(DialogResult.Cancel());
+    }
+   
+}
+
