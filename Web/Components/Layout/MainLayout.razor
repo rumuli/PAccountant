@@ -19,7 +19,7 @@
             Edge="Edge.Start" 
             OnClick="DrawerToggle" />
 
-        CRM Demo
+        PAccountant
 
         <MudSpacer />
 
@@ -30,10 +30,7 @@
             Color="Color.Inherit"
             OnClick="ToggleTheme" />
 
-        <MudIconButton
-            Icon="@Icons.Material.Filled.Logout"
-            Color="Color.Inherit"
-            OnClick="Logout" />
+        
     </MudAppBar>
 
     <MudDrawer @bind-Open="_drawerOpen">
@@ -71,8 +68,5 @@
 
     void ToggleTheme() => _isDarkMode = !_isDarkMode;
 
-    void Logout()
-    {
-        NavigationManager.NavigateTo("/account/logout");
-    }
+   
 }
