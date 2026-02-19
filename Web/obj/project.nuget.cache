@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "puh1RwiwVAI=",
+  "dgSpecHash": "PApAKmjkT+M=",
   "success": true,
-  "projectFilePath": "C:\\PAccountant\\Web\\Web.csproj",
+  "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
@@ -63,9 +63,9 @@
       "code": "NU1701",
       "level": "Warning",
       "message": "Package 'Microsoft.AspNet.Identity.Core 2.2.4' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.",
-      "projectPath": "C:\\PAccountant\\Web\\Web.csproj",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\PAccountant\\Web\\Web.csproj",
+      "filePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
       "libraryId": "Microsoft.AspNet.Identity.Core",
       "targetGraphs": [
         "net10.0"
