@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\PAccountant\\Core\\Domain\\Domain.csproj": {}
+    "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {}
   },
   "projects": {
-    "C:\\PAccountant\\Core\\Domain\\Domain.csproj": {
+    "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\PAccountant\\Core\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\PAccountant\\Core\\Domain\\Domain.csproj",
+        "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\PAccountant\\Core\\Domain\\obj\\",
+        "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
