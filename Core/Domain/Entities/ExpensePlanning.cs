@@ -1,4 +1,4 @@
-namespace Application.Domain.Entities
+namespace Domain.Entities
 {
     public class ExpensePlanning
     {
