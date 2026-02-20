@@ -2,6 +2,7 @@
   "format": 1,
   "restore": {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj": {}
   },
   "projects": {
@@ -26,6 +27,19 @@
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\obj\\",
 >>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
+=======
+    "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
+        "projectName": "Domain",
+        "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\obj\\",
+>>>>>>> d109f00170c3d96fc6d929095486969360d930e8
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

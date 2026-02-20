@@ -2424,6 +2424,7 @@
     "version": "1.0.0",
     "restore": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
       "projectName": "Infrastucture",
       "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
@@ -2436,6 +2437,13 @@
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\obj\\",
 >>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
+=======
+      "projectUniqueName": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
+      "projectName": "Infrastucture",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
+      "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\obj\\",
+>>>>>>> d109f00170c3d96fc6d929095486969360d930e8
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2458,12 +2466,17 @@
           "targetAlias": "net10.0",
           "projectReferences": {
 <<<<<<< HEAD
+<<<<<<< HEAD
             "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj": {
               "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj"
 =======
             "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
               "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj"
 >>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
+=======
+            "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj"
+>>>>>>> d109f00170c3d96fc6d929095486969360d930e8
             }
           }
         }
