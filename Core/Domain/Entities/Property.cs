@@ -6,6 +6,9 @@ namespace Domain.Entities
         public string CategoryId {get;set;}
         public string Value {get;set;}
         public string Location {get;set;}
+        public string Identification {get;set;}
+        public double EstimatedValue{get;set;}
+        public string PuchaseDate{get;set;}
         public string CreatedBy {get;set;}
         public string CreatedAt {get;set;}
         public string UpdateBy{get;set;}
