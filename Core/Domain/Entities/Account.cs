@@ -6,9 +6,12 @@ namespace Domain.Entities
         public string AccountTypeId {get;set;}
         public string AccountNumber {get;set;}
         public string Provider {get;set;}
+        public double Balance {get;set;}
+        public string  Status{get;set;}
         public string CreatedBy {get;set;}
         public string CreatedAt {get;set;}
         public string UpdateBy{get;set;}
+       
 
     }
 }
