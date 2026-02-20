@@ -1,7 +1,8 @@
-namespace Application.Domain.Entities
+namespace Domain.Entities
 {
     public class ExpensePlanning
     {
+        public int Id { get; set; }
         public string BudgetName { get; set; }
         public string ExpenseTypeId {get;set;}
         public double Amount{get;set;}

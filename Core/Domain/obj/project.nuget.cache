@@ -1,20 +1,18 @@
 {
   "version": 2,
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "dgSpecHash": "oOXRMdN6S/c=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj",
-=======
   "dgSpecHash": "Hfc7jsaKFxw=",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
->>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
-=======
-  "dgSpecHash": "Hfc7jsaKFxw=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
->>>>>>> d109f00170c3d96fc6d929095486969360d930e8
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

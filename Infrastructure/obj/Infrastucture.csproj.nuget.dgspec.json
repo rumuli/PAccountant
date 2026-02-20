@@ -1,20 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj",
-        "projectName": "Application",
-        "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\obj\\",
-=======
     "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj": {}
   },
   "projects": {
@@ -26,53 +12,22 @@
         "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\obj\\",
->>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
-=======
-    "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj",
-        "projectName": "Application",
-        "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\obj\\",
->>>>>>> d109f00170c3d96fc6d929095486969360d930e8
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-              "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj"
-=======
               "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
                 "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj"
->>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
-=======
-              "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj"
->>>>>>> d109f00170c3d96fc6d929095486969360d930e8
               }
             }
           }
@@ -386,17 +341,6 @@
         }
       }
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj",
-        "projectName": "Domain",
-        "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\obj\\",
-=======
     "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -405,32 +349,14 @@
         "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\obj\\",
->>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
-=======
-    "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
-        "projectName": "Domain",
-        "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\obj\\",
->>>>>>> d109f00170c3d96fc6d929095486969360d930e8
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -748,17 +674,6 @@
         }
       }
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-        "projectName": "Infrastucture",
-        "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\obj\\",
-=======
     "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -767,50 +682,25 @@
         "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\obj\\",
->>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
-=======
-    "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-        "projectName": "Infrastucture",
-        "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\obj\\",
->>>>>>> d109f00170c3d96fc6d929095486969360d930e8
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-              "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj": {
-                "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj"
-=======
               "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
                 "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj"
->>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
-=======
-              "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
-                "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj"
->>>>>>> d109f00170c3d96fc6d929095486969360d930e8
+              },
+              "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj"
               }
             }
           }

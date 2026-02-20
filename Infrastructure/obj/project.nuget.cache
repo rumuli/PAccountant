@@ -1,20 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "dgSpecHash": "ZLV5L97dlTs=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-=======
-  "dgSpecHash": "mTUOeO7TBTE=",
+  "dgSpecHash": "b7PnHXdihk4=",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
->>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
-=======
-  "dgSpecHash": "mTUOeO7TBTE=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
->>>>>>> d109f00170c3d96fc6d929095486969360d930e8
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
@@ -69,24 +57,21 @@
   ],
   "logs": [
     {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
+      "targetGraphs": []
+    },
+    {
       "code": "NU1701",
       "level": "Warning",
       "message": "Package 'Microsoft.AspNet.Identity.Core 2.2.4' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.",
-<<<<<<< HEAD
-<<<<<<< HEAD
-      "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-=======
       "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
       "warningLevel": 1,
       "filePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
->>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
-=======
-      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
->>>>>>> d109f00170c3d96fc6d929095486969360d930e8
       "libraryId": "Microsoft.AspNet.Identity.Core",
       "targetGraphs": [
         "net10.0"
