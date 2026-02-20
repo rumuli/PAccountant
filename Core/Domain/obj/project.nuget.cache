@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
+  "dgSpecHash": "oOXRMdN6S/c=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj",
+=======
   "dgSpecHash": "Hfc7jsaKFxw=",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj",
+>>>>>>> 08f1fd072ddb096e219a84fc5aec1797c88499a8
   "expectedPackageFiles": [],
   "logs": []
 }

@@ -1,0 +1,146 @@
+@page "/incomes"
+@using Domain.Entities
+
+<PageTitle>Incomes</PageTitle>
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+     <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <MudText Typo="Typo.h4" Class="font-weight-bold">
+            Incomes
+        </MudText>
+      <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   Href="">
+            Add Income
+        </MudButton>
+    </div>  
+
+     <MudDataGrid T="Income"
+                 Items="@_Incomes"
+                 Hover="true"
+                 Striped="true"
+                 Bordered="true"
+                 Dense="true"
+                 Filterable="true"
+                 SortMode="SortMode.Multiple"
+                 Class="elevation-1">
+
+        <Columns>
+
+        <PropertyColumn Property="x => x.Id"
+                            Title="ID"
+                            Sortable="true" />
+
+
+        <PropertyColumn Property="x => x.IncomeTypeId"
+                            Title="Income Type"
+                            Sortable="true" /> 
+
+           <PropertyColumn Property="x => x.Date"
+                            Title="Date"
+                            Format="dd MMM yyyy"
+                            Sortable="true" />                                    
+              
+               <PropertyColumn Property="x => x.AmountPaid"
+                            Title="Amount Paid"
+                            Format="C"
+                            Sortable="true" />
+
+              <PropertyColumn Property="x => x.Source"
+                            Title="Source"
+                            Sortable="true" /> 
+
+
+               <PropertyColumn Property="x => x.PaymentMethodId"
+                            Title="Payment Method"
+                            Sortable="true" /> 
+
+              <PropertyColumn Property="x => x.DepositedAccount"
+                            Title="Deposited Account"
+                            Sortable="true" /> 
+
+                  <!-- Status Column -->
+            <TemplateColumn Title="Status">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@GetStatusColor(context.Item.IsActive)"
+                             Text="@(context.Item.IsActive ? "Active" : "Inactive")"
+                             Variant="Variant.Filled" />
+                </CellTemplate>
+            </TemplateColumn>
+
+            <PropertyColumn Property="x => x.CreatedAt"
+                            Title="Created Date"
+                            Format="MM/dd/yyyy"
+                            Sortable="true" />  
+
+
+               <!-- Actions -->
+            <TemplateColumn Title="Actions">
+                <CellTemplate>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Info"
+                                   Color="Color.Info"
+                                   Size="Size.Small"
+                                   Href="@($"//{context.Item.Id}")"
+                                   Title="View Details" />
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Primary"
+                                   Size="Size.Small"
+                                   Href="@($"//{context.Item.Id}")"
+                                   Title="Edit Income" />
+
+                </CellTemplate>
+            </TemplateColumn>
+
+        </Columns>
+
+    </MudDataGrid>
+
+</MudContainer>
+
+
+     @code {
+        List<Income> _Incomes = new List<Income>
+        {
+            new Income
+            {
+                Id = 1,
+                IncomeTypeId = "Salary",
+                Date = DateTime.Now.AddDays(-10),
+                AmountPaid = 5000,
+                Source = "Company A",
+                PaymentMethodId = "Bank Transfer",
+                DepositedAccount = "Checking Account",
+                IsActive = true,
+                CreatedAt = DateTime.Now.AddDays(-15)
+            },
+            new Income
+            {
+                Id = 2,
+                IncomeTypeId = "Freelance",
+                Date = DateTime.Now.AddDays(-5),
+                AmountPaid = 1500,
+                Source = "Client B",
+                PaymentMethodId = "PayPal",
+                DepositedAccount = "Savings Account",
+                IsActive = false,
+                CreatedAt = DateTime.Now.AddDays(-7)
+            }
+        };
+
+       private Color GetStatusColor(bool isActive)
+    {
+        return isActive ? Color.Success : Color.Error;
+    }
+    }           
+
+              
+              
+              
+
+
+
+              
