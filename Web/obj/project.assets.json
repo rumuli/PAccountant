@@ -1163,6 +1163,7 @@
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "Application": "1.0.0",
+          "Domain": "1.0.0",
           "Microsoft.AspNet.Identity.Core": "2.2.4",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "10.0.2",
           "Microsoft.AspNetCore.Identity.UI": "10.0.2",
@@ -3978,6 +3979,12 @@
     }
   },
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
+    },
     {
       "code": "NU1701",
       "level": "Warning",

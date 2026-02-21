@@ -2407,6 +2407,7 @@
   "projectFileDependencyGroups": {
     "net10.0": [
       "Application >= 1.0.0",
+      "Domain >= 1.0.0",
       "Microsoft.AspNet.Identity.Core >= 2.2.4",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 10.0.2",
       "Microsoft.AspNetCore.Identity.UI >= 10.0.2",
@@ -2443,6 +2444,9 @@
           "projectReferences": {
             "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
               "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj"
+            },
+            "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj"
             }
           }
         }
@@ -2787,6 +2791,12 @@
     }
   },
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
+    },
     {
       "code": "NU1701",
       "level": "Warning",
