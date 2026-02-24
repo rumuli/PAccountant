@@ -1,5 +1,14 @@
 using Web.Components;
 using MudBlazor.Services;
+using Infrastructure.DependencyInjection;
+using Application.Services.IncomeTypes;
+using Application.Services.ExpenseTypes;
+using Application.Services.Incomes;
+using Application.Services.Expenses;
+using Application.Services.PaymentMethods;
+
+
+
 
 
 
@@ -10,6 +19,14 @@ builder.Services.AddMudServices();//mudblazor services for UI components
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
+builder.Services.AddScoped<IIncomeTypeService, IncomeTypeService>();
+builder.Services.AddScoped<IExpenseTypeService, ExpenseTypeService>();
+builder.Services.AddScoped<IIncomeService, IncomeService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
+builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 
 var app = builder.Build();
 
@@ -30,4 +47,3 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
-

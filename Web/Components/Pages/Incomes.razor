@@ -1,23 +1,16 @@
 @page "/incomes"
 @using Domain.Entities
+@using Application.Services.Incomes
+@using MudBlazor
+@inject IIncomeService IncomeService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 <PageTitle>Incomes</PageTitle>
-<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
-     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-6">
-        <MudText Typo="Typo.h4" Class="font-weight-bold">
-            Incomes
-        </MudText>
-      <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.Add"
-                   Href="">
-            Add Income
-        </MudButton>
-    </div>  
 
-     <MudDataGrid T="Income"
-                 Items="@_Incomes"
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    <MudDataGrid T="Income"
+                 Items="@_incomes"
                  Hover="true"
                  Striped="true"
                  Bordered="true"
@@ -26,121 +19,134 @@
                  SortMode="SortMode.Multiple"
                  Class="elevation-1">
 
-        <Columns>
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Income</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Income" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateDialog">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
 
-        <PropertyColumn Property="x => x.Id"
+        <Columns>
+            <SelectColumn T="Income" />
+
+            <PropertyColumn Property="x => x.Id"
                             Title="ID"
+                            HeaderStyle="white-space:nowrap"
+                            ItemStyle="white-space:nowrap"
                             Sortable="true" />
 
-
-        <PropertyColumn Property="x => x.IncomeTypeId"
+            <PropertyColumn Property="x => x.IncomeType.IncomeTypeName"
                             Title="Income Type"
-                            Sortable="true" /> 
+                            HeaderStyle="white-space:nowrap"
+                            ItemStyle="white-space:nowrap"
+                            Sortable="true" />
 
-           <PropertyColumn Property="x => x.Date"
+            <PropertyColumn Property="x => x.Date"
                             Title="Date"
                             Format="dd MMM yyyy"
-                            Sortable="true" />                                    
-              
-               <PropertyColumn Property="x => x.AmountPaid"
-                            Title="Amount Paid"
-                            Format="C"
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
                             Sortable="true" />
 
-              <PropertyColumn Property="x => x.Source"
+            <PropertyColumn Property="x => x.AmountPaid"
+                            Title="Amount Paid"
+                            Format="C"
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
+                            Sortable="true" />
+
+            <PropertyColumn Property="x => x.Source"
                             Title="Source"
-                            Sortable="true" /> 
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
+                            Sortable="true" />
 
-
-               <PropertyColumn Property="x => x.PaymentMethodId"
+            <PropertyColumn Property="x => x.PaymentMethod.PaymentMethodName"
                             Title="Payment Method"
-                            Sortable="true" /> 
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
+                            Sortable="true" />
 
-              <PropertyColumn Property="x => x.DepositedAccount"
+            <PropertyColumn Property="x => x.DepositedAccount"
                             Title="Deposited Account"
-                            Sortable="true" /> 
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
+                            Sortable="true" />
 
-                  <!-- Status Column -->
             <TemplateColumn Title="Status">
                 <CellTemplate>
                     <MudChip T="string"
-                             Color="@GetStatusColor(context.Item.IsActive)"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
                              Text="@(context.Item.IsActive ? "Active" : "Inactive")"
-                             Variant="Variant.Filled" />
+                             Variant="Variant.Filled"
+                             ItemStyle="white-space:nowrap"
+                             HeaderStyle="white-space:nowrap"
+                             Size="Size.Small" />
                 </CellTemplate>
             </TemplateColumn>
 
             <PropertyColumn Property="x => x.CreatedAt"
                             Title="Created Date"
                             Format="MM/dd/yyyy"
-                            Sortable="true" />  
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
+                            Sortable="true" />
 
-
-               <!-- Actions -->
+            <!-- Actions -->
             <TemplateColumn Title="Actions">
                 <CellTemplate>
-
                     <MudIconButton Icon="@Icons.Material.Filled.Info"
                                    Color="Color.Info"
                                    Size="Size.Small"
-                                   Href="@($"//{context.Item.Id}")"
+                                   OnClick="@(() => ViewIncome(context.Item.Id))"
                                    Title="View Details" />
 
                     <MudIconButton Icon="@Icons.Material.Filled.Edit"
                                    Color="Color.Primary"
                                    Size="Size.Small"
-                                   Href="@($"//{context.Item.Id}")"
+                                   OnClick="@(() => EditIncome(context.Item.Id))"
                                    Title="Edit Income" />
-
                 </CellTemplate>
             </TemplateColumn>
-
         </Columns>
-
     </MudDataGrid>
-
 </MudContainer>
 
+@code {
+    private List<Income> _incomes = new();
 
-     @code {
-        List<Income> _Incomes = new List<Income>
-        {
-            new Income
-            {
-                Id = 1,
-                IncomeTypeId = "Salary",
-                Date = DateTime.Now.AddDays(-10),
-                AmountPaid = 5000,
-                Source = "Company A",
-                PaymentMethodId = "Bank Transfer",
-                DepositedAccount = "Checking Account",
-                IsActive = true,
-                CreatedAt = DateTime.Now.AddDays(-15)
-            },
-            new Income
-            {
-                Id = 2,
-                IncomeTypeId = "Freelance",
-                Date = DateTime.Now.AddDays(-5),
-                AmountPaid = 1500,
-                Source = "Client B",
-                PaymentMethodId = "PayPal",
-                DepositedAccount = "Savings Account",
-                IsActive = false,
-                CreatedAt = DateTime.Now.AddDays(-7)
-            }
-        };
-
-       private Color GetStatusColor(bool isActive)
+    protected override async Task OnInitializedAsync()
     {
-        return isActive ? Color.Success : Color.Error;
+        await LoadIncomes();
     }
-    }           
 
-              
-              
-              
+    private async Task OpenCreateDialog()
+    {
+        var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateIncomeDialog>(title: "Create Income", new DialogParameters()
+        {
+            { "OnIncomeCreated", EventCallback.Factory.Create(this, LoadIncomes) }
+        }, option);
+    }
 
+    private async Task LoadIncomes()
+    {
+        _incomes = await IncomeService.GetAllIncomesAsync();
+        StateHasChanged();
+    }
 
+    private void ViewIncome(int id)
+    {
+        Snackbar.Add($"Viewing details for Income ID {id}", Severity.Info);
+        // Navigate or open dialog for details
+    }
 
-              
+    private void EditIncome(int id)
+    {
+        Snackbar.Add($"Editing Income ID {id}", Severity.Normal);
+        // Navigate or open dialog for editing
+    }
+}
+

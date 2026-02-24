@@ -1,0 +1,136 @@
+@* @page "/Expenses"
+@using Domain.Entities
+
+<PageTitle>Expenses</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+     <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <MudText Typo="Typo.h4" Class="font-weight-bold">
+            Expenses
+        </MudText>
+      <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   Href="">
+            Add Expense
+        </MudButton>
+    </div> 
+
+    <MudDataGrid T="Expense"
+                 Items="@_Expenses"
+                 Hover="true"
+                 Striped="true"
+                 Bordered="true"
+                 Dense="true"
+                 Filterable="true"
+                 SortMode="SortMode.Multiple"
+                 Class="elevation-1">
+
+      <Columns>
+
+      <PropertyColumn Property="x => x.Id"
+                            Title="ID"
+                            Sortable="true" />
+
+
+        <PropertyColumn Property="x => x.ExpenseType"
+                            Title="Expense Type"
+                            Sortable="true" /> 
+                                   
+              
+               <PropertyColumn Property="x => x.Amount"
+                            Title="Amount"
+                            Format="C"
+                            Sortable="true" />
+
+              <PropertyColumn Property="x => x.Account"
+                            Title="Account"
+                            Sortable="true" /> 
+
+
+               <PropertyColumn Property="x => x.PaidTo"
+                            Title="PaidTo"
+                            Sortable="true" /> 
+
+              <PropertyColumn Property="x => x.Description"
+                            Title="Description"
+                            Sortable="true" /> 
+
+                            
+                  <!-- Status Column -->
+            <TemplateColumn Title="Status">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@GetStatusColor(context.Item.IsActive)"
+                             Text="@(context.Item.IsActive ? "Active" : "Inactive")"
+                             Variant="Variant.Filled" />
+                </CellTemplate>
+            </TemplateColumn>
+
+            <PropertyColumn Property="x => x.CreatedAt"
+                            Title="Created Date"
+                            Format="MM/dd/yyyy"
+                            Sortable="true" />
+
+                            
+               <!-- Actions -->
+            <TemplateColumn Title="Actions">
+                <CellTemplate>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Info"
+                                   Color="Color.Info"
+                                   Size="Size.Small"
+                                   Href="@($"//{context.Item.Id}")"
+                                   Title="View Details" />
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Primary"
+                                   Size="Size.Small"
+                                   Href="@($"//{context.Item.Id}")"
+                                   Title="Edit Expense" />
+
+                </CellTemplate>
+            </TemplateColumn>
+
+        </Columns>
+
+    </MudDataGrid>
+
+</MudContainer>
+                            
+                                 
+@code{
+    List<Expense> _Expenses = new List<Expense>
+        {
+            new Expense
+            {
+                Id = 1,
+                ExpenseType = "Marketing",
+                Amount = 100.00M,
+                Account = "Checking",
+                PaidTo = "John Doe",
+                Description = "Groceries",
+                IsActive = true,
+                CreatedAt = DateTime.Now
+            },
+            new Expense
+            {
+                Id = 2,
+                ExpenseType = "Rent",
+                Amount = 50.00M,
+                Account = "Savings",
+                PaidTo = "Jane Doe",
+                Description = "Utilities",
+                IsActive = false,
+                CreatedAt = DateTime.Now
+            }
+        };
+            private Color GetStatusColor(bool isActive)
+        {
+            return isActive ? Color.Success : Color.Error;
+        }
+}   
+
+
+                  *@

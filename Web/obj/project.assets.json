@@ -1158,7 +1158,7 @@
           "bin/placeholder/Domain.dll": {}
         }
       },
-      "Infrastucture/1.0.0": {
+      "Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
@@ -1171,10 +1171,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "10.0.2"
         },
         "compile": {
-          "bin/placeholder/Infrastucture.dll": {}
+          "bin/placeholder/Infrastructure.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Infrastucture.dll": {}
+          "bin/placeholder/Infrastructure.dll": {}
         }
       }
     }
@@ -3456,16 +3456,16 @@
       "path": "../Core/Domain/Domain.csproj",
       "msbuildProject": "../Core/Domain/Domain.csproj"
     },
-    "Infrastucture/1.0.0": {
+    "Infrastructure/1.0.0": {
       "type": "project",
-      "path": "../Infrastructure/Infrastucture.csproj",
-      "msbuildProject": "../Infrastructure/Infrastucture.csproj"
+      "path": "../Infrastructure/Infrastructure.csproj",
+      "msbuildProject": "../Infrastructure/Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
       "Application >= 1.0.0",
-      "Infrastucture >= 1.0.0",
+      "Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.App.Internal.Assets >= 10.0.2",
       "Microsoft.EntityFrameworkCore.Design >= 10.0.2",
       "Microsoft.EntityFrameworkCore.Tools >= 10.0.2",
@@ -3500,8 +3500,8 @@
             "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
               "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj"
             },
-            "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj": {
-              "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj"
+            "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastructure.csproj"
             }
           }
         }
@@ -3979,12 +3979,6 @@
     }
   },
   "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
-    },
     {
       "code": "NU1701",
       "level": "Warning",

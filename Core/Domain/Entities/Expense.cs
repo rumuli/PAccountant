@@ -3,7 +3,7 @@ namespace Domain.Entities
     public class Expense
     {
         public int Id { get; set; }
-        public string ExpenseTypeId { get; set; }
+        public ExpenseType ExpenseType { get; set; } = new ExpenseType();
        public decimal Amount { get; set; }
         public string Account { get; set; }
         public string PaidTo { get; set; }
