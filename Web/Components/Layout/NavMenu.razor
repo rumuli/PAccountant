@@ -1,30 +1,12 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Web</a>
+﻿
+    <div class="d-flex align-center justify-center py-4">
+        <MudIcon Icon="@Icons.Material.Filled.Autorenew" Style="@($"color:{Colors.Gray.Lighten5}; background:{Colors.Gray.Darken4}; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; padding: 10px;")" Size="Size.Large" Class="mr-2" />
+        <MudText Typo="Typo.h5" Style="font-weight: 700; color: #051d6e;">PAccountant</MudText>
     </div>
-</div>
+    <MudNavLink  Href="/"  Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard"> Dashboard</MudNavLink>
+    <MudNavLink Href="/incomes" Icon="@Icons.Material.Filled.AttachMoney"> Incomes</MudNavLink>
+    <MudNavLink Href="/budgets" Icon="@Icons.Material.Filled.AccountBalanceWallet"> Budget Planning</MudNavLink>
+   
+    
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
+            
