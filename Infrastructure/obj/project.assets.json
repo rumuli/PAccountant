@@ -2424,15 +2424,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-      "projectUniqueName": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj",
-      "projectName": "Infrastructure",
-      "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj",
-=======
       "projectUniqueName": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj",
       "projectName": "Infrastucture",
       "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj",
->>>>>>> Users
       "packagesPath": "C:\\Users\\meong\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
@@ -2458,12 +2452,9 @@
           "projectReferences": {
             "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj": {
               "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj"
-<<<<<<< HEAD
-=======
             },
             "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Domain\\Domain.csproj": {
               "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Domain\\Domain.csproj"
->>>>>>> Users
             }
           }
         }
@@ -2808,6 +2799,12 @@
     }
   },
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
+    },
     {
       "code": "NU1701",
       "level": "Warning",
