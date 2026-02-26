@@ -7,6 +7,8 @@ using Application.Interfaces;
 using Application.Services.ExpensePlanningServices;
 using Application.Services.ExpenseTypes;
 using Application.Services.IncomeTypeServices;
+using Application.Services.Users;
+// using Application.Interfaces.Users;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,10 @@ builder.Services.AddScoped<IExpensePlanningService, ExpensePlanningService>();
 builder.Services.AddScoped<IExpenseTypeService, ExpenseTypeService>();
 builder.Services.AddScoped<IIncomeTypeService, IncomeTypeService>();
 builder.Services.AddScoped<IIncomePlanningService, IncomePlanningService>();
+builder.Services.AddHttpClient();
+builder.Services.AddControllers();  
+builder.Services.AddAuthorization();
+    builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
