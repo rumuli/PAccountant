@@ -7,6 +7,8 @@ using Application.Interfaces;
 using Infrastructure.Repositories;
 using Application.Services.IncomeTypeServices;
 using Application.Services.ExpenseTypes;
+using System.Diagnostics;
+using Infrastructure.Identity;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -18,13 +20,14 @@ namespace Infrastructure.DependencyInjection
               services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("PAccountant")),ServiceLifetime.Scoped);
                 
-                // services.AddAuthenticationService(configuration);
+                services.AddAuthenticationService(configuration);
                 services.AddScoped<IBudget, BudgetRepository>();
                 services.AddScoped<IIncomePlanning, IncomePlanningRepository>();
                 services.AddScoped<IIncomeType, IncomeTypeRepository>();
                 services.AddScoped<IExpenseType, ExpenseTypeRepository>();
                 services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
-                // services.AddScoped<IUser, UserRepository>();
+                services.AddScoped<IIdentity, IdentityRepository>();
+                
 
               
               return services;
