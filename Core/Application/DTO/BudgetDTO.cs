@@ -1,0 +1,29 @@
+namespace Application.DTO.Budget{
+    public class GetBudgetDTO
+    {
+        public int Id { get; set; }
+        public DateTime? StartingAt{get;set;}
+        public DateTime? EndingAt {get;set;}
+        public string Name {get;set;}
+    }
+    public class CreateBudgetDTO{
+        public DateTime? StartingAt{get;set;}
+        public DateTime? EndingAt{get;set;}
+        // public string Name {get;set;}
+    }
+    public class UpdateBudgetDTO{
+        public DateTime StartingAt{get;set;}
+        public DateTime EndingAt{get;set;}
+        // public string Name {get;set;}
+    }
+    public class DeleteBudgetDTO{
+        public int Id {get;set;}
+    }
+    public class GetBudgetByIdDTO
+    {
+        public int Id { get; set; }
+        public DateTime? StartingAt{get;set;}
+        public DateTime? EndingAt {get;set;}
+        public string Name {get;set;}
+    }
+}
