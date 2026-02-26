@@ -2417,23 +2417,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hirwa\\.nuget\\packages\\": {},
+    "C:\\Users\\meong\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\hirwa\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "C:\\Users\\hirwa\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\hirwa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\hirwa\\PersonalProjects\\PAccountant\\Infrastructure\\obj\\",
+      "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\meong\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\hirwa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\meong\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2449,8 +2449,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\hirwa\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\hirwa\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj"
+            "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj"
             }
           }
         }
