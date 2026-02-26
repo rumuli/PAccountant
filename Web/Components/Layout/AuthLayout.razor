@@ -1,0 +1,47 @@
+@inherits LayoutComponentBase
+
+@* Required *@
+<MudThemeProvider 
+    DefaultScrollbar="true" 
+    @bind-IsDarkMode="_isDarkMode" 
+    Theme="_theme" />
+
+<MudPopoverProvider />
+
+<MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-flex justify-center align-center" Style="min-height:100vh;">
+        @Body
+    </MudContainer>
+
+
+
+@code {
+
+    bool _drawerOpen = true;
+    bool _isDarkMode = false;
+
+    private MudTheme _theme = new()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = Colors.Blue.Default,
+            Secondary = Colors.Green.Accent4,
+            AppbarBackground = "#008AE1",
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1,
+            Secondary = Colors.Green.Lighten2,
+            AppbarBackground = Colors.Shades.Black,
+        },
+    };
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    void ToggleTheme()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
+}
