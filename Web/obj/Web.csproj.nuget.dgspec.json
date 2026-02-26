@@ -688,12 +688,21 @@
         }
       }
     },
+<<<<<<< HEAD
     "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
         "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj",
+=======
+    "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj",
+        "projectName": "Infrastucture",
+        "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj",
+>>>>>>> Users
         "packagesPath": "C:\\Users\\meong\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
@@ -719,6 +728,12 @@
             "projectReferences": {
               "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj": {
                 "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj"
+<<<<<<< HEAD
+=======
+              },
+              "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Domain\\Domain.csproj"
+>>>>>>> Users
               }
             }
           }
@@ -745,27 +760,27 @@
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.2, )"
             },
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.2, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.2, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.2, )"
             },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.2, )"
             },
             "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.2, )"
             }
           },
           "imports": [
@@ -1094,8 +1109,13 @@
               "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj": {
                 "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj"
               },
+<<<<<<< HEAD
               "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj": {
                 "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastructure.csproj"
+=======
+              "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj": {
+                "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj"
+>>>>>>> Users
               }
             }
           }
@@ -1124,15 +1144,15 @@
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.2, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.2, )"
             },
             "MudBlazor": {
               "target": "Package",
-              "version": "[9.0.0, )"
+              "version": "[8.15.0, )"
             }
           },
           "imports": [

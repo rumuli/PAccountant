@@ -1,21 +1,35 @@
 using Web.Components;
-using Infrastructure.DependencyInjection;
-using Application.Services.Users;
-using Application.Interfaces.Users;
 using MudBlazor.Services;
+using Infrastructure.DependencyInjection;
+using Application.Services.BudgetServices;
+using Application.Services.IncomePlanningServices;
+using Application.Interfaces;
+using Application.Services.ExpensePlanningServices;
+using Application.Services.ExpenseTypes;
+using Application.Services.IncomeTypeServices;
+using Application.Services.Users;
+// using Application.Interfaces.Users;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMudServices();//mudblazor services for UI components
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-    builder.Services.AddMudServices();
 
-    builder.Services.AddInfrastructureServices(builder.Configuration);
+
+builder.Services.AddScoped<IBudgetService, BudgetService>();
+builder.Services.AddScoped<IExpensePlanningService, ExpensePlanningService>();
+builder.Services.AddScoped<IExpenseTypeService, ExpenseTypeService>();
+builder.Services.AddScoped<IIncomeTypeService, IncomeTypeService>();
+builder.Services.AddScoped<IIncomePlanningService, IncomePlanningService>();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();  
 builder.Services.AddAuthorization();
     builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -39,3 +53,4 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
+

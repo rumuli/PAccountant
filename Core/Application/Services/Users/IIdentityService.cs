@@ -1,6 +1,6 @@
 using Application.DTO;
 
-namespace Application.Interfaces.Users
+namespace Application.Services.Users
 {
     public interface IIdentityService
     {
