@@ -10,6 +10,11 @@
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @using Domain.Entities
+@using Infrastructure.Data
+@using Microsoft.EntityFrameworkCore
+
+
+
 
 <MudDialog Style="border-radius:12px; overflow:hidden;">
 
@@ -129,6 +134,7 @@
                                       Margin="Margin.Dense"
                                       @bind-Value="Model.AmountPaid"
                                       Placeholder="0.00"
+                                      InputType="InputType.Number"
                                      
                                       For="@(() => Model.AmountPaid)" />
                         <ValidationMessage For="@(() => Model.AmountPaid)" />
@@ -167,18 +173,27 @@
                               For="@(() => Model.Source)" />
                 <ValidationMessage For="@(() => Model.Source)" />
 
-                <!-- Deposited Account -->
-                <MudTextField T="string"
-                              Label="Deposited Account"
-                              Variant="Variant.Outlined"
-                              Margin="Margin.Dense"
-                              @bind-Value="Model.DepositedAccount"
-                              Placeholder="e.g. Bank / Wallet name"
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.AccountBalance"
-                              AdornmentColor="Color.Primary"
-                              For="@(() => Model.DepositedAccount)" />
-                <ValidationMessage For="@(() => Model.DepositedAccount)" />
+
+           <MudSelect T="int"
+           Label="Account Type"
+           @bind-Value="Model.AccountId"
+           Variant="Variant.Outlined"
+           Margin="Margin.Dense"
+           Dense="true"
+           Required="true">
+    @foreach (var account in _accounts)
+    {
+        <MudSelectItem Value="@account.Id">@account.AccountNumber</MudSelectItem>
+    }
+</MudSelect>
+
+
+
+
+
+
+                           
+                        
 
             </MudStack>
         </EditForm>
@@ -204,6 +219,28 @@
 </MudDialog>
 
 @code {
+    
+  private List<Account> _accounts = new();
+
+    // Inject DbContext
+    [Inject] private ApplicationDbContext _dbContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        @* _accounts = await _dbContext.AccountTypes.ToListAsync(); *@
+            // Load AccountTypes directly from DbContext
+    _accounts = await _dbContext.Accounts.ToListAsync();
+
+    // Load IncomeTypes from service
+    IncomeTypes = await IncomeTypeService.GetAllIncomeTypesAsync();
+
+    // Load PaymentMethods from service
+    PaymentMethods = await PaymentMethodService.GetAllPaymentMethodsAsync();
+    }
+
+
+
+
     [CascadingParameter]
     private IDialogReference DialogReference { get; set; } = default!;
 
@@ -217,11 +254,11 @@
     private List<IncomeType> IncomeTypes = new();
     private List<PaymentMethod> PaymentMethods = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        IncomeTypes = await IncomeTypeService.GetAllIncomeTypesAsync();
-        PaymentMethods = await PaymentMethodService.GetAllPaymentMethodsAsync();
-    }
+
+
+
+
+
 
     private async Task OnValidSubmit()
     {

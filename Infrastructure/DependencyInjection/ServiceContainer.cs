@@ -7,6 +7,8 @@ using Application.Services.ExpenseTypes;
 using Application.Services.Incomes;
 using Application.Services.Expenses;
 using Application.Services.PaymentMethods;
+using Application.Services.Debts;
+using Application.Services.DebtTypes;
 using Application.Interfaces;
 using Infrastructure.Repositories;
 
@@ -27,6 +29,8 @@ namespace Infrastructure.DependencyInjection
             services.AddScoped<IIncome, IncomeRepository>();
             services.AddScoped<IExpense, ExpenseRepository>();
             services.AddScoped<IPaymentMethod, PaymentMethodRepository>();
+            services.AddScoped<IDebt, DebtRepository>();
+            services.AddScoped<IDebtType, DebtTypeRepository>();
 
 
             return services;

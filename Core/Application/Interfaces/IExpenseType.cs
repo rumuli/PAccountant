@@ -3,10 +3,10 @@ using Application.DTO;
 
 namespace Application.Interfaces
 {
-    public interface IExpenseTypeServices
+    public interface IExpenseType
     {
-        public List<ExpenseType> GetAllExpenseTypes();
-        public ExpenseType GetExpenseTypeById(int id);
-        void CreateExpenseType(CreateExpenseTypeDTO expenseTypeDTO);
+        Task <List<ExpenseType>> GetAllExpenseTypesAsync();
+        Task <ExpenseType?> GetExpenseTypeByIdAsync(int id);
+        Task<int> CreateExpenseTypeAsync(CreateExpenseTypeDTO expenseTypeDTO);
     }
 }

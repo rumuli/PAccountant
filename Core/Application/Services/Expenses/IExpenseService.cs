@@ -5,10 +5,12 @@ using Application.Services.Expenses;
 
 namespace Application.Services.Expenses
 {
-    public interface IExpenseService
-    {
-        public List<Expense> GetAllExpenses();
-        public Expense GetExpenseById(int id);
-        void CreateExpense(CreateExpenseDTO expenseDTO);
-    }
+   public interface IExpenseService
+{
+    Task<Expense?> GetExpenseByIdAsync(int id);
+    Task<List<Expense>> GetAllExpensesAsync();
+    Task<int> CreateExpenseAsync(CreateExpenseDTO expenseDTO); // ✅ corrected
+}
+
+
 }

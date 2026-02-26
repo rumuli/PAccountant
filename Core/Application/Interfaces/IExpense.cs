@@ -3,11 +3,11 @@ using Application.DTO;
 
 namespace Application.Interfaces
 {
-    public interface IExpenseServices
+    public interface IExpense
     {
-        public List<Expense> GetAllExpenses();
-        public Expense GetExpenseById(int id);
-        void CreateExpense(CreateExpenseDTO expenseDTO);
+        Task <List<Expense>> GetAllExpensesAsync();
+        Task <Expense?> GetExpenseByIdAsync(int id);
+        Task<int> CreateExpenseAsync(CreateExpenseDTO expenseDTO);
     }
     
     }

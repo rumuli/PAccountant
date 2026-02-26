@@ -69,11 +69,13 @@
                             HeaderStyle="white-space:nowrap"
                             Sortable="true" />
 
-            <PropertyColumn Property="x => x.DepositedAccount"
-                            Title="Deposited Account"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
+            <!-- Changed: show AccountType instead of DepositedAccount -->
+           <PropertyColumn Property="x => x.Account.AccountNumber"
+                Title="Deposited Account"
+                ItemStyle="white-space:nowrap"
+                HeaderStyle="white-space:nowrap"
+                Sortable="true" />
+
 
             <TemplateColumn Title="Status">
                 <CellTemplate>
@@ -100,14 +102,12 @@
                     <MudIconButton Icon="@Icons.Material.Filled.Info"
                                    Color="Color.Info"
                                    Size="Size.Small"
-                                   OnClick="@(() => ViewIncome(context.Item.Id))"
-                                   Title="View Details" />
+                                   Href="@($"/incomes/edit/{context.Item.Id}")" />
 
                     <MudIconButton Icon="@Icons.Material.Filled.Edit"
                                    Color="Color.Primary"
                                    Size="Size.Small"
-                                   OnClick="@(() => EditIncome(context.Item.Id))"
-                                   Title="Edit Income" />
+                                   Href="@($"/incomes/edit/{context.Item.Id}")" />
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
@@ -135,18 +135,6 @@
     {
         _incomes = await IncomeService.GetAllIncomesAsync();
         StateHasChanged();
-    }
-
-    private void ViewIncome(int id)
-    {
-        Snackbar.Add($"Viewing details for Income ID {id}", Severity.Info);
-        // Navigate or open dialog for details
-    }
-
-    private void EditIncome(int id)
-    {
-        Snackbar.Add($"Editing Income ID {id}", Severity.Normal);
-        // Navigate or open dialog for editing
     }
 }
 

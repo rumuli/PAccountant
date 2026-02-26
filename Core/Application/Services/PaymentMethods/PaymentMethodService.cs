@@ -35,4 +35,3 @@ namespace Application.Services.PaymentMethods
         Task<PaymentMethod?> GetPaymentMethodByIdAsync(int id);
     }
 }
-

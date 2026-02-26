@@ -10,4 +10,3 @@ namespace Application.Services.PaymentMethods
         Task CreatePaymentMethodAsync(CreatePaymentMethodDTO paymentMethodDTO);
     }
 }
-

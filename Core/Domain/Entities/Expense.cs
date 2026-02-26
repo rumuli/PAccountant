@@ -3,9 +3,15 @@ namespace Domain.Entities
     public class Expense
     {
         public int Id { get; set; }
-        public ExpenseType ExpenseType { get; set; } = new ExpenseType();
+
+        //foreign key for ExpenseType
+         public int ExpenseTypeId { get; set; }  
+
+        public ExpenseType ExpenseType { get; set; } = default!;
        public decimal Amount { get; set; }
-        public string Account { get; set; }
+        // Link to Account
+        public int AccountId { get; set; }
+        public Account Account { get; set; } = default!;
         public string PaidTo { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }

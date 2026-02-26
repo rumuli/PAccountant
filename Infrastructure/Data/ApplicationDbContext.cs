@@ -22,6 +22,7 @@ namespace Infrastructure.Data
                         public DbSet<Budget> Budgets{get;set;}
                           public DbSet<ExpenseType> ExpenseTypes{get;set;}
                             public DbSet<Lend> Lends{get;set;}
+                            public DbSet<DebtType> DebtTypes{get;set;}
 
         
     }

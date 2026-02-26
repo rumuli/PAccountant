@@ -5,7 +5,9 @@ using Application.Services.IncomeTypes;
 using Application.Services.ExpenseTypes;
 using Application.Services.Incomes;
 using Application.Services.Expenses;
+using Application.Services.Debts;
 using Application.Services.PaymentMethods;
+using Application.Services.DebtTypes;
 
 
 
@@ -27,6 +29,8 @@ builder.Services.AddScoped<IExpenseTypeService, ExpenseTypeService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+builder.Services.AddScoped<IDebtService, DebtService>();
+builder.Services.AddScoped<IDebtTypeService, DebtTypeService>();
 
 var app = builder.Build();
 

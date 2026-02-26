@@ -1,0 +1,263 @@
+@using Application.DTO
+@using Application.Services.Expenses
+@using Application.Services.ExpenseTypes
+@using MudBlazor
+@inject IExpenseService ExpenseService
+@inject IExpenseTypeService ExpenseTypeService
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@using Domain.Entities
+
+@using System.ComponentModel.DataAnnotations
+@using Infrastructure.Data
+@using Microsoft.EntityFrameworkCore
+
+<MudDialog Style="border-radius:12px; overflow:hidden;">
+
+    <!-- ══════════ HEADER BANNER ══════════ -->
+    <DialogContent>
+        <MudPaper Elevation="0"
+                  Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
+                         border-radius:8px; padding:14px 18px; margin-bottom:16px;">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                <MudIcon Icon="@Icons.Material.Filled.AttachMoney"
+                         Style="color:white; font-size:1.6rem;" />
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle1"
+                             Style="color:white; font-weight:700; line-height:1.2;">
+                        New Expense Record
+                    </MudText>
+                    <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.80);">
+                        Fill in the details below to create an entry
+                    </MudText>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+
+         <!-- ══════════ FORM ══════════ -->
+        <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudStack Spacing="1">
+
+                <!-- ── Section: Classification ── -->
+                <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
+                                text-transform:uppercase; margin-bottom:2px;">
+                    Classification
+                </MudText>
+
+                <!-- Income Type -->
+                <MudGrid Spacing="1" Class="align-items-center">
+                    <MudItem xs="11">
+                        <MudSelect T="int"
+                                   Label="Expense Type"
+                                   @bind-Value="Model.ExpenseTypeId"
+                                   Variant="Variant.Outlined"
+                                   Margin="Margin.Dense"
+                                   Dense="true"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   AdornmentIcon="@Icons.Material.Filled.Category"
+                                   Adornment="Adornment.Start"
+                                   AdornmentColor="Color.Primary">
+                            <MudSelectItem Value="0"> Select Expense Type</MudSelectItem>
+                            @foreach (var type in ExpenseTypes)
+                            {
+                                <MudSelectItem Value="@type.Id">@type.ExpenseTypeName</MudSelectItem>
+                            }
+                        </MudSelect>
+                        <ValidationMessage For="@(() => Model.ExpenseTypeId)" />
+                    </MudItem>
+                    <MudItem xs="1" Class="d-flex justify-center">
+                        <MudTooltip Text="Add new income type">
+                            <MudIconButton Icon="@Icons.Material.Filled.Add"
+                                           Color="Color.Primary"
+                                           Size="Size.Small"
+                                           Variant="Variant.Outlined"
+                                           OnClick="@GoToCreateExpenseType" />
+                        </MudTooltip>
+                    </MudItem>
+                </MudGrid>
+
+            
+
+                <MudDivider Class="my-2" />
+
+                <!-- ── Section: Financial Details ── -->
+                <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
+                                text-transform:uppercase; margin-bottom:2px;">
+                    Financial Details
+                </MudText>
+
+                <!-- Amount + Date side-by-side -->
+                <MudGrid Spacing="2">
+                    <MudItem xs="6">
+                        <MudTextField T="decimal"
+              Label="Amount"
+              Variant="Variant.Outlined"
+              Margin="Margin.Dense"
+              @bind-Value="Model.Amount"
+              Placeholder="0.00"
+              InputType="InputType.Number"
+              For="@(() => Model.Amount)" />
+<ValidationMessage For="@(() => Model.Amount)" />
+
+
+                    </MudItem>
+                </MudGrid>
+
+                <MudDivider Class="my-2" />
+
+                <!-- ── Section: Account Info ── -->
+                <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
+                                text-transform:uppercase; margin-bottom:2px;">
+                    Account Info
+                </MudText>
+
+               <MudSelect T="int"
+           Label="Account Type"
+           @bind-Value="Model.AccountId"
+           Variant="Variant.Outlined"
+           Margin="Margin.Dense"
+           Dense="true"
+           Required="true">
+    @foreach (var account in _accounts)
+    {
+        <MudSelectItem Value="@account.Id">@account.AccountNumber</MudSelectItem>
+    }
+</MudSelect>
+                
+
+                <MudTextField T="string"
+                              Label=" PaidTo"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.PaidTo"
+                              Placeholder="e.g. person name"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Person"
+                              AdornmentColor="Color.Primary"
+                              For="@(() => Model.PaidTo)" />
+                <ValidationMessage For="@(() => Model.PaidTo)" />
+                
+
+                <!-- ── Section: Account Info ── -->
+                <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
+                                text-transform:uppercase; margin-bottom:2px;">
+                    Details
+                </MudText>
+
+
+                <!-- description -->
+               <MudTextField T="string"
+              Label="Description"
+              Variant="Variant.Outlined"
+              Margin="Margin.Dense"
+              @bind-Value="Model.Description"
+              Placeholder="e.g. Description of expense"
+              Adornment="Adornment.Start"
+              AdornmentIcon="@Icons.Material.Filled.Description"
+              AdornmentColor="Color.Primary"
+              For="@(() => Model.Description)"
+              Lines="5" />   <!-- makes it bigger, multiline -->
+
+<ValidationMessage For="@(() => Model.Description)" />
+
+                
+            </MudStack>
+        </EditForm>
+    </DialogContent>
+
+    <!-- ══════════ ACTIONS ══════════ -->
+    <DialogActions>
+        <MudStack Row="true" Spacing="2" Class="px-2 pb-2" Style="width:100%;">
+            
+
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.Save"
+                       OnClick="OnValidSubmit"
+                       Style="flex:2; border-radius:8px;
+                              background: linear-gradient(135deg,#1976D2,#42A5F5);">
+                Save Expense
+            </MudButton>
+        </MudStack>
+    </DialogActions>
+
+</MudDialog>
+
+@code{
+
+     private List<Account> _accounts = new();
+
+    // Inject DbContext
+    [Inject] private ApplicationDbContext _dbContext { get; set; } = default!;
+     protected override async Task OnInitializedAsync()
+    {
+        @* _accounts = await _dbContext.AccountTypes.ToListAsync(); *@
+            // Load AccountTypes directly from DbContext
+    _accounts = await _dbContext.Accounts.ToListAsync();
+
+    // Load IncomeTypes from service
+    ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();
+
+    // Load PaymentMethods from service
+   
+    }
+
+    [CascadingParameter]
+    private IDialogReference DialogReference { get; set; } = default!;
+    private CreateExpenseDTO Model { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnExpenseCreated { get; set; }
+
+    private bool ShowErrors { get; set; } = false;
+
+    private List<ExpenseType> ExpenseTypes = new();
+
+   
+
+    private async Task OnValidSubmit()
+    {
+        try
+        {
+            await ExpenseService.CreateExpenseAsync(Model);
+            await OnExpenseCreated.InvokeAsync();
+            DialogReference.Close(DialogResult.Ok(true));
+        }
+        catch
+        {
+            ShowErrors = true;
+        }
+
+        NavigationManager.NavigateTo("/expenses");
+    }
+
+     private void Cancel()
+    {
+        DialogReference.Close(DialogResult.Cancel());
+    }
+
+    private async Task GoToCreateExpenseType()
+    {
+        var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateExpenseTypeDialog>(
+            "Create Expense Type",
+            new DialogParameters
+        {
+            { "OnExpenseTypeCreated", EventCallback.Factory.Create(this, async () =>
+                {
+                    ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();
+                    StateHasChanged();
+                })
+            }
+
+        }, option);
+    }
+}

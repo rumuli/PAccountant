@@ -1,24 +1,16 @@
-@* @page "/Expenses"
+@page "/Expenses"
 @using Domain.Entities
+@using Application.Services.Expenses
+@using MudBlazor
+@inject IExpenseService ExpenseService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 <PageTitle>Expenses</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
-     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-6">
-        <MudText Typo="Typo.h4" Class="font-weight-bold">
-            Expenses
-        </MudText>
-      <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.Add"
-                   Href="">
-            Add Expense
-        </MudButton>
-    </div> 
-
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
     <MudDataGrid T="Expense"
-                 Items="@_Expenses"
+                 Items="@_expenses"
                  Hover="true"
                  Striped="true"
                  Bordered="true"
@@ -27,110 +19,124 @@
                  SortMode="SortMode.Multiple"
                  Class="elevation-1">
 
-      <Columns>
+        
 
-      <PropertyColumn Property="x => x.Id"
+      <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Expense</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Expense" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateDialog">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>      
+
+        <Columns>
+
+        <SelectColumn T="Income" />
+
+            <PropertyColumn Property="x => x.Id"
                             Title="ID"
+                            HeaderStyle="white-space:nowrap"
+                            ItemStyle="white-space:nowrap"
+                            Sortable="true" />
+
+            <PropertyColumn Property="x => x.ExpenseType.ExpenseTypeName"
+                            Title="Expense Type"
+                            HeaderStyle="white-space:nowrap"
+                            ItemStyle="white-space:nowrap"
                             Sortable="true" />
 
 
-        <PropertyColumn Property="x => x.ExpenseType"
-                            Title="Expense Type"
-                            Sortable="true" /> 
-                                   
-              
-               <PropertyColumn Property="x => x.Amount"
+            <PropertyColumn Property="x => x.Amount"
                             Title="Amount"
                             Format="C"
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
                             Sortable="true" />
 
-              <PropertyColumn Property="x => x.Account"
-                            Title="Account"
-                            Sortable="true" /> 
+             <!-- Changed: show AccountType instead of DepositedAccount -->
+           <PropertyColumn Property="x => x.Account.AccountNumber"
+                Title=" Account"
+                ItemStyle="white-space:nowrap"
+                HeaderStyle="white-space:nowrap"
+                Sortable="true" />
 
+        
 
-               <PropertyColumn Property="x => x.PaidTo"
+            <PropertyColumn Property="x => x.PaidTo"
                             Title="PaidTo"
-                            Sortable="true" /> 
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
+                            Sortable="true" />
 
-              <PropertyColumn Property="x => x.Description"
+                            <PropertyColumn Property="x => x.Description"
                             Title="Description"
-                            Sortable="true" /> 
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
+                            Sortable="true" />
 
-                            
-                  <!-- Status Column -->
+
+
             <TemplateColumn Title="Status">
                 <CellTemplate>
                     <MudChip T="string"
-                             Color="@GetStatusColor(context.Item.IsActive)"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
                              Text="@(context.Item.IsActive ? "Active" : "Inactive")"
-                             Variant="Variant.Filled" />
+                             Variant="Variant.Filled"
+                             ItemStyle="white-space:nowrap"
+                             HeaderStyle="white-space:nowrap"
+                             Size="Size.Small" />
                 </CellTemplate>
             </TemplateColumn>
 
             <PropertyColumn Property="x => x.CreatedAt"
                             Title="Created Date"
                             Format="MM/dd/yyyy"
+                            ItemStyle="white-space:nowrap"
+                            HeaderStyle="white-space:nowrap"
                             Sortable="true" />
 
-                            
-               <!-- Actions -->
+ <!-- Actions -->
             <TemplateColumn Title="Actions">
                 <CellTemplate>
-
                     <MudIconButton Icon="@Icons.Material.Filled.Info"
                                    Color="Color.Info"
                                    Size="Size.Small"
-                                   Href="@($"//{context.Item.Id}")"
-                                   Title="View Details" />
+                                  Href="@($"/incomes/edit/{context.Item.Id}")" />
+                                  
+                                
 
                     <MudIconButton Icon="@Icons.Material.Filled.Edit"
                                    Color="Color.Primary"
                                    Size="Size.Small"
-                                   Href="@($"//{context.Item.Id}")"
-                                   Title="Edit Expense" />
-
+                                   Href="@($"/incomes/edit/{context.Item.Id}")" />
+                            
                 </CellTemplate>
             </TemplateColumn>
-
         </Columns>
-
     </MudDataGrid>
-
 </MudContainer>
-                            
-                                 
-@code{
-    List<Expense> _Expenses = new List<Expense>
-        {
-            new Expense
+
+       @code{
+        private List<Expense> _expenses = new();
+            protected override async Task OnInitializedAsync()
             {
-                Id = 1,
-                ExpenseType = "Marketing",
-                Amount = 100.00M,
-                Account = "Checking",
-                PaidTo = "John Doe",
-                Description = "Groceries",
-                IsActive = true,
-                CreatedAt = DateTime.Now
-            },
-            new Expense
-            {
-                Id = 2,
-                ExpenseType = "Rent",
-                Amount = 50.00M,
-                Account = "Savings",
-                PaidTo = "Jane Doe",
-                Description = "Utilities",
-                IsActive = false,
-                CreatedAt = DateTime.Now
+                await LoadExpenses();
             }
-        };
-            private Color GetStatusColor(bool isActive)
-        {
-            return isActive ? Color.Success : Color.Error;
-        }
-}   
 
+            private async Task OpenCreateDialog()
+            {
+                var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+                await DialogService.ShowAsync<CreateExpenseDialog>(title: "Create Expense", new DialogParameters()
+                {
+                    { "OnExpenseCreated", EventCallback.Factory.Create(this, LoadExpenses) }
+                }, option);
+            }
 
-                  *@
+            private async Task LoadExpenses()
+            {
+                _expenses = await ExpenseService.GetAllExpensesAsync();
+                StateHasChanged();
+            }
+
+       }

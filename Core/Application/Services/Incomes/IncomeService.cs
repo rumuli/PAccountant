@@ -13,6 +13,7 @@ namespace Application.Services.Incomes
             _income = income;
         }
 
+
         public async Task<Income?> GetIncomeByIdAsync(int id)
         {
             return await _income.GetIncomeByIdAsync(id);
@@ -29,10 +30,7 @@ namespace Application.Services.Incomes
             return await _income.CreateIncomeAsync(incomeDTO);
         }
 
-        public void UpdateIncome(int id, UpdateIncomeDTO incomeDTO)
-        {
-            _income.UpdateIncome(id, incomeDTO);
-        }
+       
     }
 
     // Repository contract
@@ -41,7 +39,7 @@ namespace Application.Services.Incomes
         Task<int> CreateIncomeAsync(CreateIncomeDTO incomeDTO);
         Task<List<Income>> GetAllIncomesAsync();
         Task<Income?> GetIncomeByIdAsync(int id);
-        void UpdateIncome(int id, UpdateIncomeDTO incomeDTO);
+       
     }
 }
 

@@ -1,40 +1,34 @@
 using Domain.Entities;
 using Application.DTO;
 using Application.Interfaces;
-using Application.Services.Expenses;
 
 namespace Application.Services.Expenses
 {
     public class ExpenseService : IExpenseService
     {
         private readonly IExpense _expense;
+
         public ExpenseService(IExpense expense)
         {
             _expense = expense;
         }
 
-        public Expense GetExpenseById(int id)
+        public async Task <Expense?> GetExpenseByIdAsync(int id)
         {
-            return _expense.GetExpenseById(id);
+            return await _expense.GetExpenseByIdAsync(id);
         }
 
-        public List<Expense> GetAllExpenses()
+        public async Task<List<Expense>> GetAllExpensesAsync() 
         {
-            List<Expense> expenses = _expense.GetAllEpenses();
-            return expenses;
+           return await _expense.GetAllExpensesAsync();
         }
-        public void CreateExpense(CreateExpenseDTO expenseDTO)
+        public async Task<int> CreateExpenseAsync(CreateExpenseDTO expenseDTO)
         {
-            _expense.CreateExpense(expenseDTO);
+           return await _expense.CreateExpenseAsync(expenseDTO);
         }
     }
 
-    public interface IExpense
-    {
-        void CreateExpense(CreateExpenseDTO expenseDTO);
-        List<Expense> GetAllEpenses();
-        Expense GetExpenseById(int id);
-    }
+   
 }
 
 

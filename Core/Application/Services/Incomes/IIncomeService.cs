@@ -11,7 +11,6 @@ namespace Application.Services.Incomes
         Task<Income?> GetIncomeByIdAsync(int id);
         Task<int> CreateIncomeAsync(CreateIncomeDTO incomeDTO);
 
-         void UpdateIncome(int id, UpdateIncomeDTO customerDTO);
     }
 
 }

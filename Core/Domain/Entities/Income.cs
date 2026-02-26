@@ -16,9 +16,11 @@ namespace Domain.Entities
         public int PaymentMethodId { get; set; }
         public PaymentMethod PaymentMethod { get; set; } = default!;
 
-        public string DepositedAccount { get; set; } = string.Empty;
+        // Link to Account
+        public int AccountId { get; set; }
+        public Account Account { get; set; } = default!;
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 

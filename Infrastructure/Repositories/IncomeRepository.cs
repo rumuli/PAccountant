@@ -15,12 +15,13 @@ namespace Infrastructure.Repositories
             _dbContext = context;
         }
 
-        // Get all incomes with related IncomeType and PaymentMethod
+        // Get all incomes with related IncomeType, PaymentMethod, and AccountType
         public async Task<List<Income>> GetAllIncomesAsync()
         {
             return await _dbContext.Incomes
                 .Include(i => i.IncomeType)
                 .Include(i => i.PaymentMethod)
+                .Include(i => i.Account)
                 .ToListAsync();
         }
 
@@ -30,46 +31,44 @@ namespace Infrastructure.Repositories
             return await _dbContext.Incomes
                 .Include(i => i.IncomeType)
                 .Include(i => i.PaymentMethod)
+                .Include(i => i.Account)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         // Create new income and return its ID
         public async Task<int> CreateIncomeAsync(CreateIncomeDTO incomeDTO)
-        {
-            var income = new Income
-            {
-                IncomeTypeId = incomeDTO.IncomeTypeId,
-        // If Date is nullable in DTO, use Value or fallback to Now
-        Date = incomeDTO.Date ?? DateTime.Today, 
-       AmountPaid = incomeDTO.AmountPaid ,
+{
+    var income = new Income
+    {
+        IncomeTypeId = incomeDTO.IncomeTypeId,
+        Date = incomeDTO.Date,
+        AmountPaid = incomeDTO.AmountPaid,
         Source = incomeDTO.Source,
         PaymentMethodId = incomeDTO.PaymentMethodId,
-        DepositedAccount = incomeDTO.DepositedAccount,
+        AccountId = incomeDTO.AccountId,
+        
         IsActive = true,
-        // Keep CreatedAt as UtcNow for database tracking
-        CreatedAt = DateTime.UtcNow
-            };
+        CreatedAt = DateTime.UtcNow,
+        UpdatedAt = DateTime.UtcNow
+    };
 
-            _dbContext.Incomes.Add(income);
-            await _dbContext.SaveChangesAsync();
+    _dbContext.Incomes.Add(income);
 
-            return income.Id; // return new primary key
-        }
+    // Update Account balance using AccountTypeId
+    var account = await _dbContext.Accounts
+        .FirstOrDefaultAsync(a => a.Id == incomeDTO.AccountId);
 
-        public void UpdateIncome(int id, UpdateIncomeDTO incomeDTO)
-        {
-            var income = _dbContext.Incomes.Find(id);
-            if (income != null) return;
-            {
-                // Update fields as needed
-                income.IncomeTypeId = incomeDTO.IncomeTypeId;
-                income.AmountPaid = incomeDTO.AmountPaid;
-                income.Source = incomeDTO.Source;
-                income.PaymentMethodId = incomeDTO.PaymentMethodId;
-                income.DepositedAccount = incomeDTO.DepositedAccount;
-                _dbContext.SaveChanges();
-            }
-        }
+    if (account != null)
+    {
+        account.Balance += (double)incomeDTO.AmountPaid; // Balance is double in your entity
+        _dbContext.Accounts.Update(account);
+    }
+
+    await _dbContext.SaveChangesAsync();
+    return income.Id;
+}
+
+
     }
 }
 
