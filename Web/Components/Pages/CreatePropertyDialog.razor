@@ -1,0 +1,128 @@
+@using  Application.DTO
+@using System.ComponentModel.DataAnnotations
+@using Application.Interface
+@using Application.Services.Properties
+@using Domain.Entities
+@using MudBlazor
+@using MudBlazor.Services
+@using Microsoft.AspNetCore.Components
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.AspNetCore.Authorization
+@* @attribute [Authorize] *@
+@inject NavigationManager Navigation
+@inject IPropertyService PropertyService
+@inject IPropertycategoryService PropertyCategoryService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+
+<MudDialog>
+<DialogContent>
+    @* <EditForm Model="Model" OnValidSubmit="onValidSubmit"> *@
+        <EditForm Model="Model" OnValidSubmit="onValidSubmit" FormName="CreatePropertyForm">
+        <DataAnnotationsValidator />
+        <MudGrid>
+             <MudStack Row="true" Spacing="2" Justify="Justify.Center">
+    <MudItem xs="12">
+    <MudSelect T="int"
+            Label="Category" 
+                
+               Placeholder="--Select Category Type--"
+               @bind-Value="Model.CategoryId" 
+               Variant="Variant.Outlined"
+               Style="width: 550px; 
+
+               AnchorOrigin="Origin.BottomCenter">
+               <MudSelectItem Value="0">--Select Category Type--</MudSelectItem>
+         @if (acctype != null)
+        {
+            foreach (var type in acctype)
+            {
+                <MudSelectItem T="int" Value="@type.Id">@type.Name</MudSelectItem>
+            }
+        }
+    </MudSelect>
+</MudItem>
+            <MudIconButton
+            Icon="@Icons.Material.Filled.Add"
+            Color="Color.Secondary"
+            OnClick="openCategory"/>
+            </MudStack>
+          
+            <MudItem xs="12">
+                
+                <MudTextField Label="Name" @bind-Value="Model.Name" For="@(() => Model.Name)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="Value" @bind-Value="Model.Value" For="@(() => Model.Value)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="Location" @bind-Value="Model.Location" For="@(() => Model.Location)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="AssignedTo" @bind-Value="Model.AssignedTo" For="@(() => Model.AssignedTo)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="PurchasePrice" @bind-Value="Model.PurchasePrice" For="@(() => Model.PurchasePrice)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="Identification" @bind-Value="Model.Identification" For="@(() => Model.Identification)" />
+            </MudItem>            
+            <MudItem xs="12" class="d-flex justify-content-end">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Add Account</MudButton>
+                <MudButton Href="/Property" Variant="Variant.Filled" Color="Color.Error">Cancel</MudButton>
+
+            </MudItem>
+        </MudGrid>
+
+    </EditForm>
+</DialogContent>
+</MudDialog>
+
+@code{
+    private bool _fullWidth;
+    private bool _fitContent;
+    [CascadingParameter] IMudDialogInstance DialogInstance { get; set; }
+    [SupplyParameterFromForm(Name = "CreatePropertyForm")]
+    private PropertyCreateDTO Model {get;set;} = new ();
+
+    [Parameter]
+    public EventCallback OnPropertyCreated { get; set; }
+    private async Task onValidSubmit()
+    {
+        await PropertyService.CreateProperty(Model);
+        Snackbar.Add("Property created successfully!", Severity.Success);
+        DialogInstance.Close();
+        await PropertyService.GetAllPropertysAsync();
+    }
+
+
+  
+    private async Task openCategory()
+    {
+        var dialog = await DialogService.ShowAsync<PropertyCategoryDialog>("Add Category");
+        var result = await dialog.Result;
+    } 
+
+private List<PropertyCategory> acctype = new List<PropertyCategory>();
+
+protected override async Task OnInitializedAsync()
+{
+    try 
+    {
+       
+        var types = await PropertyCategoryService.GetAllPropertyCategorysAsync();
+       if (types != null)
+        {
+            acctype = types;
+        }
+    }
+    catch (Exception ex)
+    {
+        Snackbar.Add("Error loading account types", Severity.Error);
+    }
+}
+    }
+
+
+

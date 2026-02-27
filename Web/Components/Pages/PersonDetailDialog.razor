@@ -1,0 +1,81 @@
+@using Domain.Entities
+@using Application.Services.Persons
+@using System.Globalization
+
+@inject NavigationManager NavigationManager
+
+ <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="BackToPersons" StartIcon="@Icons.Material.Filled.ArrowBack">
+                    Back to Person
+                </MudButton>
+<MudDialog>
+    
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2"/> Person Details
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (_person == null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else
+        {
+            <MudGrid Spacing="2">
+                <MudItem xs="6">
+                    <MudTextField Label="Account ID" Value="@_person.Id" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField Label="FirstName" Value="@(_person.FirstName)" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="LastName" Value="@_person.LastName" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Sex" Value="@_person.Sex" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="phoneNumber" Value="@_person.phoneNumber" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="City" Value="@_person.City" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Street" Value="@_person.Street" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudChip T="string" Color="@GetStatusColor(_person.Status)">@_person.Status</MudChip>
+                </MudItem>
+            </MudGrid>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Close">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public int Id { get; set; } 
+    
+    [Inject] IPersonService PersonService { get; set; }
+
+    private Person _person;
+
+    protected override void OnInitialized()
+    {
+        _person = PersonService.GetPersonById(Id);
+    }
+    private void Close() => MudDialog.Close();
+
+    private Color GetStatusColor(string status) => status?.ToLower() switch
+    {
+        "active" => Color.Success,
+        "inactive" => Color.Error,
+        _ => Color.Default
+    };
+     private void BackToPersons()
+    {
+        NavigationManager.NavigateTo("/persons");
+    }
+}
