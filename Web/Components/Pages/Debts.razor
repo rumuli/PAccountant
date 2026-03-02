@@ -6,6 +6,7 @@
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
+
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
     <MudDataGrid T="Debt"
                  Items="@_debts"
@@ -30,7 +31,7 @@
             <SelectColumn T="Debt" />
 
             <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" />
-            <PropertyColumn Property="x => x.DebtType" Title="Debt Type" Sortable="true" />
+            <PropertyColumn Property="x => x.DebtType.DebtTypeName" Title="Debt Type" Sortable="true" />
             <PropertyColumn Property="x => x.Amount" Title="Amount" Format="C" Sortable="true" />
             <PropertyColumn Property="x => x.Creditor" Title="Creditor" Sortable="true" />
             <PropertyColumn Property="x => x.DueDate" Title="Start Date" Format="dd MMM yyyy" Sortable="true" />

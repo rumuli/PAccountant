@@ -8,7 +8,7 @@ namespace Application.Interfaces
     {
         Task <List<DebtType>> GetAllDebtTypesAsync();
         Task <DebtType?> GetDebtTypeByIdAsync(int id);
-        Task <int> CreateDebtTypeAsync(CreateDebtTypeDTO debtTypeDTO);
+        Task<int> CreateDebtTypeAsync(CreateDebtTypeDTO debtTypeDTO);
     }
     
 }

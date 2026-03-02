@@ -1,10 +1,8 @@
 using Domain.Entities;
 using Application.DTO;
 using Application.Interfaces;
-using Application.Services.Debts;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.DependencyInjection;
 
 namespace Infrastructure.Repositories
 {
@@ -34,6 +32,7 @@ namespace Infrastructure.Repositories
         
         public async Task<int> CreateDebtAsync(CreateDebtDTO debtDTO)
         {
+            
             var debt = new Debt
             {
                 DebtTypeId = debtDTO.DebtTypeId,
