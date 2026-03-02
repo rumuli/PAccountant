@@ -218,14 +218,8 @@ namespace Infrastucture.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-<<<<<<< HEAD
                     b.Property<int>("BudgetId")
                         .HasColumnType("int");
-=======
-                    b.Property<string>("BudgetName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
->>>>>>> PersonalAccount
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -234,14 +228,8 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
                     b.Property<int>("ExpenseTypeId")
                         .HasColumnType("int");
-=======
-                    b.Property<string>("ExpenseTypeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
->>>>>>> PersonalAccount
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -251,13 +239,10 @@ namespace Infrastucture.Migrations
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
                     b.HasIndex("BudgetId");
 
                     b.HasIndex("ExpenseTypeId");
 
-=======
->>>>>>> PersonalAccount
                     b.ToTable("ExpensePlannings");
                 });
 
@@ -354,14 +339,8 @@ namespace Infrastucture.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-<<<<<<< HEAD
                     b.Property<int>("BudgetId")
                         .HasColumnType("int");
-=======
-                    b.Property<string>("BudgetName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
->>>>>>> PersonalAccount
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -370,14 +349,8 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
                     b.Property<int>("IncomeTypeId")
                         .HasColumnType("int");
-=======
-                    b.Property<string>("IncomeTypeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
->>>>>>> PersonalAccount
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -387,13 +360,10 @@ namespace Infrastucture.Migrations
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
                     b.HasIndex("BudgetId");
 
                     b.HasIndex("IncomeTypeId");
 
-=======
->>>>>>> PersonalAccount
                     b.ToTable("IncomePlannings");
                 });
 
@@ -431,17 +401,9 @@ namespace Infrastucture.Migrations
 
             modelBuilder.Entity("Domain.Entities.Lend", b =>
                 {
-<<<<<<< HEAD
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-=======
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
->>>>>>> PersonalAccount
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -473,11 +435,7 @@ namespace Infrastucture.Migrations
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
                     b.ToTable("Lends");
-=======
-                    b.ToTable("Lend");
->>>>>>> PersonalAccount
                 });
 
             modelBuilder.Entity("Domain.Entities.PaymentMethod", b =>
@@ -528,14 +486,9 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
                     b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-=======
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
->>>>>>> PersonalAccount
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -589,7 +542,6 @@ namespace Infrastucture.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
                     b.Property<string>("CategoryId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -597,49 +549,15 @@ namespace Infrastucture.Migrations
                     b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-=======
-                    b.Property<string>("AssignedTo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
->>>>>>> PersonalAccount
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-=======
-                    b.Property<string>("Identification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
->>>>>>> PersonalAccount
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-=======
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PersonId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PropertyCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PurchaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("PurchasePrice")
-                        .HasColumnType("float");
-
->>>>>>> PersonalAccount
                     b.Property<string>("UpdateBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -650,13 +568,6 @@ namespace Infrastucture.Migrations
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
-=======
-                    b.HasIndex("PersonId");
-
-                    b.HasIndex("PropertyCategoryId");
-
->>>>>>> PersonalAccount
                     b.ToTable("Properties");
                 });
 
@@ -668,14 +579,9 @@ namespace Infrastucture.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
                     b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-=======
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
->>>>>>> PersonalAccount
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -698,7 +604,6 @@ namespace Infrastucture.Migrations
                     b.ToTable("PropertyCategories");
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("Infrastructure.Identity.User", b =>
                 {
                     b.Property<int>("Id")
@@ -1001,41 +906,6 @@ namespace Infrastucture.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-=======
-            modelBuilder.Entity("Domain.Entities.Account", b =>
-                {
-                    b.HasOne("Domain.Entities.AccountType", "AccountType")
-                        .WithMany()
-                        .HasForeignKey("AccountTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AccountType");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Property", b =>
-                {
-                    b.HasOne("Domain.Entities.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.PropertyCategory", "PropertyCategory")
-                        .WithMany("properties")
-                        .HasForeignKey("PropertyCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
-
-                    b.Navigation("PropertyCategory");
-                });
-
-            modelBuilder.Entity("Domain.Entities.PropertyCategory", b =>
-                {
-                    b.Navigation("properties");
->>>>>>> PersonalAccount
                 });
 #pragma warning restore 612, 618
         }
