@@ -34,7 +34,6 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
                     b.Property<string>("AccountTypeId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -42,49 +41,21 @@ namespace Infrastucture.Migrations
                     b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-=======
-                    b.Property<int>("AccountTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
->>>>>>> PersonalAccount
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-=======
-                    b.Property<double>("InitialBalance")
-                        .HasColumnType("float");
-
->>>>>>> PersonalAccount
                     b.Property<string>("Provider")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-=======
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
->>>>>>> PersonalAccount
                     b.Property<string>("UpdateBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
-=======
-                    b.HasIndex("AccountTypeId");
-
->>>>>>> PersonalAccount
                     b.ToTable("Accounts");
                 });
 
@@ -96,14 +67,9 @@ namespace Infrastucture.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
                     b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-=======
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
->>>>>>> PersonalAccount
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
