@@ -1,0 +1,125 @@
+@using  Application.DTO
+@using System.ComponentModel.DataAnnotations
+@using Application.Interface
+@using Application.Services.Accounts
+@using Domain.Entities
+@using MudBlazor
+@using MudBlazor.Services
+@using Microsoft.AspNetCore.Components
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.AspNetCore.Authorization
+@* @attribute [Authorize] *@
+@inject NavigationManager Navigation
+@inject IAccountService AccountService
+@inject IAccountTypeService AccountTypeService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+
+<MudDialog>
+<DialogContent>
+    @* <EditForm Model="Model" OnValidSubmit="onValidSubmit"> *@
+        <EditForm Model="Model" OnValidSubmit="onValidSubmit" FormName="CreateAccountForm">
+        <DataAnnotationsValidator />
+        <MudGrid>
+             <MudStack Row="true" Spacing="2" Justify="Justify.Center">
+<MudItem xs="12">
+   
+    <MudSelect T="int"
+            Label="Account Type" 
+                
+               Placeholder="--Select Account Type--"
+               @bind-Value="Model.AccountTypeId" 
+               Variant="Variant.Outlined"
+               Style="width: 550px; 
+
+               AnchorOrigin="Origin.BottomCenter">
+               <MudSelectItem Value="0">--Select Account Type--</MudSelectItem>
+        @if (acctype != null)
+        {
+            foreach (var type in acctype)
+            {
+                <MudSelectItem T="int" Value="@type.Id">@type.Name</MudSelectItem>
+            }
+        }
+    </MudSelect>
+</MudItem>
+            <MudIconButton
+            Icon="@Icons.Material.Filled.Add"
+            Color="Color.Secondary"
+            OnClick="openAccountType"/>
+            </MudStack>
+          
+            <MudItem xs="12">
+                
+                <MudTextField Label="AccountNumber" @bind-Value="Model.AccountNumber" For="@(() => Model.AccountNumber)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="Provider" @bind-Value="Model.Provider" For="@(() => Model.Provider)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="Balance" @bind-Value="Model.InitialBalance" For="@(() => Model.InitialBalance)" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="Status" @bind-Value="Model.Status" For="@(() => Model.Status)" />
+            </MudItem>
+            @* <MudItem xs="12">
+                <MudTextField Label="CreatedBy" @bind-Value="Model.CreatedBy" For="@(() => Model.CreatedBy)" />
+            </MudItem> *@
+            
+            <MudItem xs="12" class="d-flex justify-content-end">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Add Account</MudButton>
+                <MudButton Href="/Accounts" Variant="Variant.Filled" Color="Color.Error">Cancel</MudButton>
+
+            </MudItem>
+        </MudGrid>
+
+    </EditForm>
+</DialogContent>
+</MudDialog>
+
+@code{
+    private bool _fullWidth;
+    private bool _fitContent;
+    [CascadingParameter] IMudDialogInstance DialogInstance { get; set; }
+    [SupplyParameterFromForm(Name = "CreateAccountForm")]
+    private AccountCreateDTO Model {get;set;} = new ();
+
+    [Parameter]
+    public EventCallback OnAccountCreated { get; set; }
+    private void onValidSubmit()
+    {
+        AccountService.CreateAccount(Model);
+        Snackbar.Add("Account created successfully!", Severity.Success);
+        DialogInstance.Close();
+        @* NavigationManager.NavigateTo("uri:/Accounts"); *@
+        AccountService.GetAllAccountsAsync();
+    }
+    private async Task openAccountType()
+    {
+        var dialog = await DialogService.ShowAsync<AccountTypeDialog>("Add Account type");
+        var result = await dialog.Result;
+    }
+// Initialize with an empty list so the foreach doesn't break
+private List<AccountType> acctype = new List<AccountType>();
+
+protected override async Task OnInitializedAsync()
+{
+    try 
+    {
+        // Use the Async version of your service if available
+        var types = await AccountTypeService.GetAllAccountTypes();
+        if (types != null)
+        {
+            acctype = types;
+        }
+    }
+    catch (Exception ex)
+    {
+        Snackbar.Add("Error loading account types", Severity.Error);
+    }
+}
+    }
+
+
+

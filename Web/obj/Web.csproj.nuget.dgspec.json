@@ -719,9 +719,12 @@
             "projectReferences": {
               "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj": {
                 "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj"
+<<<<<<< HEAD
               },
               "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj": {
                 "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj"
+=======
+>>>>>>> PersonalAccount
               }
             }
           }
@@ -748,27 +751,27 @@
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
             },
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
             },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
             },
             "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
             }
           },
           "imports": [
@@ -1127,11 +1130,11 @@
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[10.0.0, )"
             },
             "MudBlazor": {
               "target": "Package",

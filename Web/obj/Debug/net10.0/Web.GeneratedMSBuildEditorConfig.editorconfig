@@ -37,6 +37,7 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< HEAD
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Layout/AuthLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQXV0aExheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -55,14 +56,43 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Budgets.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdWRnZXRzLnJhem9y
+=======
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/AccountDetailDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50RGV0YWlsRGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Accounts.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/AccountTypeDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50VHlwZURpYWxvZy5yYXpvcg==
+>>>>>>> PersonalAccount
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< HEAD
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Edituser.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFZGl0dXNlci5yYXpvcg==
+=======
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreateAccountDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVBY2NvdW50RGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreatePropertyDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVQcm9wZXJ0eURpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/EditAccountDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFZGl0QWNjb3VudERpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/EditPropertyDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFZGl0UHJvcGVydHlEaWFsb2cucmF6b3I=
+>>>>>>> PersonalAccount
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Error.razor]
@@ -73,6 +103,7 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< HEAD
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -81,10 +112,13 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+=======
+>>>>>>> PersonalAccount
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/NotFound.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< HEAD
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/RedirectToLogin.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZWRpcmVjdFRvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -99,6 +133,34 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Users.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xVc2Vycy5yYXpvcg==
+=======
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/PersonCreateDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQZXJzb25DcmVhdGVEaWFsb2cucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/PersonDetailDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQZXJzb25EZXRhaWxEaWFsb2cucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/PersonEditDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQZXJzb25FZGl0RGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Persons.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQZXJzb25zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Properties.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9wZXJ0aWVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/PropertyCategoryDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9wZXJ0eUNhdGVnb3J5RGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/PropertyDetailDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9wZXJ0eURldGFpbERpYWxvZy5yYXpvcg==
+>>>>>>> PersonalAccount
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Weather.razor]
