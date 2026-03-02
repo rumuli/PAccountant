@@ -1,6 +1,7 @@
 @using  Application.DTO
 @using System.ComponentModel.DataAnnotations
 @using Application.Interface
+@using Application.Services.Persons
 @using Application.Services.Properties
 @using Domain.Entities
 @using MudBlazor
@@ -11,6 +12,7 @@
 @* @attribute [Authorize] *@
 @inject NavigationManager Navigation
 @inject IPropertyService PropertyService
+@inject IPersonService PersonService
 @inject IPropertycategoryService PropertyCategoryService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
@@ -39,6 +41,24 @@
             foreach (var type in acctype)
             {
                 <MudSelectItem T="int" Value="@type.Id">@type.Name</MudSelectItem>
+            }
+        }
+    </MudSelect>
+    <MudSelect T="int"
+            Label="Person" 
+                
+               Placeholder="--Select Person--"
+               @bind-Value="Model.PersonId" 
+               Variant="Variant.Outlined"
+               Style="width: 550px; 
+
+               AnchorOrigin="Origin.BottomCenter">
+               <MudSelectItem Value="0">--Select Person--</MudSelectItem>
+         @if (person != null)
+        {
+            foreach (var typess in person)
+            {
+                <MudSelectItem T="int" Value="@typess.Id">@typess.FirstName</MudSelectItem>
             }
         }
     </MudSelect>
@@ -96,8 +116,6 @@
         await PropertyService.GetAllPropertysAsync();
     }
 
-
-  
     private async Task openCategory()
     {
         var dialog = await DialogService.ShowAsync<PropertyCategoryDialog>("Add Category");
@@ -120,6 +138,24 @@ protected override async Task OnInitializedAsync()
     catch (Exception ex)
     {
         Snackbar.Add("Error loading account types", Severity.Error);
+    }
+}
+// person///////////////////
+private List<Person> person = new List<Person>();
+
+protected override void OnInitialized()
+{
+    try 
+    {
+        var typess =  PersonService.GetAllPersons();
+       if (typess != null)
+        {
+            person = typess;
+        }
+    }
+    catch (Exception ex)
+    {
+        Snackbar.Add("Error loading person types", Severity.Error);
     }
 }
     }

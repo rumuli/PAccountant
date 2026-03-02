@@ -58,14 +58,14 @@
                 <MudTextField Label="Provider" @bind-Value="Model.Provider" For="@(() => Model.Provider)" />
             </MudItem>
             <MudItem xs="12">
-                <MudTextField Label="Balance" @bind-Value="Model.Balance" For="@(() => Model.Balance)" />
+                <MudTextField Label="Balance" @bind-Value="Model.InitialBalance" For="@(() => Model.InitialBalance)" />
             </MudItem>
             <MudItem xs="12">
                 <MudTextField Label="Status" @bind-Value="Model.Status" For="@(() => Model.Status)" />
             </MudItem>
-            <MudItem xs="12">
+            @* <MudItem xs="12">
                 <MudTextField Label="CreatedBy" @bind-Value="Model.CreatedBy" For="@(() => Model.CreatedBy)" />
-            </MudItem>
+            </MudItem> *@
             
             <MudItem xs="12" class="d-flex justify-content-end">
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Add Account</MudButton>

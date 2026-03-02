@@ -4,7 +4,8 @@ namespace Domain.Entities
     {
         public int Id {get;set;}
         public PropertyCategory PropertyCategory {get; set;} = new PropertyCategory();
-        public int CategoryId {get;set;}
+       
+        public Person Person {get;set;} = new Person();
         public string Name {get;set;}
         public string Value {get;set;}
         public string Location {get;set;}

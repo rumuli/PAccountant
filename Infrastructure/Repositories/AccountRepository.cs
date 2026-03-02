@@ -18,12 +18,7 @@ public class AccountRepository : IAccount
         {
            dbContext= context; 
         }
-        // Repository for retrieving accounts data
-        // public List<Account> GetAllAccounts()
-        // {
-        //   List<Account> accounts = dbContext.Accounts.ToList();
-        //   return accounts;
-        // }
+       
         public async Task<List<Account>> GetAllAccountsAsync()
        {
          return await dbContext.Accounts
@@ -47,9 +42,7 @@ public class AccountRepository : IAccount
                 Status = accountDTO.Status,
                 CreatedBy = "Admin",
                 UpdateBy="Admin",
-                CreatedAt = DateTime.Now,
-              
-                
+                CreatedAt = DateTime.Now,  
 
             };
             dbContext.Accounts.Add(accounts);
@@ -64,8 +57,7 @@ public class AccountRepository : IAccount
                 account.Provider = accountDTO.Provider;
                 account.Balance = accountDTO.Balance;
                 account.Status = accountDTO.Status;
-                account.UpdateBy = accountDTO.UpdateBy;
-               
+                account.UpdateBy = "Admin";
                 dbContext.SaveChanges();
             }
         }

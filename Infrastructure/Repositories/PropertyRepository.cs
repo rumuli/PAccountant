@@ -34,10 +34,12 @@ public class PropertyRepository : IProperty
        public async Task CreateProperty(PropertyCreateDTO propertyDTO)
         {
              var property = await dbContext.PropertyCategories.FindAsync(propertyDTO.CategoryId);
+             var _person = await dbContext.Persons.FindAsync(propertyDTO.PersonId);
 
             var _property = new Property
             {
-                PropertyCategory = property,
+                 Person=_person,
+                 PropertyCategory = property,
                  Name = propertyDTO.Name,
                  Value = propertyDTO.Value,
                  Location = propertyDTO.Location,

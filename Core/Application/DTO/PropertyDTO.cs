@@ -3,6 +3,7 @@ namespace Application.DTO
     public class PropertyCreateDTO
     {
         public int CategoryId {get;set;}
+        public int  PersonId {get;set;}
         public string Name {get;set;}
         public string Value {get;set;}
         public string Location {get;set;}
