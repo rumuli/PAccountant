@@ -9,8 +9,13 @@ using Application.Services.Expenses;
 using Application.Services.PaymentMethods;
 using Application.Services.Debts;
 using Application.Services.DebtTypes;
+using Application.Services.BudgetServices;
+using Application.Services.IncomePlanningServices;
+using Application.Services.ExpensePlanningServices;
 using Application.Interfaces;
 using Infrastructure.Repositories;
+using Infrastructure.Identity;
+using System.Diagnostics;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -23,6 +28,10 @@ namespace Infrastructure.DependencyInjection
              options.UseSqlServer(configuration.GetConnectionString("PAccountantDBCONN")),ServiceLifetime.Scoped
                 );
 
+                
+         //Register authentication services
+            services.AddAuthenticationService(configuration);
+
             //register repository
             services.AddScoped<IExpenseType, ExpenseTypeRepository>();
             services.AddScoped<IIncomeType, IncomeTypeRepository>();
@@ -31,6 +40,10 @@ namespace Infrastructure.DependencyInjection
             services.AddScoped<IPaymentMethod, PaymentMethodRepository>();
             services.AddScoped<IDebt, DebtRepository>();
             services.AddScoped<IDebtType, DebtTypeRepository>();
+            services.AddScoped<IBudget, BudgetRepository>();
+            services.AddScoped<IIncomePlanning, IncomePlanningRepository>();
+            services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
+            services.AddScoped<IIdentity, IdentityRepository>();
 
 
             return services;
