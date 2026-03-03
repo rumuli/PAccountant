@@ -13,7 +13,11 @@ using Application.Services.Debts;
 using Application.Services.PaymentMethods;
 using Application.Services.DebtTypes;
 using Application.Services.Users;
-
+using Application.Services.Accounts;
+using Application.Services.AccountTypes;
+using Application.Services.Properties;
+using Application.Services.PropertyCategories;
+using Application.Services.Persons;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +43,11 @@ builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 builder.Services.AddScoped<IDebtService, DebtService>();
 builder.Services.AddScoped<IDebtTypeService, DebtTypeService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+ builder.Services.AddScoped<IAccountService, AccountService>();
+ builder.Services.AddScoped<IAccountTypeService, AccountTypeService>();
+ builder.Services.AddScoped<IPropertyService, PropertyService>();
+ builder.Services.AddScoped<IPropertycategoryService, PropertyCategoryService>();
+ builder.Services.AddScoped<IPersonService, PersonService>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();  

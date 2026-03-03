@@ -12,6 +12,12 @@ using Application.Services.DebtTypes;
 using Application.Services.BudgetServices;
 using Application.Services.IncomePlanningServices;
 using Application.Services.ExpensePlanningServices;
+using Application.Services.AccountTypes;
+using Application.Services.Accounts;
+using Application.Services.Persons;
+using Application.Services.Properties;
+using Application.Services.PropertyCategories;
+
 using Application.Interfaces;
 using Infrastructure.Repositories;
 using Infrastructure.Identity;
@@ -44,6 +50,11 @@ namespace Infrastructure.DependencyInjection
             services.AddScoped<IIncomePlanning, IncomePlanningRepository>();
             services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
             services.AddScoped<IIdentity, IdentityRepository>();
+             services.AddScoped<IAccount, AccountRepository>(); 
+            services.AddScoped<IAccountType, AccountTypeRepository>(); 
+            services.AddScoped<IPerson, PersonRepository>(); 
+            services.AddScoped<IProperty, PropertyRepository>(); 
+            services.AddScoped<IPropertyCategory, PropertyCategoryRepository>(); 
 
 
             return services;
