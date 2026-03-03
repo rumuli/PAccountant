@@ -109,51 +109,57 @@
 
 @code{
     List<Account> accounts = new List<Account>();
-        protected override async Task OnInitializedAsync()
-            {
-                accounts = await AccountService.GetAllAccountsAsync();
-            }  
-            protected IDialogReference dialogReference;
-            private Color GetStatusColor(string status)
-            {
-                return status switch
-                {
-                    "Active" => Color.Success,
-                    "Completed" => Color.Info,
-                    "Pending" => Color.Warning,
-                    "Cancelled" => Color.Error,
-                    _ => Color.Default
-                };
-            }
-            private async Task OpenDialog(List<Account>? accounts = null)
-           {
-            var dialog = await DialogService.ShowAsync<CreateAccountDialog>("Add Account");
-            var result = await dialog.Result;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAccounts();
+    }
+    protected IDialogReference dialogReference;
+    private Color GetStatusColor(string status)
+    {
+        return status switch
+        {
+            "Active" => Color.Success,
+            "Completed" => Color.Info,
+            "Pending" => Color.Warning,
+            "Cancelled" => Color.Error,
+            _ => Color.Default
+        };
+    }
+    private async Task OpenDialog(List<Account>? accounts = null)
+    {
+        var dialog = await DialogService.ShowAsync<CreateAccountDialog>("Add Account");
+        var result = await dialog.Result;
 
-            if (result != null && !result.Canceled)
-            {
-            accounts =await AccountService.GetAllAccountsAsync();
-            }
-        } 
+        if (result != null && !result.Canceled)
+        {
+            await LoadAccounts();
+        }
+    }
 
-            private async Task OpenDetailDialog(int id)
-            {
-                
-            var parameters = new DialogParameters<AccountDetailDialog> { { x => x.Id, id } };
-             await DialogService.ShowAsync<AccountDetailDialog>("View Details", parameters);
-             }
+    private async Task OpenDetailDialog(int id)
+    {
+
+        var parameters = new DialogParameters<AccountDetailDialog> { { x => x.Id, id } };
+        await DialogService.ShowAsync<AccountDetailDialog>("View Details", parameters);
+    }
 
 
-           private async Task OpenEditDialog(int id)
-           {
-            var parameters = new DialogParameters<EditAccountDialog> { { x => x.Id, id } };
-            var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true };
-            
-            var dialog = await DialogService.ShowAsync<EditAccountDialog>("Edit Account", parameters, options);
-            var result = await dialog.Result;
+    private async Task OpenEditDialog(int id)
+    {
+        var parameters = new DialogParameters<EditAccountDialog> { { x => x.Id, id } };
+        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true };
 
-            
-          }
+        var dialog = await DialogService.ShowAsync<EditAccountDialog>("Edit Account", parameters, options);
+        var result = await dialog.Result;
 
-   }
+
+    }
+
+    private async Task LoadAccounts()
+    {
+        accounts = await AccountService.GetAllAccountsAsync();
+
+        StateHasChanged();
+    }
+}
      
