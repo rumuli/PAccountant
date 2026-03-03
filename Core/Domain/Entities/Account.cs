@@ -3,13 +3,6 @@ namespace Domain.Entities
     public class Account
     {
         public int Id {get;set;}
-<<<<<<< HEAD
-        public string AccountTypeId {get;set;}
-        public string AccountNumber {get;set;}
-        public string Provider {get;set;}
-        public string CreatedBy {get;set;}
-        public string CreatedAt {get;set;}
-=======
         public int AccountTypeId {get;set;}
         public string AccountNumber {get;set;}
         public string Provider {get;set;}
@@ -19,7 +12,6 @@ namespace Domain.Entities
         public string  Status{get;set;}
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string CreatedBy {get;set;}
->>>>>>> PersonalAccount
         public string UpdateBy{get;set;}
 
     }

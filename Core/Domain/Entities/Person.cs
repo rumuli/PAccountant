@@ -14,11 +14,7 @@ namespace Domain.Entities
         public string Street{get;set;}
         public string Status{get;set;}
         public string CreatedBy {get;set;}
-<<<<<<< HEAD
-        public string CreatedAt {get;set;}
-=======
         public DateTime CreatedAt {get;set;}
->>>>>>> PersonalAccount
         public string UpdateBy {get;set;}
 
     }

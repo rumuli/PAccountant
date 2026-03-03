@@ -107,7 +107,8 @@
     List<Person> _person = new List<Person>();
         protected override void OnInitialized()
             {
-                _person = PersonService.GetAllPersons();
+                @* _person = PersonService.GetAllPersons(); *@
+                LoadPersons();
             }  
             protected IDialogReference dialogReference;
             private Color GetStatusColor(string status)
@@ -128,7 +129,7 @@
 
             if (result != null && !result.Canceled)
             {
-             _person = PersonService.GetAllPersons();
+             LoadPersons();
             }
         } 
 
@@ -147,8 +148,14 @@
             
             var dialog = await DialogService.ShowAsync<PersonEditDialog>("Edit Person", parameters, options);
             var result = await dialog.Result;
-
             
+          }
+          
+           private void LoadPersons()
+        {
+           _person =  PersonService.GetAllPersons();
+
+               StateHasChanged();
           }
 
    }

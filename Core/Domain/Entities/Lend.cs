@@ -2,11 +2,7 @@ namespace Domain.Entities
 {
 public class Lend
 {
-<<<<<<< HEAD
     public Guid Id { get; private set; }
-=======
-    public int Id { get;set; }
->>>>>>> PersonalAccount
     public string BorrowerName { get; set; } = string.Empty;
     public decimal Amount { get; private set; }
     public DateTime LendDate { get; private set; }

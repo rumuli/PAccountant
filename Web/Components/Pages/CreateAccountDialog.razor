@@ -112,6 +112,8 @@ protected override async Task OnInitializedAsync()
         if (types != null)
         {
             acctype = types;
+            StateHasChanged();
+            
         }
     }
     catch (Exception ex)
@@ -119,7 +121,6 @@ protected override async Task OnInitializedAsync()
         Snackbar.Add("Error loading account types", Severity.Error);
     }
 }
-    }
-
+}
 
 

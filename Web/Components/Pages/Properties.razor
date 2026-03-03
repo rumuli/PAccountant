@@ -124,7 +124,8 @@
        List<Property> _property = new List<Property>();
         protected override async Task OnInitializedAsync()
             {
-                _property = await PropertyService.GetAllPropertysAsync();
+                @* _property = await PropertyService.GetAllPropertysAsync(); *@
+                LoadProperties();
             }  
             protected IDialogReference dialogReference;
             private Color GetStatusColor(string status)
@@ -145,7 +146,9 @@
 
             if (result != null && !result.Canceled)
             {
-              _property =await PropertyService.GetAllPropertysAsync();
+              @* _property =await PropertyService.GetAllPropertysAsync(); *@
+
+                LoadProperties();
             }
         } 
 
@@ -165,8 +168,12 @@
             var dialog = await DialogService.ShowAsync<EditPropertyDialog>("Edit Property", parameters, options);
             var result = await dialog.Result;
 
-            
           }
+     private async Task LoadProperties()
+    {
+        _property = await PropertyService.GetAllPropertysAsync();
 
+        StateHasChanged();
+    }
    }
      

@@ -30,8 +30,6 @@ namespace Infrastructure.DependencyInjection
                             services.AddScoped<IAccount, AccountRepository>(); 
             services.AddScoped<IAccountType, AccountTypeRepository>(); 
             services.AddScoped<IPerson, PersonRepository>(); 
-
-
             services.AddScoped<IProperty, PropertyRepository>(); 
             services.AddScoped<IPropertyCategory, PropertyCategoryRepository>(); 
                 
