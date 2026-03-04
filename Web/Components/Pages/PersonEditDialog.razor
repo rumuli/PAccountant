@@ -1,0 +1,85 @@
+@using Application.Services.Persons
+@using Domain.Entities
+@using Application.DTO
+@using Application.Interface
+@using MudBlazor
+@rendermode InteractiveServer
+@inject IPersonService PersonService
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-2"/> Edit Person </MudText>
+    </TitleContent>
+    <DialogContent>
+      
+            <EditForm Model="@_editModel" OnValidSubmit="OnValidSubmit" FormName="EditPersonForm">
+                <DataAnnotationsValidator />
+                <MudStack Spacing="3">
+                    
+                    <MudTextField Label="FirstName" @bind-Value="_editModel.FirstName" 
+                                  Variant="Variant.Outlined" For="@(() => _editModel.FirstName)" />
+
+                    <MudTextField Label="LastName" @bind-Value="_editModel.LastName" 
+                                  Variant="Variant.Outlined" For="@(() => _editModel.LastName)" />
+
+                    <MudTextField Label="Sex" @bind-Value="_editModel.Sex" 
+                                     Variant="Variant.Outlined" For="@(() => _editModel.Sex)" />
+
+                    <MudTextField Label="Country" @bind-Value="_editModel.Country" 
+                                     Variant="Variant.Outlined" For="@(() => _editModel.Country)" />
+
+                    <MudTextField Label="City" @bind-Value="_editModel.City" 
+                                     Variant="Variant.Outlined" For="@(() => _editModel.City)" />
+
+                    <MudTextField Label="City" @bind-Value="_editModel.Street" 
+                                     Variant="Variant.Outlined" For="@(() => _editModel.Street)" />
+
+                </MudStack>
+            </EditForm>
+     
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="OnValidSubmit">Save Changes</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public int Id { get; set; } // The ID of the person to edit
+
+    private PersonUpdateDTO _editModel = new();
+    private List<Person> _person;
+
+    protected override void OnInitialized()
+    {
+        var _person =  PersonService.GetPersonById(Id);
+        if (_person != null)
+        {
+            _editModel = new PersonUpdateDTO
+            {
+                FirstName = _person.FirstName,
+                LastName = _person.LastName,
+                Sex = _person.Sex,
+                Country = _person.Country,
+                City = _person.City,  
+                Street = _person.Street,  
+            };
+        }
+    }
+    private void OnValidSubmit()
+    {
+        try
+        {
+            PersonService.UpdatePerson(Id, _editModel);
+            Snackbar.Add("Person updated successfully!", Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Update failed: {ex.Message}", Severity.Error);
+        }
+    }    private void Cancel() => MudDialog.Cancel();
+}

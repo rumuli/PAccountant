@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "7JttdtNsrIs=",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj",
+=======
+  "dgSpecHash": "clvrrkvEwo4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj",
+>>>>>>> f8c5b6579ee6695c22a169308cc25234ebe4470f
   "expectedPackageFiles": [],
   "logs": []
 }

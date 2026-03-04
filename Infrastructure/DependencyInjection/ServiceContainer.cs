@@ -27,6 +27,11 @@ namespace Infrastructure.DependencyInjection
                 services.AddScoped<IExpenseType, ExpenseTypeRepository>();
                 services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
                 services.AddScoped<IIdentity, IdentityRepository>();
+                            services.AddScoped<IAccount, AccountRepository>(); 
+            services.AddScoped<IAccountType, AccountTypeRepository>(); 
+            services.AddScoped<IPerson, PersonRepository>(); 
+            services.AddScoped<IProperty, PropertyRepository>(); 
+            services.AddScoped<IPropertyCategory, PropertyCategoryRepository>(); 
                 
 
               

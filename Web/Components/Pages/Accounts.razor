@@ -1,0 +1,165 @@
+@page "/Accounts"
+@using Microsoft.EntityFrameworkCore
+@using MudBlazor
+@using Domain.Entities
+@using Application.Services.Accounts
+@using Microsoft.AspNetCore.Authorization
+@* @attribute [Authorize] *@
+@inject IDialogService DialogService
+@inject IAccountService AccountService
+
+<PageTitle>Account</PageTitle>
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+     <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <MudText Typo="Typo.h4" Class="font-weight-bold">
+            Account
+        </MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(()=>OpenDialog())">
+                +Add Account
+            </MudButton>
+    </div>  
+
+     <MudDataGrid T="Account"
+                 Items="@accounts"
+                 Hover="true"
+                 Striped="true"
+                 Bordered="true"
+                 Dense="true"
+                 Filterable="true"
+                 SortMode="SortMode.Multiple"
+                 Class="elevation-1">
+
+        <Columns>
+
+        <PropertyColumn Property="x => x.Id"
+                            Title="ID"
+                            Sortable="true" />
+
+
+        <PropertyColumn Property="x => x.AccountType.Name"
+                            Title="Account Type"
+                            Sortable="true" /> 
+                                   
+              
+               <PropertyColumn Property="x => x.AccountNumber"
+                            Title="AccountNumber"
+                            Sortable="true" />
+
+              <PropertyColumn Property="x => x.Provider"
+                            Title="Provider"
+                            Sortable="true" /> 
+
+
+               <PropertyColumn Property="x => x.Balance"
+                            Title="Balance"
+                            Sortable="true" /> 
+
+               <PropertyColumn Property="x => x.Status"
+                            Title="Status"
+                            Sortable="true" /> 
+
+               <PropertyColumn Property="x => x.UpdateBy"
+                            Title="UpdateBy"
+                            Sortable="true" /> 
+                            
+               <PropertyColumn Property="x => x.CreatedBy"
+                            Title="CreatedBy"
+                            Sortable="true" /> 
+
+            <PropertyColumn Property="x => x.CreatedAt"
+                            Title="CreatedAt"
+                            Format="MM/dd/yyyy"
+                            Sortable="true" />  
+
+
+       
+   
+         <MudTd DataLabel="Actions">
+     
+       <TemplateColumn Title="Actions" Context="context">
+            <CellTemplate>
+                  <MudStack Row="true" Spacing="2" Justify="Justify.Center">
+                <MudButton Size="Size.Small" 
+                           Variant="Variant.Filled" 
+                           Color="Color.Warning"
+                           StartIcon="@Icons.Material.Filled.Edit" 
+                           OnClick="@(() => OpenEditDialog(context.Item.Id))">
+                    Edit
+                </MudButton>
+                 <MudButton Size="Size.Small" 
+                           Variant="Variant.Filled" 
+                           Color="Color.Primary" 
+                           StartIcon="@Icons.Material.Filled.MoreHoriz"
+                           OnClick="@(() => OpenDetailDialog(context.Item.Id))">
+                    Details
+                </MudButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </MudTd>
+
+   
+        </Columns>
+
+    </MudDataGrid>
+
+</MudContainer>
+
+
+@code{
+    List<Account> accounts = new List<Account>();
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAccounts();
+    }
+    protected IDialogReference dialogReference;
+    private Color GetStatusColor(string status)
+    {
+        return status switch
+        {
+            "Active" => Color.Success,
+            "Completed" => Color.Info,
+            "Pending" => Color.Warning,
+            "Cancelled" => Color.Error,
+            _ => Color.Default
+        };
+    }
+    private async Task OpenDialog(List<Account>? accounts = null)
+    {
+        var dialog = await DialogService.ShowAsync<CreateAccountDialog>("Add Account");
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await LoadAccounts();
+        }
+    }
+
+    private async Task OpenDetailDialog(int id)
+    {
+
+        var parameters = new DialogParameters<AccountDetailDialog> { { x => x.Id, id } };
+        await DialogService.ShowAsync<AccountDetailDialog>("View Details", parameters);
+    }
+
+
+    private async Task OpenEditDialog(int id)
+    {
+        var parameters = new DialogParameters<EditAccountDialog> { { x => x.Id, id } };
+        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true };
+
+        var dialog = await DialogService.ShowAsync<EditAccountDialog>("Edit Account", parameters, options);
+        var result = await dialog.Result;
+
+
+    }
+
+    private async Task LoadAccounts()
+    {
+        accounts = await AccountService.GetAllAccountsAsync();
+
+        StateHasChanged();
+    }
+}
+     

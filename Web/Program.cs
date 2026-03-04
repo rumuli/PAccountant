@@ -8,6 +8,11 @@ using Application.Services.ExpensePlanningServices;
 using Application.Services.ExpenseTypes;
 using Application.Services.IncomeTypeServices;
 using Application.Services.Users;
+using Application.Services.Accounts;
+using Application.Services.AccountTypes;
+using Application.Services.Properties;
+using Application.Services.PropertyCategories;
+using Application.Services.Persons;
 // using Application.Interfaces.Users;
 
 
@@ -25,6 +30,11 @@ builder.Services.AddScoped<IExpensePlanningService, ExpensePlanningService>();
 builder.Services.AddScoped<IExpenseTypeService, ExpenseTypeService>();
 builder.Services.AddScoped<IIncomeTypeService, IncomeTypeService>();
 builder.Services.AddScoped<IIncomePlanningService, IncomePlanningService>();
+ builder.Services.AddScoped<IAccountService, AccountService>();
+ builder.Services.AddScoped<IAccountTypeService, AccountTypeService>();
+ builder.Services.AddScoped<IPropertyService, PropertyService>();
+ builder.Services.AddScoped<IPropertycategoryService, PropertyCategoryService>();
+ builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();  
 builder.Services.AddAuthorization();
