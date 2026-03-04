@@ -1,5 +1,4 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.deps.json
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.dll
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.pdb
@@ -33,7 +32,6 @@ C:\Users\meong\PersonalProjects\PAccountant\Core\Application\obj\Debug\net10.0\r
 C:\Users\meong\PersonalProjects\PAccountant\Core\Application\obj\Debug\net10.0\Application.pdb
 C:\Users\meong\PersonalProjects\PAccountant\Core\Application\obj\Debug\net10.0\ref\Application.dll
 >>>>>>> Users
-=======
 E:\BlazorApp2\BlazorApp2\Core\Application\bin\Debug\net10.0\Application.deps.json
 E:\BlazorApp2\BlazorApp2\Core\Application\bin\Debug\net10.0\Application.dll
 E:\BlazorApp2\BlazorApp2\Core\Application\bin\Debug\net10.0\Application.pdb
