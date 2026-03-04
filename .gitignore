@@ -4,4 +4,11 @@ obj/
 bin/
 .vscode/
 **/obj/
+<<<<<<< HEAD
 **/bin/
+=======
+**/bin/
+.vs/
+**/Migrations/
+**/migrations/
+>>>>>>> origin/BudgetPlanning

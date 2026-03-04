@@ -26,6 +26,12 @@
         </div>
     </TitleContent>
     <DialogContent>
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Class="mb-4">
+                @ErrorMessage
+            </MudAlert>
+        }
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" TabPanelsClass="pa-10">
         <MudTabPanel Text="Income Planning">
             
@@ -157,6 +163,8 @@
 @code{
     @* [CascadingParameter]  *@
     @* MudDialogInstance MudDialog { get; set; } = default!; *@
+    private string ErrorMessage { get; set; } = string.Empty;
+
     [Parameter] public int BudgetId { get; set; }
     [Parameter] public string BudgetName{get;set;}
     @* private GetBudgetByIdDTO budgetbyid; *@
@@ -207,7 +215,14 @@
 
     private async Task SaveExpensePlanning()
     {
+        try{
         await ExpensePlanningService.AddExpensePlanningAsync(newExpensePlan);
+        }
+        catch(Exception ex)
+        {
+            ErrorMessage =ex.Message;  
+        }
+
                 var incomes = await IncomePlanningService.GetIncomePlanningsAsync();
         _incomeplanning = incomes
             .Where(x => x.BudgetId == BudgetId)
