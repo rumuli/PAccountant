@@ -1,4 +1,5 @@
 @using Application.DTO
+@using Application.Services.Accounts
 @using Application.Services.Expenses
 @using Application.Services.ExpenseTypes
 @using MudBlazor
@@ -9,7 +10,8 @@
 @using Domain.Entities
 
 @using System.ComponentModel.DataAnnotations
-@using Infrastructure.Data
+@* @using Infrastructure.Data *@
+@inject IAccountService AccountService
 @using Microsoft.EntityFrameworkCore
 
 <MudDialog Style="border-radius:12px; overflow:hidden;">
@@ -196,12 +198,12 @@
      private List<Account> _accounts = new();
 
     // Inject DbContext
-    [Inject] private ApplicationDbContext _dbContext { get; set; } = default!;
+    @* [Inject] private ApplicationDbContext _dbContext { get; set; } = default!; *@
      protected override async Task OnInitializedAsync()
     {
         @* _accounts = await _dbContext.AccountTypes.ToListAsync(); *@
             // Load AccountTypes directly from DbContext
-    _accounts = await _dbContext.Accounts.ToListAsync();
+    _accounts = await AccountService.GetAllAccountsAsync();
 
     // Load IncomeTypes from service
     ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();

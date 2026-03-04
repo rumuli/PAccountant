@@ -1,5 +1,7 @@
 using Domain.Entities;
 using Application.DTO;
+using Application.Services.IncomeTypes;
+
 
 namespace Application.Services.IncomeTypes
 {
@@ -7,7 +9,7 @@ namespace Application.Services.IncomeTypes
     {
         Task<List<IncomeType>> GetAllIncomeTypesAsync();
         Task<IncomeType?> GetIncomeTypeByIdAsync(int id);
-        Task CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO);
+        Task<int> CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO);
     }
 }
 

@@ -1,4 +1,5 @@
 @using Application.DTO
+@using Application.Services.Accounts
 @using Application.Services.Incomes
 @using Application.Services.IncomeTypes
 @using Application.Services.PaymentMethods
@@ -6,11 +7,12 @@
 @using System.ComponentModel.DataAnnotations
 @inject IIncomeService IncomeService
 @inject IIncomeTypeService IncomeTypeService
+@inject IAccountService AccountService
 @inject IPaymentMethodService PaymentMethodService
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @using Domain.Entities
-@using Infrastructure.Data
+@* @using Infrastructure.Data *@
 @using Microsoft.EntityFrameworkCore
 
 
@@ -223,13 +225,14 @@
   private List<Account> _accounts = new();
 
     // Inject DbContext
-    [Inject] private ApplicationDbContext _dbContext { get; set; } = default!;
+    @* [Inject] private ApplicationDbContext _dbContext { get; set; } = default!; *@
 
     protected override async Task OnInitializedAsync()
     {
         @* _accounts = await _dbContext.AccountTypes.ToListAsync(); *@
             // Load AccountTypes directly from DbContext
-    _accounts = await _dbContext.Accounts.ToListAsync();
+    _accounts = await AccountService.GetAllAccountsAsync();
+
 
     // Load IncomeTypes from service
     IncomeTypes = await IncomeTypeService.GetAllIncomeTypesAsync();

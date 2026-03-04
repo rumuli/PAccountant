@@ -3,10 +3,10 @@ using Application.DTO;
 
 namespace Application.Interfaces
 {
-    public interface IPaymentMethodService
+    public interface IPaymentMethod
     {
-        Task<List<PaymentMethod>> GetAllPaymentMethodsAsync();
+        Task <List<PaymentMethod>> GetAllPaymentMethodsAsync();
         Task<PaymentMethod?> GetPaymentMethodByIdAsync(int id);
-        Task CreatePaymentMethodAsync(CreatePaymentMethodDTO paymentTypeDTO);
+        Task<int> CreatePaymentMethodAsync(CreatePaymentMethodDTO paymentTypeDTO);
     }
 }

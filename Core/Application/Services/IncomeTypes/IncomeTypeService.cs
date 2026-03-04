@@ -23,17 +23,12 @@ namespace Application.Services.IncomeTypes
             return await _incomeType.GetAllIncomeTypesAsync();
         }
 
-        public async Task CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO)
+        public async Task<int> CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO)
         {
-            await _incomeType.CreateIncomeTypeAsync(incomeTypeDTO);
+            return await _incomeType.CreateIncomeTypeAsync(incomeTypeDTO);
         }
     }
 
-    public interface IIncomeType
-    {
-        Task CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO);
-        Task<List<IncomeType>> GetAllIncomeTypesAsync();
-        Task<IncomeType?> GetIncomeTypeByIdAsync(int id);
-    }
+   
 }
 

@@ -4,7 +4,6 @@
 @using MudBlazor
 @using Domain.Entities
 @using Microsoft.AspNetCore.Authorization
-
 @inject IDialogService DialogService
 @inject IPropertyService PropertyService
 
@@ -13,10 +12,10 @@
      <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-6">
         <MudText Typo="Typo.h4" Class="font-weight-bold">
-            Account
+            Properties
         </MudText>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(()=>OpenDialog())">
-                +Add Account
+                +Add property
             </MudButton>
     </div>  
 
@@ -150,6 +149,8 @@
 
                 LoadProperties();
             }
+             
+            
         } 
 
             private async Task OpenDetailDialog(int id)
@@ -169,11 +170,16 @@
             var result = await dialog.Result;
 
           }
+          
      private async Task LoadProperties()
     {
         _property = await PropertyService.GetAllPropertysAsync();
 
         StateHasChanged();
+        
     }
+
+    
+    
    }
      

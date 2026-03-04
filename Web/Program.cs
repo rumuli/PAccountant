@@ -3,7 +3,7 @@ using MudBlazor.Services;
 using Infrastructure.DependencyInjection;
 using Application.Services.BudgetServices;
 using Application.Services.IncomePlanningServices;
-// using Application.Interfaces;
+using Application.Interfaces;
 using Application.Services.ExpensePlanningServices;
 using Application.Services.IncomeTypes;
 using Application.Services.ExpenseTypes;
@@ -18,6 +18,8 @@ using Application.Services.AccountTypes;
 using Application.Services.Properties;
 using Application.Services.PropertyCategories;
 using Application.Services.Persons;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,11 +45,11 @@ builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 builder.Services.AddScoped<IDebtService, DebtService>();
 builder.Services.AddScoped<IDebtTypeService, DebtTypeService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
- builder.Services.AddScoped<IAccountService, AccountService>();
- builder.Services.AddScoped<IAccountTypeService, AccountTypeService>();
- builder.Services.AddScoped<IPropertyService, PropertyService>();
- builder.Services.AddScoped<IPropertycategoryService, PropertyCategoryService>();
- builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountTypeService, AccountTypeService>();
+builder.Services.AddScoped<IPropertyService, PropertyService>();
+builder.Services.AddScoped<IPropertycategoryService, PropertyCategoryService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();  

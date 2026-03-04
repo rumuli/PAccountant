@@ -33,13 +33,6 @@ namespace Application.Services.Incomes
        
     }
 
-    // Repository contract
-    public interface IIncome
-    {
-        Task<int> CreateIncomeAsync(CreateIncomeDTO incomeDTO);
-        Task<List<Income>> GetAllIncomesAsync();
-        Task<Income?> GetIncomeByIdAsync(int id);
-       
-    }
+    
 }
 

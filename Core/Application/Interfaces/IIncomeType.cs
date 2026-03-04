@@ -3,7 +3,7 @@ using Application.DTO;
 
 namespace Application.Interfaces
 {
-    public interface IIncomeTypeService
+    public interface IIncomeType
     {
         Task<List<IncomeType>> GetAllIncomeTypesAsync();
         Task<IncomeType?> GetIncomeTypeByIdAsync(int id);

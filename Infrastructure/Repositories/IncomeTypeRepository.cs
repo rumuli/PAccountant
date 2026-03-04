@@ -1,7 +1,9 @@
 using Domain.Entities;
 using Application.DTO;
+using Application.Interfaces;
 using Application.Services.IncomeTypes;
 using Infrastructure.Data;
+using Infrastructure.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
@@ -26,7 +28,7 @@ namespace Infrastructure.Repositories
         }
 
         // create new income type
-        public async Task CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO)
+        public async Task<int> CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO)
         {
             var incomeType = new IncomeType
             {
@@ -38,6 +40,8 @@ namespace Infrastructure.Repositories
 
             _dbContext.IncomeTypes.Add(incomeType);
             await _dbContext.SaveChangesAsync();
+
+            return incomeType.Id;
         }
     }
 }

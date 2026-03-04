@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Application.DTO;
+using Application.Interfaces;
 
 namespace Application.Services.PaymentMethods
 {
@@ -22,16 +23,11 @@ namespace Application.Services.PaymentMethods
             return await _paymentMethod.GetAllPaymentMethodsAsync();
         }
 
-        public async Task CreatePaymentMethodAsync(CreatePaymentMethodDTO paymentMethodDTO)
+        public async Task<int> CreatePaymentMethodAsync(CreatePaymentMethodDTO paymentMethodDTO)
         {
-            await _paymentMethod.CreatePaymentMethodAsync(paymentMethodDTO);
+            return await _paymentMethod.CreatePaymentMethodAsync(paymentMethodDTO);
         }
     }
 
-    public interface IPaymentMethod
-    {
-        Task CreatePaymentMethodAsync(CreatePaymentMethodDTO paymentMethodDTO);
-        Task<List<PaymentMethod>> GetAllPaymentMethodsAsync();
-        Task<PaymentMethod?> GetPaymentMethodByIdAsync(int id);
-    }
+   
 }

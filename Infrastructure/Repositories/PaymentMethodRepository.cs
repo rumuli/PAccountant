@@ -1,6 +1,8 @@
 using Domain.Entities;
 using Application.DTO;
+using Application.Interfaces;
 using Application.Services.PaymentMethods;
+using Infrastructure.DependencyInjection;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +27,7 @@ namespace Infrastructure.Repositories
             return await _dbContext.PaymentMethods.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task CreatePaymentMethodAsync(CreatePaymentMethodDTO paymentMethodDTO)
+        public async Task<int> CreatePaymentMethodAsync(CreatePaymentMethodDTO paymentMethodDTO)
         {
             var paymentMethod = new PaymentMethod
             {
@@ -37,6 +39,8 @@ namespace Infrastructure.Repositories
 
             _dbContext.PaymentMethods.Add(paymentMethod);
             await _dbContext.SaveChangesAsync();
+
+            return paymentMethod.Id;
         }
     }
 }
