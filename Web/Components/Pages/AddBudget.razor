@@ -36,14 +36,7 @@
     private async Task SaveBudget()
     {
         await BudgetService.AddBudgetAsync(newBudget);
-        // Close the dialog and pass a 'true' result back to the page
+        // Pass 'true' or the new budget object back to the caller
         MudDialog.Close(DialogResult.Ok(true));
-
-         _budgets = await BudgetService.GetBudgetsAsync() ?? new List<GetBudgetDTO>();    
-            NavigationManager.NavigateTo("/budgets");
     }
-    @* private async Task CloseDialogAsync(){
-        MudDialog.Close(DialogResult.Ok(true));
-    } *@
-
 }
