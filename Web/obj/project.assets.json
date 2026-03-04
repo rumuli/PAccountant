@@ -4134,43 +4134,35 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\HP\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\HP\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\HP\\Desktop\\PAccountant\\Web\\Web.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
       "projectName": "Web",
-      "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Web\\Web.csproj",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Web\\obj\\",
+      "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj"
+            "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj"
             },
-            "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj": {
-              "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj"
+            "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj": {
+              "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj"
             }
           }
         }
@@ -4652,7 +4644,7 @@
       "code": "Undefined",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\HP\\Desktop\\PAccountant\\Web\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
+      "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
     },
     {
       "code": "NU1701",

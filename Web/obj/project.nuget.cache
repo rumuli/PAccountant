@@ -1,12 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "4C40YJ6GSaE=",
-=======
-  "dgSpecHash": "TiF/3O7aUyE=",
->>>>>>> PersonalAccount
+  "dgSpecHash": "fIg01mrzLR4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Web\\Web.csproj",
+  "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
@@ -74,19 +70,19 @@
     {
       "code": "Undefined",
       "level": "Warning",
-      "message": "Problem reading the cache file C:\\Users\\HP\\Desktop\\PAccountant\\Web\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
-      "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Web\\Web.csproj",
+      "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Web\\Web.csproj",
+      "filePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
       "targetGraphs": []
     },
     {
       "code": "NU1701",
       "level": "Warning",
       "message": "Package 'Microsoft.AspNet.Identity.Core 2.2.4' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.",
-      "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Web\\Web.csproj",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Web\\Web.csproj",
+      "filePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Web\\Web.csproj",
       "libraryId": "Microsoft.AspNet.Identity.Core",
       "targetGraphs": [
         "net10.0"
