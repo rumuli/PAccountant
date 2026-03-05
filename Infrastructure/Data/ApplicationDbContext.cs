@@ -43,6 +43,8 @@ namespace Infrastructure.Data
              builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
              builder.Entity<IdentityUserRole<int>>().ToTable("UserRoles").HasKey(ur => new { ur.UserId, ur.RoleId });
 
+             builder.Entity<Budget>().Property(t=> t.Status).HasConversion<string>();
+
         }
 
         

@@ -1,12 +1,46 @@
 ﻿
 
-
-
-@page "/home"
+@using Application.Services.BudgetServices
 @using Microsoft.AspNetCore.Authorization
+@using Application.DTO.Budget
+@using Web.Components.Shared
+@inject IBudgetService BudgetService
+@rendermode InteractiveServer
+
 @attribute [Authorize]
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@* <h1>Hello, world!</h1>
 
-Welcome to your new app.
+Welcome to your new app. *@
+@if (budgetbystatus == null || !budgetbystatus.Any())
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6">
+    <MudText Typo="Typo.h4" Class="mb-4">Welcome to CRM Demo</MudText>
+<p>Count: @budgetbystatus.Count</p>
+
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <StatCards Title="Total Budgets" Value="@TotalBudgets.ToString()" Subtitle="All Budgets" ValueColor="Color.Primary" Icon="Icons.Material.Filled.Assignment" TrendText="23%"/>
+        </MudItem>
+        @foreach (var Budgetbystatus in budgetbystatus)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <StatCards Title="@Budgetbystatus.Status.ToString()" Value="@Budgetbystatus.Counts.ToString()" Subtitle="Tickets with this status" ValueColor="Color.Primary" Icon="Icons.Material.Filled.Assignment" />
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+    }
+@code{
+    private List<CountStatusBudgetDTO> budgetbystatus= new();
+    private int TotalBudgets => budgetbystatus.Sum(b=> b.Counts);  
+    protected override async Task OnInitializedAsync()
+    {
+       budgetbystatus = await BudgetService.CountBudgetByStatusAsync();
+    }
+}

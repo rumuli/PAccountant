@@ -32,10 +32,13 @@ namespace Infrastructure.Repositories
             {
                 Name = $"Budget {startdate.ToString("MMMM yyyy")}",
                 StartingAt = startdate,
+                PlannedIncome= 0,
+                PlannedExpense=0,
                 EndingAt = dto.EndingAt.GetValueOrDefault()
+                // Status = dto.BudgetStatus
             };
             _dbcontext.Budgets.Add(newbudget);
-            _dbcontext.SaveChangesAsync();
+        await _dbcontext.SaveChangesAsync();
         }
         public async Task<GetBudgetByIdDTO?> GetBudgetByIdAsync(int id)
         {
@@ -50,7 +53,18 @@ namespace Infrastructure.Repositories
                 })
                 .FirstOrDefaultAsync();
         }
+        public async Task<List<CountStatusBudgetDTO>> CountBudgetByStatusAsync()
+        {
+            return await _dbcontext.Budgets
+            .GroupBy(t=> t.Status)
+            .Select(g => new CountStatusBudgetDTO
+            {
+                Status=g.Key,
+                Counts = g.Count()
+            })
+            .ToListAsync();
 
+        }
         
     }
 }

@@ -18,8 +18,13 @@ namespace Infrastructure.Repositories{
             .ToListAsync();
         }
         public async Task AddIncomePlanning(CreateIncomePlanningDTO dto){
-             IncomePlanning newincomeplanning = new  (){
-             Budget= await _context.Budgets.FindAsync(dto.BudgetId),
+            var budget = await _context.Budgets.FindAsync(dto.BudgetId);
+            if(budget == null)
+            {
+                throw new Exception("Budget not found");    
+            }
+            IncomePlanning newincomeplanning = new  (){
+             Budget= budget,
              IncomeType= await _context.IncomeTypes.FindAsync(dto.IncomeTypeId),
              Amount= dto.Amount,
              Description= dto.Description,
@@ -27,6 +32,7 @@ namespace Infrastructure.Repositories{
              UserAdded= 1,
              UpdatedAt= DateTime.Now
            };
+            budget.PlannedIncome += dto.Amount;
            _context.IncomePlannings.Add(newincomeplanning);
            await _context.SaveChangesAsync();
         }
