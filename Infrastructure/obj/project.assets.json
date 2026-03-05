@@ -2213,19 +2213,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
       "projectName": "Infrastucture",
       "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\Infrastucture.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\obj\\",
-=======
-      "projectUniqueName": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-      "projectName": "Infrastucture",
-      "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-      "packagesPath": "C:\\Users\\meong\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\obj\\",
->>>>>>> origin/BudgetPlanning
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -2240,19 +2232,11 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-<<<<<<< HEAD
             "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj": {
               "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj"
             },
             "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj": {
               "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Domain\\Domain.csproj"
-=======
-            "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Application\\Application.csproj"
-            },
-            "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\meong\\PersonalProjects\\PAccountant\\Core\\Domain\\Domain.csproj"
->>>>>>> origin/BudgetPlanning
             }
           }
         }
@@ -2601,11 +2585,7 @@
       "code": "Undefined",
       "level": "Warning",
       "warningLevel": 1,
-<<<<<<< HEAD
       "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Infrastructure\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
-=======
-      "message": "Problem reading the cache file C:\\Users\\meong\\PersonalProjects\\PAccountant\\Infrastructure\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
->>>>>>> origin/BudgetPlanning
     },
     {
       "code": "NU1701",

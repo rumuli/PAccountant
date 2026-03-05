@@ -18,7 +18,7 @@ namespace Infrastructure.DependencyInjection
         {
            //Add Infrastructure services here, e.g., DbContext, Repositories, etc.
               services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("PAccountant")),ServiceLifetime.Scoped);
+                options.UseSqlServer(configuration.GetConnectionString("PAccountantMSSQLConnection")),ServiceLifetime.Scoped);
                 
                 services.AddAuthenticationService(configuration);
                 services.AddScoped<IBudget, BudgetRepository>();
@@ -27,7 +27,7 @@ namespace Infrastructure.DependencyInjection
                 services.AddScoped<IExpenseType, ExpenseTypeRepository>();
                 services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
                 services.AddScoped<IIdentity, IdentityRepository>();
-                            services.AddScoped<IAccount, AccountRepository>(); 
+            services.AddScoped<IAccount, AccountRepository>(); 
             services.AddScoped<IAccountType, AccountTypeRepository>(); 
             services.AddScoped<IPerson, PersonRepository>(); 
             services.AddScoped<IProperty, PropertyRepository>(); 
