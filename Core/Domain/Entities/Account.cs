@@ -6,8 +6,8 @@ namespace Domain.Entities
         public int AccountTypeId {get;set;}
         public string AccountNumber {get;set;}
         public string Provider {get;set;}
-        public double InitialBalance {get;set;}
-        public double Balance {get;set;}
+        public decimal InitialBalance {get;set;}
+        public decimal Balance {get;set;}
         public AccountType AccountType {get; set;} = new AccountType();
         public string  Status{get;set;}
         public DateTime CreatedAt { get; set; } = DateTime.Now;

@@ -7,6 +7,10 @@ namespace Application.DTO
       [Range(1, int.MaxValue, ErrorMessage = "Please select an Expense type")]
        public int ExpenseTypeId { get; set; }   // ✅ correct property
 
+            [Required(ErrorMessage = "Please select an Expense type")]
+      [Range(1, int.MaxValue, ErrorMessage = "Please select an Expense type")]
+       public DateTime? Date { get; set; } = DateTime.Today;  // ✅ correct property
+
 
 
         [Required(ErrorMessage = "Amount is required")]

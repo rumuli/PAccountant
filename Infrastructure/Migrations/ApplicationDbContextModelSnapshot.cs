@@ -37,8 +37,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("AccountTypeId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -47,8 +47,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("InitialBalance")
-                        .HasColumnType("float");
+                    b.Property<decimal>("InitialBalance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Provider")
                         .IsRequired()
@@ -231,6 +231,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()

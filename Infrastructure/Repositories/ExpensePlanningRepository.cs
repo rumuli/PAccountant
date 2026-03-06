@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
                 throw new Exception("Budget not found");    
             }
             decimal potentialexpenseplanned = budget.PlannedExpense + dto.Amount;
-            if(potentialexpenseplanned > budget.PlannedExpense)
+            if(potentialexpenseplanned > budget.PlannedIncome)
             {
                 throw new Exception("Planned expense exceeds the budget's planned income");
             }

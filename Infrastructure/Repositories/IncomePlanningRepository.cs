@@ -24,7 +24,7 @@ namespace Infrastructure.Repositories{
                 throw new Exception("Budget not found");    
             }
             IncomePlanning newincomeplanning = new  (){
-             Budget= budget,
+             Budget= await _context.Budgets.FindAsync(dto.BudgetId),
              IncomeType= await _context.IncomeTypes.FindAsync(dto.IncomeTypeId),
              Amount= dto.Amount,
              Description= dto.Description,

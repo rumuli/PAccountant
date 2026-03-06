@@ -9,6 +9,7 @@ namespace Domain.Entities
 
         public ExpenseType ExpenseType { get; set; } = default!;
        public decimal Amount { get; set; }
+       public DateTime? Date{ get; set; }= DateTime.Now;
         // Link to Account
         public int AccountId { get; set; }
         public Account Account { get; set; } = default!;

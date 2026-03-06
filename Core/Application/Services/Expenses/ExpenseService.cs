@@ -22,10 +22,16 @@ namespace Application.Services.Expenses
         {
            return await _expense.GetAllExpensesAsync();
         }
-        public async Task<int> CreateExpenseAsync(CreateExpenseDTO expenseDTO)
+        public async Task CreateExpenseAsync(CreateExpenseDTO expenseDTO)
         {
-           return await _expense.CreateExpenseAsync(expenseDTO);
+            await _expense.CreateExpenseAsync(expenseDTO);
+            
         }
+        public async Task<decimal> GetRemainingBudgetAsync(int expenseTypeId, DateTime date)
+        {
+            return await _expense.GetRemainingBudgetAsync(expenseTypeId, date);
+        }
+
     }
 
    

@@ -1,7 +1,6 @@
 <<<<<<< HEAD
 ;
 =======
-<<<<<<< HEAD
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.deps.json
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.dll
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.pdb
@@ -17,7 +16,6 @@ C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\obj\Debug\net10.0\A
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\obj\Debug\net10.0\refint\Application.dll
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\obj\Debug\net10.0\Application.pdb
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\obj\Debug\net10.0\ref\Application.dll
-=======
 C:\Users\meong\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.deps.json
 C:\Users\meong\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.dll
 C:\Users\meong\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.pdb

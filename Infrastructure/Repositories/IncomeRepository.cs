@@ -61,7 +61,7 @@ namespace Infrastructure.Repositories
 
     if (account != null)
     {
-        account.Balance += (double)incomeDTO.AmountPaid; // Balance is double in your entity
+        account.Balance += incomeDTO.AmountPaid; 
         _dbContext.Accounts.Update(account);
     }
 

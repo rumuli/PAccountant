@@ -9,7 +9,8 @@ namespace Application.Services.Expenses
 {
     Task<Expense?> GetExpenseByIdAsync(int id);
     Task<List<Expense>> GetAllExpensesAsync();
-    Task<int> CreateExpenseAsync(CreateExpenseDTO expenseDTO); // ✅ corrected
+    Task CreateExpenseAsync(CreateExpenseDTO expenseDTO); // ✅ corrected
+    Task<decimal> GetRemainingBudgetAsync(int expenseTypeId, DateTime date);
 }
 
 

@@ -7,7 +7,8 @@ namespace Application.Interfaces
     {
         Task <List<Expense>> GetAllExpensesAsync();
         Task <Expense?> GetExpenseByIdAsync(int id);
-        Task<int> CreateExpenseAsync(CreateExpenseDTO expenseDTO);
+        Task CreateExpenseAsync(CreateExpenseDTO expenseDTO);
+        Task<decimal> GetRemainingBudgetAsync(int expenseTypeId, DateTime date);
     }
     
     }
