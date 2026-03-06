@@ -1,10 +1,6 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "EK2+RP01PMA=",
-=======
-  "dgSpecHash": "EKFbWf8R304=",
->>>>>>> PersonalAccount
+  "dgSpecHash": "fJheIURzwow=",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
   "expectedPackageFiles": [
@@ -56,15 +52,6 @@
     "C:\\Users\\HP\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.4\\system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
   ],
   "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "message": "Problem reading the cache file C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
-      "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\Infrastucture.csproj",
-      "targetGraphs": []
-    },
     {
       "code": "NU1701",
       "level": "Warning",

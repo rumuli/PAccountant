@@ -13,14 +13,14 @@ namespace Infrastructure.Repositories{
         }
         public async Task <List<IncomePlanning>> GetIncomePlanningsAsync(){
             return await _context.IncomePlannings
-            .Include(x=> x.IncomeType)
-            .Include(x =>x.Budget)
+            // .Include(x=> x.IncomeType)
+            // .Include(x =>x.Budget)
             .ToListAsync();
         }
         public async Task AddIncomePlanning(CreateIncomePlanningDTO dto){
              IncomePlanning newincomeplanning = new  (){
-             Budget= await _context.Budgets.FindAsync(dto.BudgetId),
-             IncomeType= await _context.IncomeTypes.FindAsync(dto.IncomeTypeId),
+            //  Budget= await _context.Budgets.FindAsync(dto.BudgetId),
+            //  IncomeType= await _context.IncomeTypes.FindAsync(dto.IncomeTypeId),
              Amount= dto.Amount,
              Description= dto.Description,
              CreatedAt= DateTime.Now,

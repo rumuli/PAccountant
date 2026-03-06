@@ -12,8 +12,6 @@
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\HP\.nuget\packages\" />
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
-<<<<<<< HEAD
-=======
   </ItemGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Content Include="$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\4.14.0\contentFiles\any\any\BuildHost-net472\Microsoft.Build.Locator.dll" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.workspaces.msbuild\4.14.0\contentFiles\any\any\BuildHost-net472\Microsoft.Build.Locator.dll')">
@@ -522,7 +520,6 @@
       <Private>True</Private>
       <Link>BuildHost-netcore\zh-Hant\System.CommandLine.resources.dll</Link>
     </Content>
->>>>>>> PersonalAccount
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)mudblazor\8.15.0\buildTransitive\MudBlazor.props" Condition="Exists('$(NuGetPackageRoot)mudblazor\8.15.0\buildTransitive\MudBlazor.props')" />

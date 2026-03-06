@@ -41,7 +41,6 @@ namespace Infrastructure.Data
              builder.Entity<IdentityUserRole<int>>().ToTable("UserRoles").HasKey(ur => new { ur.UserId, ur.RoleId });
 
         }
-
         
     }
 }

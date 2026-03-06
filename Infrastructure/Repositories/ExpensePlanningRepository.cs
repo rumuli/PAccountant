@@ -16,16 +16,16 @@ namespace Infrastructure.Repositories
         public async Task<List<ExpensePlanning>> GetExpensePlanningsAsync()
         {
             return await _dbcontext.ExpensePlannings
-            .Include(e => e.Budget)
-            .Include(e => e.ExpenseType)
+            // .Include(e => e.Budget)
+            // .Include(e => e.ExpenseType)
             .ToListAsync();
         }
         public async Task AddExpensePlanningAsync(CreateExpensePlanningDTO dto)
         {
             ExpensePlanning newexpenseplanning = new()
             {
-                Budget = await _dbcontext.Budgets.FindAsync(dto.BudgetId),
-                ExpenseType = await _dbcontext.ExpenseTypes.FindAsync(dto.ExpenseTypeId),
+                // Budget = await _dbcontext.Budgets.FindAsync(dto.BudgetId),
+                // ExpenseType = await _dbcontext.ExpenseTypes.FindAsync(dto.ExpenseTypeId),
                 Amount = dto.Amount,
                 Description = dto.Description,
                 CreatedAt = DateTime.Now,

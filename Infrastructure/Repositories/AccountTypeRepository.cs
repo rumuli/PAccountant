@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Infrastructure.Data;
 using Application.DTO;
-using Application.Interface;
+using Application.Interfaces;
 using Application.Services.AccountTypes;
 using Microsoft.EntityFrameworkCore;
 

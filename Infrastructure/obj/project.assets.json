@@ -2242,12 +2242,9 @@
           "projectReferences": {
             "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj": {
               "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj"
-<<<<<<< HEAD
             },
             "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj": {
               "projectPath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Domain\\Domain.csproj"
-=======
->>>>>>> PersonalAccount
             }
           }
         }
@@ -2592,12 +2589,6 @@
     }
   },
   "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\HP\\Desktop\\PAccountant\\Infrastructure\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
-    },
     {
       "code": "NU1701",
       "level": "Warning",
