@@ -1,7 +1,7 @@
 using Domain.Entities;
 using Application.DTO;
 
-namespace Application.Services.PropertyCategories
+namespace Application.Interfaces
 {
    public interface IPropertycategoryService
     {

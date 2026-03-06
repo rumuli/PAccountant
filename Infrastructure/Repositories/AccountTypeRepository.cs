@@ -31,7 +31,7 @@ public class AccountTypeRepository : IAccountType
             var accounttype = new AccountType
             {
                 Name = accounttypeDTO.Name,
-                 Status = accounttypeDTO.Status,
+                 Status = "Active",
                 CreatedBy = "Admin",
                 UpdateBy = "Admin", // ADD THIS LINE: It cannot be NULL in the database
                 CreatedAt = DateTime.Now,

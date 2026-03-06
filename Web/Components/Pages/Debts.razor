@@ -1,0 +1,92 @@
+@page "/Debts"
+@using Domain.Entities
+@using Application.Services.Debts
+@using MudBlazor
+@inject IDebtService DebtService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    <MudDataGrid T="Debt"
+                 Items="@_debts"
+                 Hover="true"
+                 Striped="true"
+                 Bordered="true"
+                 Dense="true"
+                 Filterable="true"
+                 SortMode="SortMode.Multiple"
+                 Class="elevation-1">
+
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Debts</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Debts" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateDialog">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+        <Columns>
+            <SelectColumn T="Debt" />
+
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" />
+            <PropertyColumn Property="x => x.DebtType.DebtTypeName" Title="Debt Type" Sortable="true" />
+            <PropertyColumn Property="x => x.Amount" Title="Amount" Format="C" Sortable="true" />
+            <PropertyColumn Property="x => x.Creditor" Title="Creditor" Sortable="true" />
+            <PropertyColumn Property="x => x.DueDate" Title="Start Date" Format="dd MMM yyyy" Sortable="true" />
+            <PropertyColumn Property="x => x.DateIncurred" Title="End Date" Format="dd MMM yyyy" Sortable="true" />
+
+            <TemplateColumn Title="Status">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
+                             Text="@(context.Item.IsActive ? "Active" : "Inactive")"
+                             Variant="Variant.Filled"
+                             Size="Size.Small" />
+                </CellTemplate>
+            </TemplateColumn>
+
+            <PropertyColumn Property="x => x.CreatedAt" Title="Created Date" Format="MM/dd/yyyy" Sortable="true" />
+
+            <TemplateColumn Title="Actions">
+                <CellTemplate>
+                    <MudIconButton Icon="@Icons.Material.Filled.Info"
+                                   Color="Color.Info"
+                                   Size="Size.Small"
+                                   Href="@($"/debts/details/{context.Item.Id}")" />
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Primary"
+                                   Size="Size.Small"
+                                   Href="@($"/debts/edit/{context.Item.Id}")" />
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+</MudContainer>
+
+@code {
+    private List<Debt> _debts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDebts();
+    }
+
+    private async Task OpenCreateDialog()
+    {
+        var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateDebtDialog>("Create Debt", new DialogParameters()
+        {
+            { "OnDebtCreated", EventCallback.Factory.Create(this, LoadDebts) }
+        }, option);
+    }
+
+    private async Task LoadDebts()
+    {
+        _debts = await DebtService.GetAllDebtsAsync();
+        StateHasChanged();
+    }
+}
+

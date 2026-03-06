@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+=======
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.deps.json
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.dll
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.pdb
@@ -10,7 +11,6 @@ C:\Users\hirwa\PersonalProjects\PAccountant\Core\Domain\obj\Debug\net10.0\Domain
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Domain\obj\Debug\net10.0\refint\Domain.dll
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Domain\obj\Debug\net10.0\Domain.pdb
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Domain\obj\Debug\net10.0\ref\Domain.dll
-=======
 C:\Users\meong\PersonalProjects\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.deps.json
 C:\Users\meong\PersonalProjects\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.dll
 C:\Users\meong\PersonalProjects\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.pdb
@@ -83,6 +83,7 @@ C:\Users\HP\Desktop\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.dll
 C:\Users\HP\Desktop\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.pdb
 C:\Users\HP\Desktop\PAccountant\Core\Domain\obj\Debug\net10.0\ref\Domain.dll
 >>>>>>> PersonalAccount
+>>>>>>> main
 C:\Users\HP\source\repos\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.deps.json
 C:\Users\HP\source\repos\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.dll
 C:\Users\HP\source\repos\PAccountant\Core\Domain\bin\Debug\net10.0\Domain.pdb
