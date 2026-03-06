@@ -19,13 +19,29 @@ namespace Infrastructure.Repositories{
         }
         public async Task AddIncomePlanning(CreateIncomePlanningDTO dto){
             var budget = await _context.Budgets.FindAsync(dto.BudgetId);
+            var incometype = await _context.IncomeTypes.FindAsync(dto.IncomeTypeId);
+            bool exist = await _context.IncomePlannings.AnyAsync(e => e.Budget.Id == dto.BudgetId && e.IncomeType.Id == dto.IncomeTypeId);  
+            if (exist)            
+            {
+                throw new Exception($"Income planning for this budget and income type already exists.");
+            }
             if(budget == null)
             {
                 throw new Exception("Budget not found");    
             }
+            if(incometype == null)
+            {
+                throw new Exception("Income type not found");
+            }
+            
             IncomePlanning newincomeplanning = new  (){
+<<<<<<< HEAD
              Budget= await _context.Budgets.FindAsync(dto.BudgetId),
              IncomeType= await _context.IncomeTypes.FindAsync(dto.IncomeTypeId),
+=======
+             Budget= budget,
+             IncomeType= incometype,
+>>>>>>> BudgetPlanning
              Amount= dto.Amount,
              Description= dto.Description,
              CreatedAt= DateTime.Now,

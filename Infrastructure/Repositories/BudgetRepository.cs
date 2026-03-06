@@ -28,17 +28,27 @@ namespace Infrastructure.Repositories
         public async Task  AddBudgetAsync(CreateBudgetDTO dto)
         {
             DateTime startdate = dto.StartingAt.GetValueOrDefault();
-            Budget newbudget = new()
+            DateTime enddate = dto.EndingAt.GetValueOrDefault();
+            bool exist = await _dbcontext.Budgets.AnyAsync(b => b.StartingAt.Month == startdate.Month && b.StartingAt.Year == startdate.Year);  
+            if (exist)
+            {
+                throw new Exception($"Budget for {startdate.ToString("MMMM yyyy")} already exists.");
+            }
+            if(enddate < startdate.AddMonths(1))
+            {
+                throw new Exception("Interval between starting and ending date is less than month. The budget period must be at least one month long.");
+            }
+            var newbudget = new Budget
             {
                 Name = $"Budget {startdate.ToString("MMMM yyyy")}",
                 StartingAt = startdate,
                 PlannedIncome= 0,
                 PlannedExpense=0,
-                EndingAt = dto.EndingAt.GetValueOrDefault()
+                EndingAt = enddate
                 // Status = dto.BudgetStatus
             };
             _dbcontext.Budgets.Add(newbudget);
-        await _dbcontext.SaveChangesAsync();
+            await _dbcontext.SaveChangesAsync();
         }
         public async Task<GetBudgetByIdDTO?> GetBudgetByIdAsync(int id)
         {
@@ -63,7 +73,6 @@ namespace Infrastructure.Repositories
                 Counts = g.Count()
             })
             .ToListAsync();
-
         }
         
     }
