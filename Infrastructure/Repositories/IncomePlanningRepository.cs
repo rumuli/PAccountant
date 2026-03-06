@@ -35,13 +35,8 @@ namespace Infrastructure.Repositories{
             }
             
             IncomePlanning newincomeplanning = new  (){
-<<<<<<< HEAD
              Budget= await _context.Budgets.FindAsync(dto.BudgetId),
              IncomeType= await _context.IncomeTypes.FindAsync(dto.IncomeTypeId),
-=======
-             Budget= budget,
-             IncomeType= incometype,
->>>>>>> BudgetPlanning
              Amount= dto.Amount,
              Description= dto.Description,
              CreatedAt= DateTime.Now,
