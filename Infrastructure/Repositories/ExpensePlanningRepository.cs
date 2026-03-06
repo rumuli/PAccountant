@@ -23,10 +23,21 @@ namespace Infrastructure.Repositories
         public async Task AddExpensePlanningAsync(CreateExpensePlanningDTO dto)
         {
             var budget = await _dbcontext.Budgets.FindAsync(dto.BudgetId);
+            var expenseType = await _dbcontext.ExpenseTypes.FindAsync(dto.ExpenseTypeId);
+            bool exist = await _dbcontext.ExpensePlannings.AnyAsync(e => e.Budget.Id == dto.BudgetId && e.ExpenseType.Id == dto.ExpenseTypeId);  
+            if (exist)
+            {
+                throw new Exception($"Expense planning for this budget and expense type already exists.");
+            }
             if(budget == null)
             {
                 throw new Exception("Budget not found");    
             }
+            if(expenseType == null)
+            {
+                throw new Exception("Expense type not found");
+            }
+            
             decimal potentialexpenseplanned = budget.PlannedExpense + dto.Amount;
             if(potentialexpenseplanned > budget.PlannedExpense)
             {
@@ -35,7 +46,7 @@ namespace Infrastructure.Repositories
             ExpensePlanning newexpenseplanning = new()
             {
                 Budget = budget,
-                ExpenseType = await _dbcontext.ExpenseTypes.FindAsync(dto.ExpenseTypeId),
+                ExpenseType = expenseType,
                 Amount = dto.Amount,
                 Description = dto.Description,
                 CreatedAt = DateTime.Now,
