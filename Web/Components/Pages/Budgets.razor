@@ -1,5 +1,6 @@
 @page "/budgets"
 @layout Layout.MainLayout
+@using Domain.ValueObjects
 @using Application.DTO.Budget
 @using Application.Services.BudgetServices
 @using System.ClientModel
@@ -15,6 +16,7 @@
                  SortMode="SortMode.Multiple" 
                  Filterable="true"
                  Hideable="true" 
+                 Dense="true"
                  RowClick="@RowClicked" 
                  SelectedItemsChanged="@SelectedItemsChanged">
         
@@ -31,13 +33,22 @@
             <SelectColumn T="GetBudgetDTO" />
             <PropertyColumn Property="x => x.Id" Title="ID" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.Name" SortBy="@_sortBy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
-            <PropertyColumn Property="x => x.Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudChip T="string" 
+                            Color="@GetStatusColor(context.Item.Status)" 
+                            Size="Size.Small" 
+                            Variant="Variant.Text">
+                        @context.Item.Status
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
             <PropertyColumn Property="x => x.StartingAt" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.EndingAt" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             
             <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
                 <CellTemplate>
-                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
                         @* Ensure the method name here matches exactly what is in @code *@
                         <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => HandleEdit(context.Item))">Edit</MudMenuItem>
                         <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconColor="Color.Error">Delete</MudMenuItem>
@@ -113,4 +124,14 @@ private async Task OpenDialogAsync()
 
     private void RowClicked(DataGridRowClickEventArgs<GetBudgetDTO> args) { }
     private void SelectedItemsChanged(HashSet<GetBudgetDTO> items) { }
+    private Color GetStatusColor(BudgetStatus status)
+    {
+        return status.ToString() switch
+        {
+            "Planned" => Color. Warning,
+            "Executed" => Color.Success,
+            "Running" => Color.Warning,
+            _ => Color.Default
+        };
+    }
 }
