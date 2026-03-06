@@ -1,0 +1,107 @@
+@using Application.DTO
+@using Application.Services.DebtTypes
+@using MudBlazor
+@inject IDebtTypeService DebtTypeService
+
+<MudDialog Style="border-radius:12px; overflow:hidden;">
+
+    <!-- ══════════ HEADER BANNER ══════════ -->
+    <DialogContent>
+        <MudPaper Elevation="0"
+                  Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
+                         border-radius:8px; padding:14px 18px; margin-bottom:16px;">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                <MudIcon Icon="@Icons.Material.Filled.Category"
+                         Style="color:white; font-size:1.6rem;" />
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle1"
+                             Style="color:white; font-weight:700; line-height:1.2;">
+                        New Debt Type
+                    </MudText>
+                    <MudText Typo="Typo.caption"
+                             Style="color:rgba(255,255,255,0.80);">
+                        Define a new category for Debt classification
+                    </MudText>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+
+        <!-- ══════════ FORM ══════════ -->
+        <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudStack Spacing="1">
+                <!-- ── Section Label ── -->
+                <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
+                                text-transform:uppercase; margin-bottom:2px;">
+                    Type Details
+                </MudText>
+
+                <!-- Debt Type Name -->
+                <MudTextField T="string"
+                              Label="Debt Type Name"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.DebtTypeName"
+                              Placeholder="e.g. Mortgage, Student Loan..."
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Label"
+                              AdornmentColor="Color.Primary"
+                              For="@(() => Model.DebtTypeName)" />
+                <ValidationMessage For="@(() => Model.DebtTypeName)" />
+            </MudStack>
+        </EditForm>
+    </DialogContent>
+
+    <!-- ══════════ ACTIONS ══════════ -->
+    <DialogActions>
+        <MudStack Row="true" Spacing="2" Class="px-2 pb-2" Style="width:100%;">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.Save"
+                       OnClick="OnValidSubmit"
+                       Style="flex:2; border-radius:8px;
+                              background: linear-gradient(135deg,#1976D2,#42A5F5);">
+                Save Type
+            </MudButton>
+
+        </MudStack>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IDialogReference DialogReference { get; set; } = default!;
+
+    private CreateDebtTypeDTO Model { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnDebtTypeCreated { get; set; }
+
+    private bool ShowErrors { get; set; } = false;
+
+    private async Task OnValidSubmit()
+    {
+        try
+        {
+            await DebtTypeService.CreateDebtTypeAsync(Model);
+            await OnDebtTypeCreated.InvokeAsync();
+
+            Model = new CreateDebtTypeDTO(); // reset form
+            DialogReference.Close(DialogResult.Ok(true));
+        }
+        catch
+        {
+            ShowErrors = true;
+        }
+    }
+
+    private void Cancel()
+    {
+        DialogReference.Close(DialogResult.Cancel());
+    }
+}
+

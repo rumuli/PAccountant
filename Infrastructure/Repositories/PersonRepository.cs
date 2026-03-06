@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
                 FirstName = personDTO.FirstName,
                 LastName = personDTO.LastName,
                 Sex = personDTO.Sex,
-                Status = personDTO.Status,
+                Status = "Active",
                 DateOfBirth = DateTime.Now,
                 phoneNumber = personDTO.phoneNumber,
                 Email = personDTO.Email,

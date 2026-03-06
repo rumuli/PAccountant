@@ -66,8 +66,40 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVBY2NvdW50RGlhbG9nLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreateDebtDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVEZWJ0RGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreateDebtTypeDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVEZWJ0VHlwZURpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreateExpenseDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVFeHBlbnNlRGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreateExpenseTypeDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVFeHBlbnNlVHlwZURpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreateIncomeDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVJbmNvbWVEaWFsb2cucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreateIncomeTypeDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVJbmNvbWVUeXBlRGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreatePaymentMethodDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVQYXltZW50TWV0aG9kRGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/CreatePropertyDialog.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDcmVhdGVQcm9wZXJ0eURpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Debts.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEZWJ0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/EditAccountDialog.razor]
@@ -86,8 +118,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Expenses.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFeHBlbnNlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Incomes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xJbmNvbWVzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Pages/Login.razor]
@@ -152,6 +192,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/Desktop/PAccountant/Web/Components/Shared/StatCards.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcU3RhdENhcmRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/HP/Desktop/PAccountant/Web/Components/_Imports.razor]

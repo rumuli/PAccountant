@@ -1,8 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "clvrrkvEwo4=",
+  "dgSpecHash": "7JttdtNsrIs=",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP\\Desktop\\PAccountant\\Core\\Application\\Application.csproj",
+  "projectFilePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\HP\\source\\repos\\PAccountant\\Core\\Application\\Application.csproj",
+      "targetGraphs": []
+    }
+  ]
 }
