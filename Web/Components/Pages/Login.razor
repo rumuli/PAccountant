@@ -150,10 +150,10 @@
                               AdornmentIcon="@_passwordInputIcon" 
                               OnAdornmentClick="TogglePasswordVisibility" />
 
-                <div class="d-flex align-center justify-space-between mt-2 mb-6">
+                @* <div class="d-flex align-center justify-space-between mt-2 mb-6">
                     <MudCheckBox @bind-Value="rememberMe" name="rememberMe" Label="Remember Me" Color="Color.Primary" Dense="true" T="bool" />
                     <MudLink Typo="Typo.body2" Color="Color.Primary" Underline="Underline.None" Style="font-weight: 600;">Forgot Your Password?</MudLink>
-                </div>
+                </div> *@
 
                 <MudButton Variant="Variant.Filled" 
                            Color="Color.Primary" 
@@ -185,7 +185,7 @@
                 </MudGrid>
 
                 <MudText Typo="Typo.body2" Align="Align.Center" Class="mt-8" Color="Color.Primary">
-                    Don't Have An Account? <MudLink Color="Color.Primary" Underline="Underline.None" Style="font-weight: 700;">Register Now.</MudLink>
+                    Don't Have An Account? <MudLink href="/RegisterUser" Color="Color.Primary" Underline="Underline.None" Style="font-weight: 700;">Register Now.</MudLink>
                 </MudText>
             </form>
         </div>

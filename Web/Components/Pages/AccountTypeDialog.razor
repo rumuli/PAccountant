@@ -1,0 +1,62 @@
+@using Application.DTO
+@using Application.Interfaces
+@using Application.Services.AccountTypes
+@using MudBlazor
+@inject IAccountTypeService AccountTypesService
+@inject ISnackbar Snackbar
+
+@rendermode InteractiveServer  
+
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h6" Class="mb-4 fw-bold">
+            <MudIcon Icon="@Icons.Material.Filled.PostAdd" Class="mr-2"/> Create New Income Type
+        </MudText>
+
+        <EditForm Model="Model" OnValidSubmit="OnValidSubmit" FormName="CreateIncomeTypeForm">
+            <DataAnnotationsValidator />
+
+            <MudStack Spacing="3">
+                <MudTextField T="string"
+                              Label="Type Name"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Model.Name"
+                              For="@(() => Model.Name)" />
+            </MudStack>
+        </EditForm>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Variant="Variant.Text" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnValidSubmit">Save Type</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private AccountTypeCreateDTO Model { get; set; } = new() { CreatedBy = "Admin" };
+
+    [Parameter] public EventCallback OnAccountTypeCreated { get; set; }
+
+    private async Task OnValidSubmit()
+    {
+        try
+        {
+            await AccountTypesService.CreateAccountType(Model);
+
+            Snackbar.Add("New type added successfully!", Severity.Success);
+
+            await OnAccountTypeCreated.InvokeAsync();
+
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}
+
