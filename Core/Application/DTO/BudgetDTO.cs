@@ -10,7 +10,7 @@ namespace Application.DTO.Budget{
         public decimal PlannedIncome {get;set;}
         public decimal PlannedExpense {get;set;}
         public BudgetStatus Status{get;set;}
-        public decimal PlannedExpense { get; set; }
+        // public decimal PlannedExpense { get; set; }
 
     }
     public class CreateBudgetDTO{

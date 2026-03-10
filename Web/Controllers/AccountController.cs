@@ -30,7 +30,7 @@ namespace Web.Controllers
 
             if (result)
             {
-                var redirect = string.IsNullOrEmpty(returnUrl) ? "/" : returnUrl;
+                var redirect = string.IsNullOrEmpty(returnUrl) ? "/home" : returnUrl;
                 return Redirect(redirect);
             }
 

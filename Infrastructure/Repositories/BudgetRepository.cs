@@ -24,7 +24,8 @@ namespace Infrastructure.Repositories
                         Name = b.Name,
                         StartingAt = b.StartingAt,
                         EndingAt = b.EndingAt,
-                        Status=b.Status
+                        Status=b.Status,
+                        PlannedExpense = b.PlannedExpense 
                     })
                     .ToListAsync();
         }

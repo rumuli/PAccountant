@@ -65,7 +65,6 @@
                  MultiSelection="true" 
                  SortMode="SortMode.Multiple" 
                  Filterable="true"
-<<<<<<< HEAD
                  Hideable="true" 
                  Dense="true"
                  RowClick="@RowClicked" 
@@ -92,12 +91,6 @@
 
             </MudMenu>
         </ToolBarContent>
-=======
-                 SortMode="SortMode.Multiple"
-                 Class="elevation-1"
-                 RowClick="@RowClicked"
-                 SelectedItemsChanged="@SelectedItemsChanged">
->>>>>>> 50918137e3e0233a0b22d93fbd95fd054579ce42
 
         <!-- Toolbar -->
         <ToolBarContent>
@@ -113,7 +106,6 @@
         <Columns>
             <SelectColumn T="Account" />
 
-<<<<<<< HEAD
             <PropertyColumn Property="x => x.Id"
                             Title="ID"
                             Sortable="true" />
@@ -189,28 +181,6 @@
                 </CellTemplate>
             </TemplateColumn>
 
-=======
-            <PropertyColumn Property="x => x.Id" Title="ID" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.AccountType.Name" Title="Account Type" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.AccountNumber" Title="Account Number" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.Provider" Title="Provider" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.Balance" Title="Balance" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.Status" Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.UpdateBy" Title="Updated By" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.CreatedBy" Title="Created By" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.CreatedAt" Title="Created At" Format="MM/dd/yyyy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-
-            <!-- Actions Menu -->
-            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
-                <CellTemplate>
-                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
-                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => OpenEditDialog(context.Item.Id))">Edit</MudMenuItem>
-                        <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => OpenDetailDialog(context.Item.Id))">Details</MudMenuItem>
-                        @* <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconColor="Color.Error" OnClick="@(() => Snackbar.Add($"Deleting Account {context.Item.Id}", Severity.Error))">Delete</MudMenuItem> *@
-                    </MudMenu>
-                </CellTemplate>
-            </TemplateColumn>
->>>>>>> 50918137e3e0233a0b22d93fbd95fd054579ce42
         </Columns>
         <PagerContent>
             <MudDataGridPager T="Account" />
@@ -223,45 +193,20 @@
     </MudDataGrid>
 </MudContainer>
 
-<<<<<<< HEAD
 @code{
 
     List<Account> accounts = new();
-=======
-@code {
-    List<Account> accounts = new List<Account>();
->>>>>>> 50918137e3e0233a0b22d93fbd95fd054579ce42
 
     protected override async Task OnInitializedAsync()
     {
         await LoadAccounts();
     }
 
-<<<<<<< HEAD
     private async Task OpenDialog()
     {
        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
 
         var dialog = await DialogService.ShowAsync<CreateAccountDialog>("Add Account", options);
-=======
-    protected IDialogReference dialogReference;
-
-    private Color GetStatusColor(string status)
-    {
-        return status switch
-        {
-            "Active" => Color.Success,
-            "Completed" => Color.Info,
-            "Pending" => Color.Warning,
-            "Cancelled" => Color.Error,
-            _ => Color.Default
-        };
-    }
-
-    private async Task OpenDialog(List<Account>? accounts = null)
-    {
-        var dialog = await DialogService.ShowAsync<CreateAccountDialog>("Add Account");
->>>>>>> 50918137e3e0233a0b22d93fbd95fd054579ce42
         var result = await dialog.Result;
 
         if (result != null && !result.Canceled)
@@ -290,7 +235,6 @@
         accounts = await AccountService.GetAllAccountsAsync();
         StateHasChanged();
     }
-<<<<<<< HEAD
         private Color GetStatusColor(AccountStatus status)
     {
         return status.ToString() switch
@@ -305,10 +249,3 @@
     private void SelectedItemsChanged(HashSet<Account> items) { }
 
 }
-=======
-
-    private void RowClicked(DataGridRowClickEventArgs<Account> args) { }
-    private void SelectedItemsChanged(HashSet<Account> items) { }
-}
-
->>>>>>> 50918137e3e0233a0b22d93fbd95fd054579ce42
