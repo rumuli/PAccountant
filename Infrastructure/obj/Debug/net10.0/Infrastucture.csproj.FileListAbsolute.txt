@@ -1,0 +1,6 @@
+C:\Users\HP\Desktop\PAccountant\Infrastructure\obj\Debug\net10.0\Infrastucture.csproj.AssemblyReference.cache
+C:\Users\HP\Desktop\PAccountant\Infrastructure\obj\Debug\net10.0\Infrastucture.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\Desktop\PAccountant\Infrastructure\obj\Debug\net10.0\Infrastucture.AssemblyInfoInputs.cache
+C:\Users\HP\Desktop\PAccountant\Infrastructure\obj\Debug\net10.0\Infrastucture.AssemblyInfo.cs
+C:\Users\HP\Desktop\PAccountant\Infrastructure\obj\Debug\net10.0\Infrastucture.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\PAccountant\Infrastructure\obj\Debug\net10.0\Infrastucture.sourcelink.json
