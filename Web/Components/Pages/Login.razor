@@ -110,7 +110,7 @@
         @* Top Left Branding *@
         <div style="position: absolute; top: 40px; left: 40px;" class="d-flex align-center">
             <MudIcon Icon="@Icons.Material.Filled.Autorenew" Color="Color.Primary" Size="Size.Large" Class="mr-2" />
-            <MudText Typo="Typo.h5" Style="font-weight: 700; color: #1a1a1a;">PAccount</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700; color:">PAccount</MudText>
         </div>
 
         <div style="max-width: 400px; width: 100%;">
@@ -160,8 +160,8 @@
                            ButtonType="ButtonType.Submit"
                            FullWidth="true" 
                            Size="Size.Large" 
-                           Class="py-3 rounded-lg shadow-none mb-6"
-                           Style="text-transform: none; font-weight: 700; background-color: #000000;">
+                           Class="py-3 rounded-lg shadow-none mb-6 mt-4"
+                           Style="text-transform: none; font-weight: 700;">
                     Log In
                 </MudButton>
 
@@ -199,18 +199,18 @@
 
     @* Right Column: Visual Showcase *@
     <MudItem xs="0" md="6" Class="d-none d-md-flex flex-column justify-center align-center relative pa-12" 
-             Style="background-color: #000000; border-radius: 40px 0 0 40px; color: white; overflow: hidden;">
-        
+             Style="border-radius: 40px 0 0 40px; color: white; overflow: hidden; background: linear-gradient(135deg, #22a075 0%, #064632 100%);">
+    
         @* Decorative Background Circles *@
         <div style="position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
         <div style="position: absolute; bottom: -50px; left: -50px; width: 300px; height: 300px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
 
         <div style="z-index: 2; width: 100%; max-width: 500px;">
             <MudText Typo="Typo.h3" Style="font-weight: 700; line-height: 1.2;" Class="mb-6">
-                Effortlessly manage your sales and operations.
+                Effortlessly manage your finances.
             </MudText>
             <MudText Typo="Typo.h6" Style="font-weight: 400; opacity: 0.9;" Class="mb-10">
-                Log in to access your PAccount dashboard and manage your team.
+                Log in to access your PAccount dashboard and manage your finances.
             </MudText>
 
             @* Mock Dashboard Image/Element *@
@@ -225,14 +225,14 @@
                 <MudGrid Spacing="2">
                     <MudItem xs="4">
                         <MudPaper Class="pa-3 rounded-lg" Elevation="0" Style="background: #f8f9ff;">
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">Total Sales</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Total Earnings</MudText>
                             <MudText Typo="Typo.subtitle1" Style="font-weight: 800; color: #333;">$189,374</MudText>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="8">
                         <MudPaper Class="pa-3 rounded-lg" Elevation="0" Style="background: #f8f9ff;">
                             <div class="d-flex justify-space-between">
-                                 <MudText Typo="Typo.caption" Color="Color.Secondary">Performance</MudText>
+                                 <MudText Typo="Typo.caption" Color="Color.Secondary">Budget</MudText>
                                  <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Small" Color="Color.Success"/>
                             </div>
                             <div style="height: 20px; width: 100%; background: linear-gradient(90deg, teal 30%, #eee 30%); border-radius: 10px; margin-top: 4px;"></div>
@@ -241,8 +241,8 @@
                     <MudItem xs="12">
                          <MudTable Items="_mockRows" Elevation="0" Dense="true" Class="rounded-lg mt-2">
                             <HeaderContent>
-                                <MudTh><MudText Typo="Typo.caption" Style="font-weight:700">Order ID</MudText></MudTh>
-                                <MudTh><MudText Typo="Typo.caption" Style="font-weight:700">Product</MudText></MudTh>
+                                <MudTh><MudText Typo="Typo.caption" Style="font-weight:700">ID</MudText></MudTh>
+                                <MudTh><MudText Typo="Typo.caption" Style="font-weight:700">Asset</MudText></MudTh>
                                 <MudTh><MudText Typo="Typo.caption" Style="font-weight:700">Status</MudText></MudTh>
                             </HeaderContent>
                             <RowTemplate>
@@ -259,9 +259,9 @@
                 @* Floating Chart Decoration *@
                 <MudPaper Elevation="10" Class="pa-4 rounded-xl absolute d-flex flex-column align-center" 
                           Style="bottom: -20px; right: -40px; width: 160px; background: white; border: 1px solid #eee;">
-                     <MudText Typo="Typo.caption" Style="font-weight: 700;">Sales Category</MudText>
+                     <MudText Typo="Typo.caption" Style="font-weight: 700;">Expenses</MudText>
                      <MudProgressCircular Value="75" Color="Color.Success" Size="Size.Large" Class="my-2" />
-                     <MudText Typo="Typo.caption" Style="font-weight: 800;">6,248 Units</MudText>
+                     <MudText Typo="Typo.caption" Style="font-weight: 800;">$ 6,248</MudText>
                 </MudPaper>
             </MudPaper>
         </div>

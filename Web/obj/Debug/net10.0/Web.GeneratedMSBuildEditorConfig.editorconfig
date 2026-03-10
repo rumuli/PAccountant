@@ -65,6 +65,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZGRQbGFubmluZy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/meong/PersonalProjects/PAccountant/Web/Components/Pages/BudgetDetailsDrawer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdWRnZXREZXRhaWxzRHJhd2VyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/meong/PersonalProjects/PAccountant/Web/Components/Pages/Budgets.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdWRnZXRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -203,6 +207,22 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/meong/PersonalProjects/PAccountant/Web/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/meong/PersonalProjects/PAccountant/Web/Components/Shared/CircularProgress.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcQ2lyY3VsYXJQcm9ncmVzcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/meong/PersonalProjects/PAccountant/Web/Components/Shared/DonutChart.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcRG9udXRDaGFydC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/meong/PersonalProjects/PAccountant/Web/Components/Shared/LinearProgress.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcTGluZWFyUHJvZ3Jlc3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/meong/PersonalProjects/PAccountant/Web/Components/Shared/SimpleDataGrid.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcU2ltcGxlRGF0YUdyaWQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/meong/PersonalProjects/PAccountant/Web/Components/Shared/StatCards.razor]
