@@ -1,7 +1,7 @@
 <MudCard Class="stats-card" Elevation="2">
     <MudCardContent>
         <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-            <MudText Typo="Typo.overline" Class="font-weight-semibold text-uppercase"></MudText>
+            <MudText  Class="fw-bold">@Title</MudText>
 
             @if (!string.IsNullOrWhiteSpace(TrendText))
             {
@@ -17,7 +17,7 @@
 
                 <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mt-3">
             <MudStack Spacing="1">
-                <MudText Typo="Typo.h5" Color="@ValueColor" Class="font-weight-bold">
+                <MudText Color="@ValueColor" Class="font-weight-bold">
                     @Value
                 </MudText>
 
