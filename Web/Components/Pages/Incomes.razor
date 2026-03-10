@@ -9,108 +9,124 @@
 <PageTitle>Incomes</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+
+    <MudGrid Class="mb-6">
+        @* Left Section: Portfolio & Multi-Account Breakdown *@
+        <MudItem xs="12" md="8">
+            @* Removed fixed height to allow account cards to fit properly *@
+            <MudPaper Elevation="0" Class="pa-8 d-flex flex-column relative overflow-hidden" 
+                      Style="min-height: 250px; border-radius: 24px; background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%); border: 1px solid #e0e0e0;">
+                
+                <MudIcon Icon="@Icons.Material.Filled.AccountBalanceWallet" 
+                         Style="position:absolute; right:-15px; top:-15px; font-size:10rem; color:rgba(25, 118, 210, 0.05);" />
+                
+                <MudText Typo="Typo.h5" Style="font-weight: 800; color: #023d28;">Portfolio Overview</MudText>
+                
+                <MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-2">
+                    <MudText Typo="Typo.h3" Style="font-weight: 900; color: #023d28;">
+                        @_incomes.Sum(x => x.AmountPaid).ToString("n")
+                    </MudText>
+                    <MudChip T="string" Color="Color.Success" Variant="Variant.Text" Size="Size.Small" Icon="@Icons.Material.Filled.NorthEast">Total Gained</MudChip>
+                </MudStack>
+
+                <MudDivider Class="my-4" />
+
+                <MudText Typo="Typo.caption" Class="mud-text-secondary mb-3" Style="font-weight:700; text-transform:uppercase;">Breakdown by Account</MudText>
+                
+                @* Use Flex-Wrap so accounts don't get cut off at the bottom or sides *@
+                <div class="d-flex flex-wrap gap-4">
+                    @if (_incomes != null && _incomes.Any())
+                    {
+                        @foreach (var group in _incomes.GroupBy(x => x.Account?.AccountNumber ?? "Other"))
+                        {
+                            <MudPaper Elevation="0" Class="pa-4" 
+                                      Style="background: white; border: 1px solid #e0e0e0; border-radius: 16px; min-width: 180px; flex-grow: 1; max-width: 250px;">
+                                <MudStack Spacing="1">
+                                    <MudText Typo="Typo.caption" Style="font-weight:bold; color: #023d28; letter-spacing: 1px;">@group.Key</MudText>
+                                    <MudText Typo="Typo.h6" Style="font-weight:800; color: #023d28;">@group.Sum(x => x.AmountPaid).ToString("n")</MudText>
+                                </MudStack>
+                            </MudPaper>
+                        }
+                    }
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        @* Right Section: Transaction Count *@
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="0" Class="pa-6 d-flex flex-column justify-center align-center" 
+                      Style="height: 250px; border-radius: 24px; background: #f8faf9; border: 1px solid #023d28;">
+                
+                <MudAvatar Color="Color.Info" Style="height:60px; width:60px;" Class="mb-3" Variant="Variant.Outlined">
+                    <MudIcon Icon="@Icons.Material.Filled.History" Size="Size.Large" />
+                </MudAvatar>
+                
+                <MudText Typo="Typo.h4" Style="font-weight: 900;">@_incomes.Count</MudText>
+                <MudText Typo="Typo.caption" Class="mud-text-primary" Style="font-weight:700;">TOTAL INCOME LOGS</MudText>
+                
+                <div class="mt-4" style="width:100%">
+                    <MudChart ChartType="ChartType.Bar" 
+                              ChartSeries="@_series" 
+                              Width="100%" 
+                              Height="50px" 
+                              XAxisLabels="@(new string[0])"
+                              CanScaleY="true"
+                              ChartOptions="@_chartOptions"
+                              ShowLegend="false"
+                              ShowXAxis="false"
+                              ShowYAxis="false"
+                              MaxBarWidth="10" />
+                </div>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
     <MudDataGrid T="Income"
                  Items="@_incomes"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
                  Hover="true"
                  Striped="true"
                  Bordered="true"
-                 Dense="true"
-                 Filterable="true"
-                 SortMode="SortMode.Multiple"
                  Class="elevation-1">
-
         <ToolBarContent>
-            <MudText Typo="Typo.h5" Color="Color.Primary">Income</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Incomes</MudText>
             <MudSpacer />
             <MudMenu Label="Add Income" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
-                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateDialog">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="GoToCreateIncome">Single</MudMenuItem>
                 <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
             </MudMenu>
         </ToolBarContent>
-
         <Columns>
             <SelectColumn T="Income" />
-
-            <PropertyColumn Property="x => x.Id"
-                            Title="ID"
-                            HeaderStyle="white-space:nowrap"
-                            ItemStyle="white-space:nowrap"
-                            Sortable="true" />
-
-            <PropertyColumn Property="x => x.IncomeType.IncomeTypeName"
-                            Title="Income Type"
-                            HeaderStyle="white-space:nowrap"
-                            ItemStyle="white-space:nowrap"
-                            Sortable="true" />
-
-            <PropertyColumn Property="x => x.Date"
-                            Title="Date"
-                            Format="dd MMM yyyy"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
-            <PropertyColumn Property="x => x.AmountPaid"
-                            Title="Amount Paid"
-                            Format="C"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
-            <PropertyColumn Property="x => x.Source"
-                            Title="Source"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
-            <PropertyColumn Property="x => x.PaymentMethod.PaymentMethodName"
-                            Title="Payment Method"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
-            <!-- Changed: show AccountType instead of DepositedAccount -->
-           <PropertyColumn Property="x => x.Account.AccountNumber"
-                Title="Deposited Account"
-                ItemStyle="white-space:nowrap"
-                HeaderStyle="white-space:nowrap"
-                Sortable="true" />
-
-
+            <PropertyColumn Property="x => x.Id" Title="ID" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.IncomeType.IncomeTypeName" Title="Income Type" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Date" Title="Date" Format="dd MMM yyyy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.AmountPaid" Title="Amount Paid" Format="n" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Source" Title="Source" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Account.AccountNumber" Title="Deposited Account" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
             <TemplateColumn Title="Status">
                 <CellTemplate>
-                    <MudChip T="string"
-                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
-                             Text="@(context.Item.IsActive ? "Active" : "Inactive")"
-                             Variant="Variant.Filled"
-                             ItemStyle="white-space:nowrap"
-                             HeaderStyle="white-space:nowrap"
-                             Size="Size.Small" />
+                    <MudChip T="string" Color="@(context.Item.IsActive ? Color.Success : Color.Error)" Size="Size.Small" Variant="Variant.Text">
+                        @(context.Item.IsActive ? "Active" : "Inactive")
+                    </MudChip>
                 </CellTemplate>
             </TemplateColumn>
-
-            <PropertyColumn Property="x => x.CreatedAt"
-                            Title="Created Date"
-                            Format="MM/dd/yyyy"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
-            <!-- Actions -->
             <TemplateColumn Title="Actions">
                 <CellTemplate>
-                    <MudIconButton Icon="@Icons.Material.Filled.Info"
-                                   Color="Color.Info"
-                                   Size="Size.Small"
-                                   Href="@($"/incomes/edit/{context.Item.Id}")" />
-
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                   Color="Color.Primary"
-                                   Size="Size.Small"
-                                   Href="@($"/incomes/edit/{context.Item.Id}")" />
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => Snackbar.Add($"Viewing {context.Item.Id}", Severity.Info))">Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Snackbar.Add($"Editing {context.Item.Id}", Severity.Info))">Edit</MudMenuItem>
+                    </MudMenu>
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
+        <PagerContent>
+            <MudDataGridPager T="Income" />
+        </PagerContent>
     </MudDataGrid>
 </MudContainer>
 
@@ -122,19 +138,29 @@
         await LoadIncomes();
     }
 
-    private async Task OpenCreateDialog()
-    {
-        var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
-        await DialogService.ShowAsync<CreateIncomeDialog>(title: "Create Income", new DialogParameters()
-        {
-            { "OnIncomeCreated", EventCallback.Factory.Create(this, LoadIncomes) }
-        }, option);
-    }
-
     private async Task LoadIncomes()
     {
         _incomes = await IncomeService.GetAllIncomesAsync();
         StateHasChanged();
     }
-}
 
+    private async Task GoToCreateIncome()
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall, FullWidth = true };
+        var dialog = await DialogService.ShowAsync<CreateIncomeDialog>("Add Income", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(100);
+            await LoadIncomes();
+        }
+    }
+
+    private List<ChartSeries> _series = new() 
+    { 
+        new ChartSeries { Name = "Activity", Data = new double[] { 12, 45, 30, 60, 40, 80, 50 } } 
+    };
+
+    private ChartOptions _chartOptions = new() { InterpolationOption = InterpolationOption.Straight };
+}

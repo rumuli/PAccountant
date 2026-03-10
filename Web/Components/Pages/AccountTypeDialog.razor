@@ -7,29 +7,86 @@
 
 @rendermode InteractiveServer  
 
-<MudDialog>
+<MudDialog Style="border-radius:20px; overflow:hidden; max-width:450px; border: 1px solid rgba(103, 58, 183, 0.1);">
     <DialogContent>
-        <MudText Typo="Typo.h6" Class="mb-4 fw-bold">
-            <MudIcon Icon="@Icons.Material.Filled.PostAdd" Class="mr-2"/> Create New Income Type
-        </MudText>
+        @* Header Section: Deep Purple Gradient for structural/architectural feel *@
+        <MudPaper Elevation="0"
+                  Class="relative overflow-hidden"
+                  Style="background: linear-gradient(135deg, #057a52 0%, #057a52 100%);
+                         border-radius:16px; padding:24px; margin-bottom:24px; position:relative;">
+            
+            @* Background Icon for design depth *@
+            <MudIcon Icon="@Icons.Material.Filled.AccountTree" 
+                     Style="position:absolute; right:-15px; top:-15px; font-size:6rem; color:rgba(255,255,255,0.1);" />
 
-        <EditForm Model="Model" OnValidSubmit="OnValidSubmit" FormName="CreateIncomeTypeForm">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="4" Style="position:relative; z-index:1;">
+                <MudAvatar Color="Color.Default" Style="height:56px; width:56px; background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);">
+                    <MudIcon Icon="@Icons.Material.Filled.PostAdd" Style="color:white; font-size:1.8rem;" />
+                </MudAvatar>
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.h6"
+                             Style="color:white; font-weight:800; letter-spacing:-0.5px;">
+                        Account Type
+                    </MudText>
+                    <MudText Typo="Typo.caption"
+                             Style="color:rgba(255,255,255,0.8); font-size:0.85rem;">
+                        Create a new classification for your accounts
+                    </MudText>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+
+        <EditForm Model="Model" OnValidSubmit="HandleValidSubmit" FormName="CreateAccountTypeForm">
             <DataAnnotationsValidator />
+            
+            <MudStack Spacing="4" Class="px-2">
+                <div>
+                    @* Styled Label with Vertical Indicator *@
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-3">
+                        <MudDivider Vertical="true" FlexItem="true" Style="border-width: 3px; border-color: #057a52; height: 14px; border-radius: 2px;" />
+                        <MudText Typo="Typo.caption"
+                                 Style="color:#057a52; font-weight:900; letter-spacing:.12em; text-transform:uppercase;">
+                            ACCOUNT CLASSIFICATION
+                        </MudText>
+                    </MudStack>
 
-            <MudStack Spacing="3">
-                <MudTextField T="string"
-                              Label="Type Name"
-                              Variant="Variant.Outlined"
-                              @bind-Value="Model.Name"
-                              For="@(() => Model.Name)" />
+                    <MudTextField T="string"
+                                  Label="Type Name"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense" 
+                                  @bind-Value="Model.Name"
+                                  Placeholder="e.g. Asset, Liability, Savings"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Label"
+                                  AdornmentColor="Color.Primary"
+                                  For="@(() => Model.Name)"
+                                  Style="background: white; border-radius:12px;" />
+                </div>
+
+                @* Save Button inside EditForm *@
+                <MudButton ButtonType="ButtonType.Submit"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           Size="Size.Large"
+                           Disabled="@_isProcessing"
+                           StartIcon="@(_isProcessing ? null : Icons.Material.Filled.Save)"
+                           Style="width:100%; border-radius:12px; font-weight:700;
+                                  background: #057a52;
+                                  box-shadow: 0 6px 20px rgba(103, 58, 183, 0.25);
+                                  padding: 12px 0; margin-top: 8px;">
+                    @if (_isProcessing)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">SAVING...</MudText>
+                    }
+                    else
+                    {
+                        <MudText>SAVE TYPE</MudText>
+                    }
+                </MudButton>
             </MudStack>
         </EditForm>
     </DialogContent>
-
-    <DialogActions>
-        <MudButton Variant="Variant.Text" OnClick="Cancel">Cancel</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnValidSubmit">Save Type</MudButton>
-    </DialogActions>
 </MudDialog>
 
 @code {
@@ -38,16 +95,19 @@
     private AccountTypeCreateDTO Model { get; set; } = new() { CreatedBy = "Admin" };
 
     [Parameter] public EventCallback OnAccountTypeCreated { get; set; }
+    
+    private bool _isProcessing;
 
-    private async Task OnValidSubmit()
+    private async Task HandleValidSubmit()
     {
+        _isProcessing = true;
         try
         {
             await AccountTypesService.CreateAccountType(Model);
-
             Snackbar.Add("New type added successfully!", Severity.Success);
-
-            await OnAccountTypeCreated.InvokeAsync();
+            
+            if (OnAccountTypeCreated.HasDelegate)
+                await OnAccountTypeCreated.InvokeAsync();
 
             MudDialog.Close(DialogResult.Ok(true));
         }
@@ -55,8 +115,11 @@
         {
             Snackbar.Add($"Error: {ex.Message}", Severity.Error);
         }
+        finally
+        {
+            _isProcessing = false;
+        }
     }
 
     private void Cancel() => MudDialog.Cancel();
 }
-

@@ -31,7 +31,7 @@ public class PropertyCategoryRepository : IPropertyCategory
             var propertycategory = new PropertyCategory
             {
                 Name = propertyCategoryDTO.Name,
-                 Status = propertyCategoryDTO.Status,
+                 Status = "Active",
                 CreatedBy = "Admin",
                 UpdateBy = "Admin", // ADD THIS LINE: It cannot be NULL in the database
                 CreatedAt = DateTime.Now,

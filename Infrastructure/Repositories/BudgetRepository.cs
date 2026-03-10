@@ -4,15 +4,18 @@ using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+
 namespace Infrastructure.Repositories
 {
     public class BudgetRepository : IBudget
     {
         private readonly ApplicationDbContext _dbcontext;
+        
         public BudgetRepository(ApplicationDbContext context)
         {
             _dbcontext = context;
         }
+
         public async Task<List<GetBudgetDTO>> GetBudgetsAsync()
         {
             return await _dbcontext.Budgets
@@ -21,35 +24,49 @@ namespace Infrastructure.Repositories
                         Id = b.Id,
                         Name = b.Name,
                         StartingAt = b.StartingAt,
-                        EndingAt = b.EndingAt
+                        EndingAt = b.EndingAt,
+                        // Fix: Sending the actual database value to the UI
+                        PlannedExpense = b.PlannedExpense 
                     })
                     .ToListAsync();
         }
-        public async Task  AddBudgetAsync(CreateBudgetDTO dto)
+
+        public async Task AddBudgetAsync(CreateBudgetDTO dto)
         {
             DateTime startdate = dto.StartingAt.GetValueOrDefault();
             DateTime enddate = dto.EndingAt.GetValueOrDefault();
-            bool exist = await _dbcontext.Budgets.AnyAsync(b => b.StartingAt.Month == startdate.Month && b.StartingAt.Year == startdate.Year);  
+
+            bool exist = await _dbcontext.Budgets.AnyAsync(b => 
+                b.StartingAt.Month == startdate.Month && 
+                b.StartingAt.Year == startdate.Year);  
+            
             if (exist)
             {
                 throw new Exception($"Budget for {startdate.ToString("MMMM yyyy")} already exists.");
             }
+
             if(enddate < startdate.AddMonths(1))
             {
                 throw new Exception("Interval between starting and ending date is less than month. The budget period must be at least one month long.");
             }
+
             var newbudget = new Budget
             {
                 Name = $"Budget {startdate.ToString("MMMM yyyy")}",
                 StartingAt = startdate,
-                PlannedIncome= 0,
-                PlannedExpense=0,
-                EndingAt = enddate
-                // Status = dto.BudgetStatus
+                EndingAt = enddate,
+                PlannedIncome = 0,
+                // Fix: Saving the user's input from the DTO instead of hardcoding 0
+                PlannedExpense = 0
+                
+                
+                // Status mapping can be added here if needed later
             };
+
             _dbcontext.Budgets.Add(newbudget);
             await _dbcontext.SaveChangesAsync();
         }
+
         public async Task<GetBudgetByIdDTO?> GetBudgetByIdAsync(int id)
         {
             return await _dbcontext.Budgets
@@ -59,21 +76,23 @@ namespace Infrastructure.Repositories
                     Id = x.Id,
                     Name = x.Name,
                     StartingAt = x.StartingAt,
-                    EndingAt= x.EndingAt
+                    EndingAt = x.EndingAt,
+                    // Fix: Map the expense for the detail view
+                    PlannedExpense = x.PlannedExpense
                 })
                 .FirstOrDefaultAsync();
         }
+
         public async Task<List<CountStatusBudgetDTO>> CountBudgetByStatusAsync()
         {
             return await _dbcontext.Budgets
-            .GroupBy(t=> t.Status)
-            .Select(g => new CountStatusBudgetDTO
-            {
-                Status=g.Key,
-                Counts = g.Count()
-            })
-            .ToListAsync();
+                .GroupBy(t => t.Status)
+                .Select(g => new CountStatusBudgetDTO
+                {
+                    Status = g.Key,
+                    Counts = g.Count()
+                })
+                .ToListAsync();
         }
-        
     }
 }

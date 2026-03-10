@@ -1,118 +1,124 @@
 @using Application.DTO
 @using Application.Services.PaymentMethods
 @using MudBlazor
-@inject NavigationManager NavigationManager
 @inject IPaymentMethodService PaymentMethodService
 
-<MudDialog Style="border-radius:12px; overflow:hidden;">
-
-    <!-- ══════════ HEADER BANNER ══════════ -->
+<MudDialog Style="border-radius:20px; overflow:hidden; max-width:450px; border: 1px solid rgba(63, 81, 181, 0.1);">
     <DialogContent>
+        @* Header Section: Indigo Gradient for a secure, financial feel *@
         <MudPaper Elevation="0"
-                  Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
-                         border-radius:8px; padding:14px 18px; margin-bottom:16px;">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                <MudIcon Icon="@Icons.Material.Filled.CreditCard"
-                         Style="color:white; font-size:1.6rem;" />
+                  Class="relative overflow-hidden"
+                  Style="background: linear-gradient(135deg, #057a52 0%, #057a52 100%);
+                         border-radius:16px; padding:24px; margin-bottom:24px; position:relative;">
+            
+            @* Background Icon for design depth *@
+            <MudIcon Icon="@Icons.Material.Filled.Payments" 
+                     Style="position:absolute; right:-15px; top:-15px; font-size:6rem; color:rgba(255,255,255,0.1);" />
+
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="4" Style="position:relative; z-index:1;">
+                <MudAvatar Color="Color.Default" Style="height:56px; width:56px; background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);">
+                    <MudIcon Icon="@Icons.Material.Filled.CreditCard" Style="color:white; font-size:1.8rem;" />
+                </MudAvatar>
                 <MudStack Spacing="0">
-                    <MudText Typo="Typo.subtitle1"
-                             Style="color:white; font-weight:700; line-height:1.2;">
-                        New Payment Method
+                    <MudText Typo="Typo.h6"
+                             Style="color:white; font-weight:800; letter-spacing:-0.5px;">
+                        Payment Method
                     </MudText>
                     <MudText Typo="Typo.caption"
-                             Style="color:rgba(255,255,255,0.80);">
-                        Add a new method used for receiving payments
+                             Style="color:rgba(255,255,255,0.8); font-size:0.85rem;">
+                        Add a way to track your transactions
                     </MudText>
                 </MudStack>
             </MudStack>
         </MudPaper>
 
-        <!-- ══════════ FORM ══════════ -->
-        <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+        <EditForm Model="Model" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
-            <ValidationSummary />
+            
+            <MudStack Spacing="4" Class="px-2">
+                <div>
+                    @* Styled Label with Vertical Indicator *@
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-3">
+                        <MudDivider Vertical="true" FlexItem="true" Style="border-width: 3px; border-color: #057a52; height: 14px; border-radius: 2px;" />
+                        <MudText Typo="Typo.caption"
+                                 Style="color:#057a52; font-weight:900; letter-spacing:.12em; text-transform:uppercase;">
+                            METHOD DETAILS
+                        </MudText>
+                    </MudStack>
 
-            <MudStack Spacing="1">
+                    <MudTextField T="string"
+                                  Label="Payment Method Name"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense" 
+                                  @bind-Value="Model.PaymentMethodName"
+                                  Placeholder="e.g. Bank Account, Cash, Visa"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Wallet"
+                                  AdornmentColor="Color.Primary"
+                                  For="@(() => Model.PaymentMethodName)"
+                                  Style="background: white; border-radius:12px;" />
+                </div>
 
-                <!-- ── Section Label ── -->
-                <MudText Typo="Typo.caption"
-                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
-                                text-transform:uppercase; margin-bottom:2px;">
-                    Method Details
-                </MudText>
+                @if (ShowErrors)
+                {
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Text" Dense="true" Class="mt-2" 
+                              Style="border-radius:8px; background: rgba(244, 67, 54, 0.05);">
+                        An error occurred while saving. Please try again.
+                    </MudAlert>
+                }
 
-                <!-- Payment Method Name -->
-                <MudTextField T="string"
-                              Label="Payment Method Name"
-                              Variant="Variant.Outlined"
-                              Margin="Margin.Dense"
-                              @bind-Value="Model.PaymentMethodName"
-                              Placeholder="e.g. Cash, Bank Transfer, PayPal…"
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Payments"
-                              AdornmentColor="Color.Primary"
-                              For="@(() => Model.PaymentMethodName)" />
-                <ValidationMessage For="@(() => Model.PaymentMethodName)" />
-
+                @* Action Button: Full width and styled to match *@
+                <MudButton ButtonType="ButtonType.Submit"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           Size="Size.Large"
+                           Disabled="@_isProcessing"
+                           StartIcon="@(_isProcessing ? null : Icons.Material.Filled.Save)"
+                           Style="width:100%; border-radius:12px; font-weight:700;
+                                  background: #057a52;
+                                  box-shadow: 0 6px 20px rgba(63, 81, 181, 0.25);
+                                  padding: 12px 0; margin-top: 8px;">
+                    @if (_isProcessing)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">SAVING...</MudText>
+                    }
+                    else
+                    {
+                        <MudText>SAVE METHOD</MudText>
+                    }
+                </MudButton>
             </MudStack>
         </EditForm>
     </DialogContent>
-
-    <!-- ══════════ ACTIONS ══════════ -->
-    <DialogActions>
-        <MudStack Row="true" Spacing="2" Class="px-2 pb-2" Style="width:100%;">
-
-           
-
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       Size="Size.Small"
-                       StartIcon="@Icons.Material.Filled.Save"
-                       OnClick="OnValidSubmit"
-                       Style="flex:2; border-radius:8px;
-                              background: linear-gradient(135deg,#1976D2,#42A5F5);">
-                Save Method
-            </MudButton>
-
-        </MudStack>
-    </DialogActions>
-
 </MudDialog>
 
 @code {
-    [CascadingParameter]
-    private IDialogReference DialogReference { get; set; } = default!;
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
 
     private CreatePaymentMethodDTO Model { get; set; } = new();
-
-    [Parameter]
-    public EventCallback OnPaymentMethodCreated { get; set; }
-
     private bool ShowErrors { get; set; } = false;
+    private bool _isProcessing { get; set; }
 
-    private async Task OnValidSubmit()
+    private async Task HandleValidSubmit()
     {
+        _isProcessing = true;
+        ShowErrors = false;
+        
         try
         {
             await PaymentMethodService.CreatePaymentMethodAsync(Model);
-
-            // Notify parent to reload dropdown list
-            await OnPaymentMethodCreated.InvokeAsync();
-
-              Model = new CreatePaymentMethodDTO();
-
-            @* DialogReference.Close(DialogResult.Ok(true)); *@
+            MudDialog.Close(DialogResult.Ok(true));  
         }
         catch
         {
             ShowErrors = true;
         }
-
-       
+        finally
+        {
+            _isProcessing = false;
+        }
     }
 
-    private void Cancel()
-    {
-        DialogReference.Close(DialogResult.Cancel());
-    }
+    private void Cancel() => MudDialog.Cancel(); 
 }

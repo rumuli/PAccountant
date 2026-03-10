@@ -2,116 +2,123 @@
 @using Application.Services.IncomeTypes
 @using MudBlazor
 @inject IIncomeTypeService IncomeTypeService
-@inject NavigationManager NavigationManager
 
-<MudDialog Style="border-radius:12px; overflow:hidden;">
-
-    <!-- ══════════ HEADER BANNER ══════════ -->
+<MudDialog Style="border-radius:20px; overflow:hidden; max-width:450px; border: 1px solid rgba(25, 118, 210, 0.1);">
     <DialogContent>
+        @* Header Section: Blue Gradient to match Income theme *@
         <MudPaper Elevation="0"
-                  Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
-                         border-radius:8px; padding:14px 18px; margin-bottom:16px;">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                <MudIcon Icon="@Icons.Material.Filled.Category"
-                         Style="color:white; font-size:1.6rem;" />
+                  Class="relative overflow-hidden"
+                  Style="background: linear-gradient(135deg, #057a52 0%, #057a52 100%);
+                         border-radius:16px; padding:24px; margin-bottom:24px; position:relative;">
+            
+            @* Background Icon for design depth *@
+            <MudIcon Icon="@Icons.Material.Filled.AccountBalanceWallet" 
+                     Style="position:absolute; right:-15px; top:-15px; font-size:6rem; color:rgba(255,255,255,0.1);" />
+
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="4" Style="position:relative; z-index:1;">
+                <MudAvatar Color="Color.Default" Style="height:56px; width:56px; background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);">
+                    <MudIcon Icon="@Icons.Material.Filled.AddCard" Style="color:white; font-size:1.8rem;" />
+                </MudAvatar>
                 <MudStack Spacing="0">
-                    <MudText Typo="Typo.subtitle1"
-                             Style="color:white; font-weight:700; line-height:1.2;">
+                    <MudText Typo="Typo.h6"
+                             Style="color:white; font-weight:800; letter-spacing:-0.5px;">
                         New Income Type
                     </MudText>
                     <MudText Typo="Typo.caption"
-                             Style="color:rgba(255,255,255,0.80);">
-                        Define a new category for income classification
+                             Style="color:rgba(255,255,255,0.8); font-size:0.85rem;">
+                        Define a new source of revenue
                     </MudText>
                 </MudStack>
             </MudStack>
         </MudPaper>
 
-        <!-- ══════════ FORM ══════════ -->
-        <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+        <EditForm Model="Model" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
-            <ValidationSummary />
+            
+            <MudStack Spacing="4" Class="px-2">
+                <div>
+                    @* Styled Label with Vertical Indicator *@
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-3">
+                        <MudDivider Vertical="true" FlexItem="true" Style="border-width: 3px; border-color: #057a52; height: 14px; border-radius: 2px;" />
+                        <MudText Typo="Typo.caption"
+                                 Style="color:#057a52; font-weight:900; letter-spacing:.12em; text-transform:uppercase;">
+                            TYPE DETAILS
+                        </MudText>
+                    </MudStack>
 
-            <MudStack Spacing="1">
+                    <MudTextField T="string"
+                                  Label="Income Type Name"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense" 
+                                  @bind-Value="Model.IncomeTypeName"
+                                  Placeholder="e.g. Freelance, Salary, Dividends"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Label"
+                                  AdornmentColor="Color.Primary"
+                                  For="@(() => Model.IncomeTypeName)"
+                                  Style="background: white; border-radius:12px;" />
+                </div>
 
-                <!-- ── Section Label ── -->
-                <MudText Typo="Typo.caption"
-                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
-                                text-transform:uppercase; margin-bottom:2px;">
-                    Type Details
-                </MudText>
+                @if (ShowErrors)
+                {
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Text" Dense="true" Class="mt-2" 
+                              Style="border-radius:8px; background: rgba(244, 67, 54, 0.05);">
+                        An error occurred while saving. Please try again.
+                    </MudAlert>
+                }
 
-                <!-- Income Type Name -->
-                <MudTextField T="string"
-                              Label="Income Type Name"
-                              Variant="Variant.Outlined"
-                              Margin="Margin.Dense"
-                              @bind-Value="Model.IncomeTypeName"
-                              Placeholder="e.g. Salary, Freelance, Bonus…"
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Label"
-                              AdornmentColor="Color.Primary"
-                              For="@(() => Model.IncomeTypeName)" />
-                <ValidationMessage For="@(() => Model.IncomeTypeName)" />
-
+                @* Action Button moved inside EditForm for better UX *@
+                <MudButton ButtonType="ButtonType.Submit"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           Size="Size.Large"
+                           Disabled="@_isProcessing"
+                           StartIcon="@(_isProcessing ? null : Icons.Material.Filled.Save)"
+                           Style="width:100%; border-radius:12px; font-weight:700;
+                                  background: #057a52;
+                                  box-shadow: 0 6px 20px rgba(25, 118, 210, 0.25);
+                                  padding: 12px 0; margin-top: 8px;">
+                    @if (_isProcessing)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">SAVING...</MudText>
+                    }
+                    else
+                    {
+                        <MudText>SAVE TYPE</MudText>
+                    }
+                </MudButton>
             </MudStack>
         </EditForm>
     </DialogContent>
-
-    <!-- ══════════ ACTIONS ══════════ -->
-    <DialogActions>
-        <MudStack Row="true" Spacing="2" Class="px-2 pb-2" Style="width:100%;">
-
-           
-
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       Size="Size.Small"
-                       StartIcon="@Icons.Material.Filled.Save"
-                       OnClick="OnValidSubmit"
-                       Style="flex:2; border-radius:8px;
-                              background: linear-gradient(135deg,#1976D2,#42A5F5);">
-                Save Type
-            </MudButton>
-
-        </MudStack>
-    </DialogActions>
-
 </MudDialog>
 
 @code {
-    [CascadingParameter]
-    private IDialogReference DialogReference { get; set; } = default!;
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
 
     private CreateIncomeTypeDTO Model { get; set; } = new();
-
-    [Parameter]
-    public EventCallback OnIncomeTypeCreated { get; set; }
-
     private bool ShowErrors { get; set; } = false;
+    private bool _isProcessing { get; set; }
 
-    private async Task OnValidSubmit()
+    private async Task HandleValidSubmit()
     {
+        _isProcessing = true;
+        ShowErrors = false;
+        
         try
         {
             await IncomeTypeService.CreateIncomeTypeAsync(Model);
-
-            // Notify parent to reload dropdown list
-            await OnIncomeTypeCreated.InvokeAsync();
-
-            Model = new CreateIncomeTypeDTO();
-
-            @* DialogReference.Close(DialogResult.Ok(true)); *@
+            MudDialog.Close(DialogResult.Ok(true));  
         }
         catch
         {
             ShowErrors = true;
         }
-       
+        finally
+        {
+            _isProcessing = false;
+        }
     }
 
-    private void Cancel()
-    {
-        DialogReference.Close(DialogResult.Cancel());
-    }
+    private void Cancel() => MudDialog.Cancel(); 
 }
