@@ -1,0 +1,2 @@
+C:\Users\HP\Desktop\PAccountant\Web\obj\Debug\net10.0\EmbeddedAttribute.cs
+C:\Users\HP\Desktop\PAccountant\Web\obj\Debug\net10.0\ValidatableTypeAttribute.cs
