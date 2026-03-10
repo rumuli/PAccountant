@@ -1,5 +1,3 @@
-using Domain.ValueObjects;
-
 namespace Application.DTO
 {
     public class PropertyCreateDTO
@@ -15,7 +13,6 @@ namespace Application.DTO
         public DateTime PurchaseDate{get;set;}
         public string CreatedBy {get;set;}
         public string CreatedAt {get;set;}
-        public PropertyStatus Status {get;set;}
     }
     public class PropertyUpdateDTO
     {

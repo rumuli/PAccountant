@@ -1,9 +1,7 @@
 @page "/budgets"
 @layout Layout.MainLayout
-@using Domain.ValueObjects
 @using Application.DTO.Budget
 @using Application.Services.BudgetServices
-@using System.ClientModel
 @inject IBudgetService BudgetService
 @inject IDialogService DialogService
 @inject IDialogService Dialog
@@ -16,7 +14,6 @@
                  SortMode="SortMode.Multiple" 
                  Filterable="true"
                  Hideable="true" 
-                 Dense="true"
                  RowClick="@RowClicked" 
                  SelectedItemsChanged="@SelectedItemsChanged">
         
@@ -24,7 +21,7 @@
             <MudText Typo="Typo.h5" Color="Color.Primary">Budgets</MudText>
             <MudSpacer />
             <MudMenu Label="Add Budget" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
-                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@OpenDialogAsync">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@(() => OpenDialogAsync(_closeButton))">Single</MudMenuItem>
                 <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
             </MudMenu>
         </ToolBarContent>
@@ -33,22 +30,12 @@
             <SelectColumn T="GetBudgetDTO" />
             <PropertyColumn Property="x => x.Id" Title="ID" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.Name" SortBy="@_sortBy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
-            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
-                <CellTemplate>
-                    <MudChip T="string" 
-                            Color="@GetStatusColor(context.Item.Status)" 
-                            Size="Size.Small" 
-                            Variant="Variant.Text">
-                        @context.Item.Status
-                    </MudChip>
-                </CellTemplate>
-            </TemplateColumn>
             <PropertyColumn Property="x => x.StartingAt" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.EndingAt" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             
             <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
                 <CellTemplate>
-                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
                         @* Ensure the method name here matches exactly what is in @code *@
                         <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => HandleEdit(context.Item))">Edit</MudMenuItem>
                         <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconColor="Color.Error">Delete</MudMenuItem>
@@ -80,12 +67,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _budgets = await BudgetService.GetBudgetsAsync() ?? new List<GetBudgetDTO>();
-    }
-    private async Task LoadBudgets()
-    {
-        _budgets = await BudgetService.GetBudgetsAsync() ?? new List<GetBudgetDTO>();
-
+         _budgets = await BudgetService.GetBudgetsAsync() ?? new List<GetBudgetDTO>();
     }
 
     // Fix for CS0103: Explicitly defined handler
@@ -107,31 +89,11 @@ private async Task OpenPlaning(int budgetId, string budgetName)
     var result = await dialog.Result;
 
 }
-private async Task OpenDialogAsync()
+private Task OpenDialogAsync(DialogOptions options)
 {
-    DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
-
-    var dialog = await DialogService.ShowAsync<AddBudget>("Add Budget", options);
-    var result = await dialog.Result;
-
-    if (result != null && !result.Canceled)
-    {
-        await Task.Delay(50);
-        await LoadBudgets();
-    }
-} 
-
+    return Dialog.ShowAsync<AddBudget>("Create Budget", options);
+}
 
     private void RowClicked(DataGridRowClickEventArgs<GetBudgetDTO> args) { }
     private void SelectedItemsChanged(HashSet<GetBudgetDTO> items) { }
-    private Color GetStatusColor(BudgetStatus status)
-    {
-        return status.ToString() switch
-        {
-            "Planned" => Color. Warning,
-            "Executed" => Color.Success,
-            "Running" => Color.Warning,
-            _ => Color.Default
-        };
-    }
 }

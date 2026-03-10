@@ -2,62 +2,42 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Data;
-using Application.Services.IncomeTypes;
-using Application.Services.ExpenseTypes;
-using Application.Services.Incomes;
-using Application.Services.Expenses;
-using Application.Services.PaymentMethods;
-using Application.Services.Debts;
-using Application.Services.DebtTypes;
-using Application.Services.BudgetServices;
-using Application.Services.IncomePlanningServices;
-using Application.Services.ExpensePlanningServices;
-using Application.Services.AccountTypes;
-using Application.Services.Accounts;
-using Application.Services.Persons;
-using Application.Services.Properties;
-using Application.Services.PropertyCategories;
-
+using Infrastructure.Repository;
 using Application.Interfaces;
 using Infrastructure.Repositories;
-using Infrastructure.Identity;
+using Application.Services.IncomeTypeServices;
+using Application.Services.ExpenseTypes;
 using System.Diagnostics;
+using Infrastructure.Identity;
 
 namespace Infrastructure.DependencyInjection
 {
     public static class ServiceContainer
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // Register ApplicationDbContext (service here) with SQL Server provider
-            services.AddDbContext<ApplicationDbContext>(options =>
-             options.UseSqlServer(configuration.GetConnectionString("PAccountantDBCONN")),ServiceLifetime.Scoped
-                );
-
+           //Add Infrastructure services here, e.g., DbContext, Repositories, etc.
+              services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("PAccountant")),ServiceLifetime.Scoped);
                 
-         //Register authentication services
-            services.AddAuthenticationService(configuration);
-
-            //register repository
-            services.AddScoped<IExpenseType, ExpenseTypeRepository>();
-            services.AddScoped<IIncomeType, IncomeTypeRepository>();
-            services.AddScoped<IIncome, IncomeRepository>();
-            services.AddScoped<IExpense, ExpenseRepository>();
-            services.AddScoped<IPaymentMethod, PaymentMethodRepository>();
-            services.AddScoped<IDebt, DebtRepository>();
-            services.AddScoped<IDebtType, DebtTypeRepository>();
-            services.AddScoped<IBudget, BudgetRepository>();
-            services.AddScoped<IIncomePlanning, IncomePlanningRepository>();
-            services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
-            services.AddScoped<IIdentity, IdentityRepository>();
-             services.AddScoped<IAccount, AccountRepository>(); 
+                services.AddAuthenticationService(configuration);
+                services.AddScoped<IBudget, BudgetRepository>();
+                services.AddScoped<IIncomePlanning, IncomePlanningRepository>();
+                services.AddScoped<IIncomeType, IncomeTypeRepository>();
+                services.AddScoped<IExpenseType, ExpenseTypeRepository>();
+                services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
+                services.AddScoped<IIdentity, IdentityRepository>();
+                            services.AddScoped<IAccount, AccountRepository>(); 
             services.AddScoped<IAccountType, AccountTypeRepository>(); 
             services.AddScoped<IPerson, PersonRepository>(); 
+
+
             services.AddScoped<IProperty, PropertyRepository>(); 
             services.AddScoped<IPropertyCategory, PropertyCategoryRepository>(); 
+                
 
-
-            return services;
+              
+              return services;
         }
     }
 }

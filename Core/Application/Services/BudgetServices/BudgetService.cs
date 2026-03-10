@@ -23,10 +23,6 @@ namespace Application.Services.BudgetServices{
    {
       return await _budget.GetBudgetByIdAsync(id);
    }
-   public async Task<List<CountStatusBudgetDTO>>CountBudgetByStatusAsync()
-      {
-         return await _budget.CountBudgetByStatusAsync();
-      }
    
    } 
 }

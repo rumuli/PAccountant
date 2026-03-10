@@ -13,28 +13,12 @@ namespace Infrastructure.Repositories{
         }
         public async Task <List<IncomePlanning>> GetIncomePlanningsAsync(){
             return await _context.IncomePlannings
-            // .Include(x=> x.IncomeType)
-            // .Include(x =>x.Budget)
+            .Include(x=> x.IncomeType)
+            .Include(x =>x.Budget)
             .ToListAsync();
         }
         public async Task AddIncomePlanning(CreateIncomePlanningDTO dto){
-            var budget = await _context.Budgets.FindAsync(dto.BudgetId);
-            var incometype = await _context.IncomeTypes.FindAsync(dto.IncomeTypeId);
-            bool exist = await _context.IncomePlannings.AnyAsync(e => e.Budget.Id == dto.BudgetId && e.IncomeType.Id == dto.IncomeTypeId);  
-            if (exist)            
-            {
-                throw new Exception($"Income planning for this budget and income type already exists.");
-            }
-            if(budget == null)
-            {
-                throw new Exception("Budget not found");    
-            }
-            if(incometype == null)
-            {
-                throw new Exception("Income type not found");
-            }
-            
-            IncomePlanning newincomeplanning = new  (){
+             IncomePlanning newincomeplanning = new  (){
              Budget= await _context.Budgets.FindAsync(dto.BudgetId),
              IncomeType= await _context.IncomeTypes.FindAsync(dto.IncomeTypeId),
              Amount= dto.Amount,
@@ -43,7 +27,6 @@ namespace Infrastructure.Repositories{
              UserAdded= 1,
              UpdatedAt= DateTime.Now
            };
-            budget.PlannedIncome += dto.Amount;
            _context.IncomePlannings.Add(newincomeplanning);
            await _context.SaveChangesAsync();
         }

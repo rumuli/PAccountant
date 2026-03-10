@@ -4,6 +4,5 @@ namespace Application.Services.BudgetServices{
         Task <List<GetBudgetDTO>> GetBudgetsAsync();
         Task AddBudgetAsync(CreateBudgetDTO dto);
         Task<GetBudgetByIdDTO?> GetBudgetByIdAsync(int id);
-        Task<List<CountStatusBudgetDTO>>CountBudgetByStatusAsync();
     }
 }

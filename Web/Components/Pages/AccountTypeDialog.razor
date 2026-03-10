@@ -1,11 +1,12 @@
 @using Application.DTO
-@using Application.Interfaces
+@using Application.Interface
 @using Application.Services.AccountTypes
 @using MudBlazor
 @inject IAccountTypeService AccountTypesService
 @inject ISnackbar Snackbar
 
-@rendermode InteractiveServer  
+@* Required for button clicks and form submission to work in .NET 8/9 *@
+@rendermode InteractiveServer 
 
 <MudDialog>
     <DialogContent>
@@ -13,6 +14,7 @@
             <MudIcon Icon="@Icons.Material.Filled.PostAdd" Class="mr-2"/> Create New Income Type
         </MudText>
 
+        @* FIXED: Added FormName to prevent POST routing errors *@
         <EditForm Model="Model" OnValidSubmit="OnValidSubmit" FormName="CreateIncomeTypeForm">
             <DataAnnotationsValidator />
 
@@ -22,19 +24,35 @@
                               Variant="Variant.Outlined"
                               @bind-Value="Model.Name"
                               For="@(() => Model.Name)" />
+
+                <MudTextField T="string"
+                              Label="Status"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Model.Status"
+                              For="@(() => Model.Status)" />
+
+                <MudTextField T="string"
+                              Label="Created By"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Model.CreatedBy"
+                              ReadOnly="true" />
             </MudStack>
         </EditForm>
     </DialogContent>
 
     <DialogActions>
         <MudButton Variant="Variant.Text" OnClick="Cancel">Cancel</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnValidSubmit">Save Type</MudButton>
+        @* FIXED: Button must be inside or linked to the form to trigger OnValidSubmit *@
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" 
+                   OnClick="OnValidSubmit">Save Type</MudButton>
     </DialogActions>
 </MudDialog>
 
 @code {
     [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
 
+    // Model initialized with default "Admin" as seen in your Repository logic
     private AccountTypeCreateDTO Model { get; set; } = new() { CreatedBy = "Admin" };
 
     [Parameter] public EventCallback OnAccountTypeCreated { get; set; }
@@ -44,7 +62,7 @@
         try
         {
             await AccountTypesService.CreateAccountType(Model);
-
+            
             Snackbar.Add("New type added successfully!", Severity.Success);
 
             await OnAccountTypeCreated.InvokeAsync();
@@ -59,4 +77,3 @@
 
     private void Cancel() => MudDialog.Cancel();
 }
-

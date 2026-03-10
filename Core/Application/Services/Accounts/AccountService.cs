@@ -1,7 +1,6 @@
-using Application.Interfaces;
+using Application.Interface;
 using Domain.Entities; 
 using Application.DTO;
-
 
 namespace  Application.Services.Accounts
 {

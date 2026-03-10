@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Infrastructure.Data;
 using Application.DTO;
-using Application.Interfaces;
+using Application.Interface;
 using Application.Services.AccountTypes;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +31,7 @@ public class AccountTypeRepository : IAccountType
             var accounttype = new AccountType
             {
                 Name = accounttypeDTO.Name,
-                 Status = "Active",
+                 Status = accounttypeDTO.Status,
                 CreatedBy = "Admin",
                 UpdateBy = "Admin", // ADD THIS LINE: It cannot be NULL in the database
                 CreatedAt = DateTime.Now,

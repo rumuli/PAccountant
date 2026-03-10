@@ -1,194 +1,155 @@
 @page "/persons"
+@using Microsoft.EntityFrameworkCore
 @using MudBlazor
-@layout MainLayout
 @using Domain.Entities
 @using Application.Services.Persons
+@using Microsoft.AspNetCore.Authorization
+@* @attribute [Authorize] *@
 @inject IDialogService DialogService
-@inject IDialogService Dialog
-
 @inject IPersonService PersonService
 
 <PageTitle>Persons</PageTitle>
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+     <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <MudText Typo="Typo.h4" Class="font-weight-bold">
+            Person
+        </MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(()=>OpenDialog())">
+                +Add Person
+            </MudButton>
+    </div>  
 
-<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
-
-    <MudDataGrid T="Person"
+     <MudDataGrid T="Person"
                  Items="@_person"
-                 MultiSelection="true" 
-                 SortMode="SortMode.Multiple" 
-                 Filterable="true"
-                 Hideable="true" 
+                 Hover="true"
+                 Striped="true"
+                 Bordered="true"
                  Dense="true"
-                 RowClick="@RowClicked" 
-                 SelectedItemsChanged="@SelectedItemsChanged">
-
-        <!-- Toolbar -->
-        <ToolBarContent>
-            <MudText Typo="Typo.h5" Color="Color.Primary">Persons</MudText>
-            <MudSpacer />
-
-            <MudMenu Label="Add Person"
-                     Variant="Variant.Filled"
-                     EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-                     Color="Color.Primary">
-
-                <MudMenuItem Icon="@Icons.Material.Filled.Add"
-                             OnClick="@OpenDialog">
-                    Single
-                </MudMenuItem>
-
-                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">
-                    Import
-                </MudMenuItem>
-
-            </MudMenu>
-        </ToolBarContent>
+                 Filterable="true"
+                 SortMode="SortMode.Multiple"
+                 Class="elevation-1">
 
         <Columns>
-        <SelectColumn T="Person" />
-            <PropertyColumn Property="x => x.Id"
+
+        <PropertyColumn Property="x => x.Id"
                             Title="ID"
                             Sortable="true" />
 
-            <PropertyColumn Property="x => x.FirstName"
-                            Title="First Name"
+               <PropertyColumn Property="x => x.FirstName"
+                            Title="FirstName"
                             Sortable="true" />
 
-            <PropertyColumn Property="x => x.LastName"
-                            Title="Last Name"
-                            Sortable="true" />
+              <PropertyColumn Property="x => x.LastName"
+                            Title="LastName"
+                            Sortable="true" /> 
 
-            <PropertyColumn Property="x => x.Sex"
+
+               <PropertyColumn Property="x => x.Sex"
                             Title="Sex"
-                            Sortable="true" />
+                            Sortable="true" /> 
 
-            <PropertyColumn Property="x => x.phoneNumber"
-                            Title="Phone Number"
-                            Sortable="true" />
+               <PropertyColumn Property="x => x.phoneNumber"
+                            Title="phoneNumber"
+                            Sortable="true" /> 
 
-            <PropertyColumn Property="x => x.Email"
+               <PropertyColumn Property="x => x.Email"
                             Title="Email"
-                            Sortable="true" />
-
-            @* <PropertyColumn Property="x => x.Country"
+                            Sortable="true" /> 
+                            
+               <PropertyColumn Property="x => x.Country"
                             Title="Country"
-                            Sortable="true" /> *@
+                            Sortable="true" /> 
 
-            @* <PropertyColumn Property="x => x.DateOfBirth"
-                            Title="Date Of Birth"
+            <PropertyColumn Property="x => x.DateOfBirth"
+                            Title="DateOfBirth"
                             Format="MM/dd/yyyy"
-                            Sortable="true" /> *@
-@* 
-            <PropertyColumn Property="x => x.Street"
+                            Sortable="true" />  
+
+                            <PropertyColumn Property="x => x.Street"
                             Title="Street"
-                            Sortable="true" /> *@
-
-            <TemplateColumn Title="Status">
-                <CellTemplate>
-                    <MudChip T="string"
-                             Color="@GetStatusColor(context.Item.Status)"
-                             Text="@context.Item.Status"
-                             Variant="Variant.Filled"
-                             Size="Size.Small" />
-                </CellTemplate>
-            </TemplateColumn>
-
-            @* <PropertyColumn Property="x => x.CreatedBy"
+                            Sortable="true" /> 
+                            <PropertyColumn Property="x => x.Status"
+                            Title="Status"
+                            Sortable="true" /> 
+                            <PropertyColumn Property="x => x.CreatedBy"
                             Title="CreatedBy"
-                            Sortable="true" /> *@
-
-            <!-- Actions -->
-            @* <TemplateColumn Title="Actions">
-                <CellTemplate>
-
-                    <MudIconButton Icon="@Icons.Material.Filled.Info"
-                                   Color="Color.Info"
-                                   Size="Size.Small"
-                                   OnClick="@(()=>OpenDetailDialog(context.Item.Id))" />
-
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                   Color="Color.Primary"
-                                   Size="Size.Small"
-                                   OnClick="@(()=>OpenEditDialog(context.Item.Id))" />
-
-                </CellTemplate>
-            </TemplateColumn> *@
-             <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
-                <CellTemplate>
-                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
-                        @* Ensure the method name here matches exactly what is in @code *@
-                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => OpenEditDialog(context.Item.Id))">Edit</MudMenuItem>
-                        <MudMenuItem Icon="@Icons.Material.Filled.MonetizationOn" 
-                                    IconColor="Color.Info" 
-                                    OnClick="@(() => OpenDetailDialog(context.Item.Id))">
-                            Details
-                        </MudMenuItem>
-                    </MudMenu>
-                </CellTemplate>
-             </TemplateColumn>
+                            Sortable="true" /> 
+         <MudTd DataLabel="Actions">
+     
+       <TemplateColumn Title="Actions" Context="context">
+            <CellTemplate>
+                  <MudStack Row="true" Spacing="2" Justify="Justify.Center">
+                <MudButton Size="Size.Small" 
+                           Variant="Variant.Filled" 
+                           Color="Color.Warning"
+                           StartIcon="@Icons.Material.Filled.Edit" 
+                           OnClick="@(() => OpenEditDialog(context.Item.Id))">
+                    Edit
+                </MudButton>
+                 <MudButton Size="Size.Small" 
+                           Variant="Variant.Filled" 
+                           Color="Color.Primary" 
+                           StartIcon="@Icons.Material.Filled.MoreHoriz"
+                           OnClick="@(() => OpenDetailDialog(context.Item.Id))">
+                    Details
+                </MudButton>
+                </MudStack>
+            </CellTemplate>
+          </TemplateColumn>
+          </MudTd>
         </Columns>
-        <PagerContent>
-            <MudDataGridPager T="Person" />
-        </PagerContent>
     </MudDataGrid>
-
 </MudContainer>
 
+
 @code{
+    List<Person> _person = new List<Person>();
+        protected override void OnInitialized()
+            {
+                _person = PersonService.GetAllPersons();
+            }  
+            protected IDialogReference dialogReference;
+            private Color GetStatusColor(string status)
+            {
+                return status switch
+                {
+                    "Active" => Color.Success,
+                    "Completed" => Color.Info,
+                    "Pending" => Color.Warning,
+                    "Cancelled" => Color.Error,
+                    _ => Color.Default
+                };
+            }
+            private async Task OpenDialog(List<Person>? _person = null)
+           {
+            var dialog = await DialogService.ShowAsync<PersonCreateDialog>("Add person");
+            var result = await dialog.Result;
 
-    List<Person> _person = new();
-    private readonly DialogOptions _closeButton = new() { CloseButton = true };
+            if (result != null && !result.Canceled)
+            {
+             _person = PersonService.GetAllPersons();
+            }
+        } 
+
+            private async Task OpenDetailDialog(int id)
+            {
+                
+            var parameters = new DialogParameters<PersonDetailDialog> { { x => x.Id, id } };
+             await DialogService.ShowAsync<PersonDetailDialog>("View Details", parameters);
+             }
 
 
-    protected override void OnInitialized()
-    {
-        LoadPersons();
-    }
+           private async Task OpenEditDialog(int id)
+           {
+            var parameters = new DialogParameters<PersonEditDialog> { { x => x.Id, id } };
+            var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true };
+            
+            var dialog = await DialogService.ShowAsync<PersonEditDialog>("Edit Person", parameters, options);
+            var result = await dialog.Result;
 
-    private Color GetStatusColor(string status)
-    {
-        return status switch
-        {
-             "Dormant" => Color. Warning,
-            "Active" => Color.Success,
-            "Closed" => Color.Error,
-            _ => Color.Default
-        };
-    }
+            
+          }
 
-    private async Task OpenDialog()
-    {
-        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
-
-        var dialog = await DialogService.ShowAsync<PersonCreateDialog>("Add person", options);
-        var result = await dialog.Result;
-
-        if (result != null && !result.Canceled)
-        {
-            LoadPersons();
-        }
-    }
-
-    private async Task OpenDetailDialog(int id)
-    {
-        var parameters = new DialogParameters<PersonDetailDialog> { { x => x.Id, id } };
-        await DialogService.ShowAsync<PersonDetailDialog>("View Details", parameters);
-    }
-
-    private async Task OpenEditDialog(int id)
-    {
-        var parameters = new DialogParameters<PersonEditDialog> { { x => x.Id, id } };
-        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true };
-
-        var dialog = await DialogService.ShowAsync<PersonEditDialog>("Edit Person", parameters, options);
-        var result = await dialog.Result;
-    }
-
-    private void LoadPersons()
-    {
-        _person = PersonService.GetAllPersons();
-        StateHasChanged();
-    }
-    private void RowClicked(DataGridRowClickEventArgs<Person> args) { }
-    private void SelectedItemsChanged(HashSet<Person> items) { }
-}
+   }
+     
