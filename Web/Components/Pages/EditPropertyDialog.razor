@@ -1,0 +1,107 @@
+@using Application.Services.Properties
+@using Application.Services.Accounts
+@using Application.Services.AccountTypes
+
+
+@using Domain.Entities
+@using Application.DTO
+@using Application.Interfaces
+@using MudBlazor
+@inject IPropertyService PropertyService
+@inject IAccountTypeService AccountTypeService
+@inject ISnackbar Snackbar
+
+@rendermode InteractiveServer
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-2"/> Edit Account Asset
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (_properycategory == null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else
+        {
+            <EditForm Model="@_property" OnValidSubmit="OnValidSubmit" FormName="EditAccountForm">
+                <DataAnnotationsValidator />
+                <MudStack Spacing="3">
+                    
+                    <MudTextField Label="Account Number" @bind-Value="_property.Name" 
+                                  Variant="Variant.Outlined" For="@(() => _property.Name)" />
+
+                    <MudTextField Label="Provider" @bind-Value="_property.Value" 
+                                  Variant="Variant.Outlined" For="@(() => _property.Value)" />
+
+                    <MudNumericField Label="Balance" @bind-Value="_property.Location" 
+                                     Variant="Variant.Outlined" For="@(() => _property.Location)" />
+                    <MudNumericField Label="Balance" @bind-Value="_property.AssignedTo" 
+                                     Variant="Variant.Outlined" For="@(() => _property.AssignedTo)" />
+
+                    <MudNumericField Label="Balance" @bind-Value="_property.PurchasePrice" 
+                                     Variant="Variant.Outlined" For="@(() => _property.PurchasePrice)" />
+
+                    <MudNumericField Label="Balance" @bind-Value="_property.Identification" 
+                                     Variant="Variant.Outlined" For="@(() => _property.Identification)" />
+
+
+                </MudStack>
+            </EditForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="OnValidSubmit">Save Changes</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public int Id { get; set; } // The ID of the account to edit
+
+    private PropertyUpdateDTO _property = new();
+    private List<AccountType> _properycategory;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 1. Load Categories/Types for the dropdown
+        _properycategory = await AccountTypeService.GetAllAccountTypes();
+
+        // 2. Load the existing Account data
+        var account = await PropertyService.GetPropertyById(Id);
+        if (account != null)
+        {
+            // Map Entity to DTO
+            _property = new PropertyUpdateDTO
+            {
+                Name = account.Name,
+                Value = account.Value,
+                Location = account.Location,
+                AssignedTo = account.AssignedTo,
+                PurchasePrice = account.PurchasePrice,
+                Identification = account.Identification,
+                PurchaseDate = DateTime.Now,
+                UpdateBy="Admin"
+            };
+        }
+    }
+
+    private async Task OnValidSubmit()
+    {
+        try
+        {
+            await PropertyService.UpdateProperty(Id, _property);
+            Snackbar.Add("Asset updated successfully!", Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Update failed: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

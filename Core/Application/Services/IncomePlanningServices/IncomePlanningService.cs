@@ -16,5 +16,9 @@ namespace Application.Services.IncomePlanningServices{
         public async Task AddIncomePlanning(CreateIncomePlanningDTO dto){
             await _incomePlanning.AddIncomePlanning(dto);
         }
+        public async Task <List<IncomePlanning>> GetSummaryIncomePlanningAsync(int BudgetId)
+        {
+            return await _incomePlanning.GetSummaryIncomePlanningAsync(BudgetId);
+        }
     }
 }

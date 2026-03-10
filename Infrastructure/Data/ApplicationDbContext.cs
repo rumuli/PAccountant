@@ -3,6 +3,8 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Identity;
+
+
 namespace Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
@@ -17,6 +19,7 @@ namespace Infrastructure.Data
         public DbSet<PropertyCategory> PropertyCategories{get;set;}
         public DbSet<Debt> Debts{get;set;}
         public DbSet<Expense> Expenses{get;set;}
+        public DbSet<DebtType> DebtTypes{get;set;}
         public DbSet<Income> Incomes{get;set;}
         public DbSet<IncomeType> IncomeTypes{get;set;}
         public DbSet<PaymentMethod> PaymentMethods{get;set;}
@@ -39,6 +42,8 @@ namespace Infrastructure.Data
              builder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
              builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
              builder.Entity<IdentityUserRole<int>>().ToTable("UserRoles").HasKey(ur => new { ur.UserId, ur.RoleId });
+
+             builder.Entity<Budget>().Property(t=> t.Status).HasConversion<string>();
 
         }
 

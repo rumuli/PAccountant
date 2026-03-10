@@ -1,19 +1,72 @@
 @page "/budgets"
 @layout Layout.MainLayout
+@using Domain.ValueObjects
 @using Application.DTO.Budget
 @using Application.Services.BudgetServices
+@using System.ClientModel
+@using Web.Components.Shared
+@using Domain.Entities
+@using Application.Services.IncomePlanningServices
+@using Application.Services.ExpensePlanningServices
+@inject IIncomePlanningService IncomePlanningService
+@inject IExpensePlanningService ExpensePlanningService
 @inject IBudgetService BudgetService
 @inject IDialogService DialogService
 @inject IDialogService Dialog
 @inject ISnackbar Snackbar
 
+<BudgetDetailsDrawer @bind-Open="_open" 
+                     BudgetId="_selectedBudgetId" 
+                     Anchor="_anchor" 
+                     Width="@_width" 
+                     Height="@_height" />
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    <MudGrid Spacing="3" Class="mb-4">
+        <MudItem xs="12" sm="4" md="2">
+           <StatCards 
+               Title="Total Budgets"
+               Value="@TotalBudgets.ToString()"
+               ValueColor="Color.Primary"
+               Icon="@Icons.Material.Filled.AccountBalanceWallet" 
+               IconColor="Color.Primary"
+               />
+        </MudItem>
+            @foreach (var statusCount in _countStatusBudgets)
+            {
+                <MudItem xs="12" sm="4" md="2">
+                    <StatCards Title="@($"{statusCount.Status} Budgets")"
+                               Value="@statusCount.Counts.ToString()"
+                               ValueColor="Color.Primary"
+                               Icon="@GetStatusIcon(statusCount.Status)"
+                               IconColor="@GetStatusColor(statusCount.Status)" />
+                </MudItem>
+            }
+            <MudItem xs="12" sm="4" md="2">
+                <StatCards
+                Title="Total Planned Revenue"
+                Value="@TotalPlannedRevenue.ToString()"
+                ValueColor="Color.Primary"
+                Icon="@Icons.Material.Filled.AccountBalanceWallet"
+                IconColor="Color.Primary"
+                />
+            </MudItem>
+            <MudItem xs="12" sm="4" md="2">
+                <StatCards
+                Title="Total Planned Expense"
+                Value="@TotalPlannedExpenses.ToString()"
+                ValueColor="Color.Primary"
+                Icon="@Icons.Material.Filled.AccountBalanceWallet"
+                IconColor="Color.Primary"
+                />
+            </MudItem>
+    </MudGrid>
     <MudDataGrid T="GetBudgetDTO" 
                  Items="@_budgets" 
                  MultiSelection="true" 
                  SortMode="SortMode.Multiple" 
                  Filterable="true"
                  Hideable="true" 
+                 Dense="true"
                  RowClick="@RowClicked" 
                  SelectedItemsChanged="@SelectedItemsChanged">
         
@@ -21,7 +74,7 @@
             <MudText Typo="Typo.h5" Color="Color.Primary">Budgets</MudText>
             <MudSpacer />
             <MudMenu Label="Add Budget" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
-                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@(() => OpenDialogAsync(_closeButton))">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@OpenDialogAsync">Single</MudMenuItem>
                 <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
             </MudMenu>
         </ToolBarContent>
@@ -30,14 +83,25 @@
             <SelectColumn T="GetBudgetDTO" />
             <PropertyColumn Property="x => x.Id" Title="ID" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.Name" SortBy="@_sortBy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudChip T="string" 
+                            Color="@GetStatusColor(context.Item.Status)" 
+                            Size="Size.Small" 
+                            Variant="Variant.Text">
+                        @context.Item.Status
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
             <PropertyColumn Property="x => x.StartingAt" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.EndingAt" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             
             <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
                 <CellTemplate>
-                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
                         @* Ensure the method name here matches exactly what is in @code *@
                         <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => HandleEdit(context.Item))">Edit</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => OpenDrawer(Anchor.End, context.Item.Id))">Details</MudMenuItem>
                         <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconColor="Color.Error">Delete</MudMenuItem>
                         <MudMenuItem Icon="@Icons.Material.Filled.MonetizationOn" 
                                     IconColor="Color.Info" 
@@ -55,6 +119,12 @@
 </MudContainer>
 
 @code {
+    private List<CountStatusBudgetDTO> _countStatusBudgets= new();
+    private List<IncomePlanning> incomePlannings = new();    
+    private List<ExpensePlanning> expensePlannings = new();    
+    private decimal TotalPlannedRevenue => incomePlannings.Sum(b => b.Amount);    
+    private decimal TotalPlannedExpenses => expensePlannings.Sum(b => b.Amount);    
+    private int TotalBudgets=> _countStatusBudgets.Sum(x=>x.Counts);
     private readonly DialogOptions _closeButton = new() { CloseButton = true };
     private List<GetBudgetDTO> _budgets = new();
     private bool _sortNameByLength = false;
@@ -64,10 +134,27 @@
             return (object)x.Name.Length;
         return (object)x.Name;
     };
-
+    private async Task LoadCountStatusBudgets()
+    {
+       _countStatusBudgets= await BudgetService.CountBudgetByStatusAsync();
+    }
     protected override async Task OnInitializedAsync()
     {
-         _budgets = await BudgetService.GetBudgetsAsync() ?? new List<GetBudgetDTO>();
+        await LoadCountStatusBudgets(); 
+        await LoadBudgets();  
+        await LoadTotalPlannedRevenue(); 
+        await LoadTotalPlannedExpenses();
+    }
+    private async Task LoadTotalPlannedRevenue(){
+        incomePlannings = await IncomePlanningService.GetIncomePlanningsAsync() ?? new List<IncomePlanning>();
+    }
+    private async Task LoadTotalPlannedExpenses(){
+        expensePlannings = await ExpensePlanningService.GetExpensePlanningsAsync() ?? new List<ExpensePlanning>();
+    }
+    private async Task LoadBudgets()
+    {
+        _budgets = await BudgetService.GetBudgetsAsync() ?? new List<GetBudgetDTO>();
+
     }
 
     // Fix for CS0103: Explicitly defined handler
@@ -75,25 +162,97 @@
     {
         Snackbar.Add($"Editing: {item.Name}", Severity.Info);
     }
-private async Task OpenPlaning(int budgetId, string budgetName)
-{
-    var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-
-    var parameters = new DialogParameters
+    private async Task OpenPlaning(int budgetId, string budgetName)
     {
-        { "BudgetId", budgetId},
-        {"BudgetName", budgetName }
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        var parameters = new DialogParameters
+        {
+            { "BudgetId", budgetId },
+            { "BudgetName", budgetName },
+            { "OnSaveSuccess", EventCallback.Factory.Create(this, RefreshPlanningData) }
+        };
+
+        await DialogService.ShowAsync<AddPlanning>($"Planning for {budgetName}", parameters, options);
+    }
+    private async Task OpenPlanningDialog(GetBudgetDTO budget)
+{
+    var parameters = new DialogParameters<AddPlanning>
+    {
+        { x => x.BudgetId, budget.Id },
+        { x => x.BudgetName, $"{budget.StartingAt:yyyy-MM-dd} to {budget.EndingAt:yyyy-MM-dd}" }
     };
 
-    var dialog = await DialogService.ShowAsync<AddPlanning>($"Planning for {budgetName}", parameters, options);
+    var options = new DialogOptions { 
+        CloseOnEscapeKey = true, 
+        MaxWidth = MaxWidth.Medium, 
+        FullWidth = true,
+        CloseButton = true 
+    };
+
+    await DialogService.ShowAsync<AddPlanning>("Budget Planning", parameters, options);
+}
+
+    private async Task RefreshPlanningData()
+    {
+
+        await LoadTotalPlannedRevenue();
+        await LoadBudgets();
+        await LoadTotalPlannedExpenses();
+        await LoadCountStatusBudgets();
+        StateHasChanged(); 
+    }
+private async Task OpenDialogAsync()
+{
+    DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+    var dialog = await DialogService.ShowAsync<AddBudget>("Add Budget", options);
     var result = await dialog.Result;
 
-}
-private Task OpenDialogAsync(DialogOptions options)
-{
-    return Dialog.ShowAsync<AddBudget>("Create Budget", options);
-}
+    if (result != null && !result.Canceled && result.Data is GetBudgetDTO createdBudget)
+    {
+        await LoadBudgets();
+        await LoadCountStatusBudgets();
+
+        // Immediately open AddPlanning for the newly created budget
+        await OpenPlaning(createdBudget.Id, createdBudget.Name);
+    }
+
+    } 
+
 
     private void RowClicked(DataGridRowClickEventArgs<GetBudgetDTO> args) { }
     private void SelectedItemsChanged(HashSet<GetBudgetDTO> items) { }
+    private Color GetStatusColor(BudgetStatus status)
+    {
+        return status.ToString() switch
+        {
+            "Planned" => Color. Warning,
+            "Executed" => Color.Success,
+            "Running" => Color.Info,
+            _ => Color.Default
+        };
+    }
+        private string GetStatusIcon(Domain.ValueObjects.BudgetStatus status) => status switch
+    {
+        Domain.ValueObjects.BudgetStatus.Planned => Icons.Material.Filled.Schedule,
+        Domain.ValueObjects.BudgetStatus.Executed => Icons.Material.Filled.CheckCircle,
+        Domain.ValueObjects.BudgetStatus.Running => Icons.Material.Filled.PlayArrow,
+        @* Domain.ValueObjects.BudgetStatus.Closed => Icons.Material.Filled.Lock, *@
+        _ => Icons.Material.Filled.ConfirmationNumber
+    };
+    private bool _open;
+    private Anchor _anchor;
+
+    private string _width, _height;
+
+    private int? _selectedBudgetId;
+    private void OpenDrawer(Anchor anchor, int budgetId)
+    {
+        _selectedBudgetId = budgetId;
+        _anchor = anchor;
+        _open = true;
+        _width = "500px";
+        _height = "100%";
+    }
 }

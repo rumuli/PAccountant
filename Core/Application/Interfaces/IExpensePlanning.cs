@@ -4,5 +4,7 @@ namespace Application.Interfaces{
     public interface IExpensePlanning{
         Task <List<ExpensePlanning>> GetExpensePlanningsAsync();
         Task AddExpensePlanningAsync(CreateExpensePlanningDTO dto);
+        Task <List<ExpensePlanning>> GetSummaryExpensePlanningAsync(int BudgetId);
+
     }
 }

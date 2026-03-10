@@ -1,0 +1,178 @@
+@using Application.DTO
+@using Application.Services.Debts
+@using Application.Services.DebtTypes
+@using MudBlazor
+@using Domain.Entities
+@inject IDebtService DebtService
+@inject IDebtTypeService DebtTypeService
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@using Microsoft.EntityFrameworkCore
+
+<MudDialog Style="border-radius:12px; overflow:hidden;">
+    <DialogContent>
+        <!-- Header Banner -->
+        <MudPaper Elevation="0"
+                  Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
+                         border-radius:8px; padding:14px 18px; margin-bottom:16px;">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                <MudIcon Icon="@Icons.Material.Filled.AttachMoney" Style="color:white; font-size:1.6rem;" />
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle1" Style="color:white; font-weight:700;">New Debt Record</MudText>
+                    <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.80);">Fill in the details below to create an entry</MudText>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+
+        <!-- Form -->
+        <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudStack Spacing="2">
+                <!-- Debt Type Dropdown -->
+                <MudGrid Spacing="1" Class="align-items-center">
+                    <MudItem xs="11">
+                        <MudSelect T="int"
+                                   Label="Debt Type"
+                                   @bind-Value="Model.DebtTypeId"
+                                   Variant="Variant.Outlined"
+                                   Margin="Margin.Dense"
+                                   Dense="true"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   AdornmentIcon="@Icons.Material.Filled.Category"
+                                   Adornment="Adornment.Start"
+                                   AdornmentColor="Color.Primary">
+                            <MudSelectItem Value="0">Select Debt Type</MudSelectItem>
+                            @foreach (var type in DebtTypes)
+                            {
+                                <MudSelectItem Value="@type.Id">@type.DebtTypeName</MudSelectItem>
+                            }
+                        </MudSelect>
+                        <ValidationMessage For="@(() => Model.DebtTypeId)" />
+                    </MudItem>
+                    <MudItem xs="1" Class="d-flex justify-center">
+                        <MudTooltip Text="Add new debt type">
+                            <MudIconButton Icon="@Icons.Material.Filled.Add"
+                                           Color="Color.Primary"
+                                           Size="Size.Small"
+                                           Variant="Variant.Outlined"
+                                           OnClick="@GoToCreateDebtType" />
+                        </MudTooltip>
+                    </MudItem>
+                </MudGrid>
+
+                <!-- Amount -->
+                <MudTextField T="decimal"
+                              Label="Amount"
+                              Placeholder="0.00"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              InputType="InputType.Number"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.AttachMoney"
+                              AdornmentColor="Color.Primary"
+                              @bind-Value="Model.Amount"
+                              For="@(() => Model.Amount)" />
+                <ValidationMessage For="@(() => Model.Amount)" />
+
+                <!-- Creditor -->
+                <MudTextField T="string"
+                              Label="Creditor"
+                              Placeholder="e.g. Bank or Person"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Person"
+                              AdornmentColor="Color.Primary"
+                              @bind-Value="Model.Creditor"
+                              For="@(() => Model.Creditor)" />
+                <ValidationMessage For="@(() => Model.Creditor)" />
+
+                <!-- Due Date -->
+                <MudDatePicker Label="Start Date of Loan"
+                               Placeholder="Pick a start date"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.Dense"
+                               @bind-Value="Model.DueDate" />
+                <ValidationMessage For="@(() => Model.DueDate)" />
+
+                <!-- Date Incurred -->
+                <MudDatePicker Label="End Date of Loan"
+                               Placeholder="Pick an end date"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.Dense"
+                               @bind-Value="Model.DateIncurred" />
+                <ValidationMessage For="@(() => Model.DateIncurred)" />
+            </MudStack>
+
+            <!-- Actions -->
+            <DialogActions>
+                <MudButton Type="ButtonType.Submit"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           StartIcon="@Icons.Material.Filled.Save"
+                           OnClick="OnValidSubmit"
+                           Style="flex:2; border-radius:8px; background: linear-gradient(135deg,#1976D2,#42A5F5);">
+                    Save Debt
+                </MudButton>
+                
+            </DialogActions>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IDialogReference DialogReference { get; set; } = default!;
+    private CreateDebtDTO Model { get; set; } = new();
+
+    [Parameter] public EventCallback OnDebtCreated { get; set; }
+    private bool ShowErrors { get; set; } = false;
+
+    private List<DebtType> DebtTypes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        DebtTypes = await DebtTypeService.GetAllDebtTypesAsync();
+    }
+
+    private async Task OnValidSubmit()
+    {
+        try
+        {
+            await DebtService.CreateDebtAsync(Model);
+            await OnDebtCreated.InvokeAsync();
+            DialogReference.Close(DialogResult.Ok(true));
+          
+        }
+        catch (Exception ex)
+        {
+            ShowErrors = true;
+            Console.WriteLine($"Error saving debt: {ex.Message}");
+        }
+          NavigationManager.NavigateTo("/Debts");
+    }
+
+    private void Cancel()
+    {
+        DialogReference.Close(DialogResult.Cancel());
+    }
+
+    private async Task GoToCreateDebtType()
+    {
+        var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateDebtTypeDialog>(
+            "Create Debt Type",
+            new DialogParameters
+            {
+                { "OnDebtTypeCreated", EventCallback.Factory.Create(this, async () =>
+                    {
+                        DebtTypes = await DebtTypeService.GetAllDebtTypesAsync();
+                        StateHasChanged();
+                    })
+                }
+            }, option);
+    }
+}
+
