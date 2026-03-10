@@ -3,13 +3,6 @@ namespace Domain.Entities
     public class Property
     {
         public int Id {get;set;}
-<<<<<<< HEAD
-        public string CategoryId {get;set;}
-        public string Value {get;set;}
-        public string Location {get;set;}
-        public string CreatedBy {get;set;}
-        public string CreatedAt {get;set;}
-=======
         public PropertyCategory PropertyCategory {get; set;} = new PropertyCategory();
        
         public Person Person {get;set;} = new Person();
@@ -22,7 +15,6 @@ namespace Domain.Entities
         public DateTime PurchaseDate{get;set;}
         public string CreatedBy {get;set;}
         public DateTime CreatedAt {get;set;}=DateTime.Now;
->>>>>>> PersonalAccount
         public string UpdateBy{get;set;}
 
     }
