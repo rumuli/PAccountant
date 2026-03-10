@@ -7,8 +7,8 @@ namespace Application.Services.ExpenseTypes
 {
     public interface IExpenseTypeService
     {
-       Task <List<ExpenseType>> GetAllExpenseTypesAsync();
-        Task <ExpenseType?> GetExpenseTypeByIdAsync(int id);
-        Task<int> CreateExpenseTypeAsync(CreateExpenseTypeDTO expenseTypeDTO);
+        Task<List<ExpenseType>> GetAllExpenseTypesAsync();
+        public ExpenseType GetExpenseTypeById(int id);
+        void CreateExpenseType(CreateExpenseTypeDTO expenseTypeDTO);
 }
 }

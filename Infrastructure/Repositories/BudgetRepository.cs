@@ -6,15 +6,18 @@ using Domain.Entities;
 using Domain.ValueObjects;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+
 namespace Infrastructure.Repositories
 {
     public class BudgetRepository : IBudget
     {
         private readonly ApplicationDbContext _dbcontext;
+        
         public BudgetRepository(ApplicationDbContext context)
         {
             _dbcontext = context;
         }
+
         public async Task<List<GetBudgetDTO>> GetBudgetsAsync()
         {
             return await _dbcontext.Budgets
@@ -24,12 +27,13 @@ namespace Infrastructure.Repositories
                         Name = b.Name,
                         StartingAt = b.StartingAt,
                         EndingAt = b.EndingAt,
-                        Status=b.Status
+                        // Fix: Sending the actual database value to the UI
+                        PlannedExpense = b.PlannedExpense 
                     })
                     .ToListAsync();
         }
-        
-        public async Task<GetBudgetDTO> AddBudgetAsync(CreateBudgetDTO dto)
+
+        public async Task AddBudgetAsync(CreateBudgetDTO dto)
         {
             DateTime startdate = dto.StartingAt.GetValueOrDefault();
             DateTime enddate = dto.EndingAt.GetValueOrDefault();
@@ -74,6 +78,7 @@ namespace Infrastructure.Repositories
                 Status = budgetEntity.Status
             };
         }
+
         public async Task<GetBudgetByIdDTO?> GetBudgetByIdAsync(int id)
         {
             return await _dbcontext.Budgets
@@ -83,10 +88,13 @@ namespace Infrastructure.Repositories
                     Id = x.Id,
                     Name = x.Name,
                     StartingAt = x.StartingAt,
-                    EndingAt= x.EndingAt
+                    EndingAt = x.EndingAt,
+                    // Fix: Map the expense for the detail view
+                    PlannedExpense = x.PlannedExpense
                 })
                 .FirstOrDefaultAsync();
         }
+
         public async Task<List<CountStatusBudgetDTO>> CountBudgetByStatusAsync()
         {
             return await _dbcontext.Budgets
@@ -98,6 +106,5 @@ namespace Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
-        
     }
 }

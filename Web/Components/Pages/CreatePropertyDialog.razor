@@ -1,8 +1,7 @@
 @using  Application.DTO
 @using System.ComponentModel.DataAnnotations
-@using Application.Interfaces
+@using Application.Interface
 @using Application.Services.Persons
-@using Application.Services.PropertyCategories
 @using Application.Services.Properties
 @using Domain.Entities
 @using MudBlazor
@@ -90,7 +89,7 @@
                 <MudTextField Label="Identification" @bind-Value="Model.Identification" For="@(() => Model.Identification)" />
             </MudItem>            
             <MudItem xs="12" class="d-flex justify-content-end">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Add property</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Add Account</MudButton>
                 <MudButton Href="/Property" Variant="Variant.Filled" Color="Color.Error">Cancel</MudButton>
 
             </MudItem>

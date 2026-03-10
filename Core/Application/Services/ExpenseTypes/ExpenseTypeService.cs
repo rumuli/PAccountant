@@ -1,33 +1,32 @@
 using Domain.Entities;
 using Application.DTO;
 using Application.Interfaces;
+using Application.Services.ExpenseTypes;
+
+
 
 namespace Application.Services.ExpenseTypes
 {
     public class ExpenseTypeService : IExpenseTypeService
+{
+    private readonly IExpenseType _expenseType;
+    public ExpenseTypeService(IExpenseType expenseType)
     {
-        private readonly IExpenseType _expenseType;
-
-        public ExpenseTypeService(IExpenseType expenseType)
-        {
-            _expenseType = expenseType;
-        }
-
-
-        public async Task<ExpenseType?> GetExpenseTypeByIdAsync(int id)
-        {
-            return await _expenseType.GetExpenseTypeByIdAsync(id);
-        }
-
-        public async Task<List<ExpenseType>> GetAllExpenseTypesAsync()
-        {
-            return await _expenseType.GetAllExpenseTypesAsync();
-        }
-
-        public async Task<int> CreateExpenseTypeAsync(CreateExpenseTypeDTO expenseTypeDTO)
-        {
-            return await _expenseType.CreateExpenseTypeAsync(expenseTypeDTO);
-        }
+        _expenseType = expenseType;
     }
-}
+    public async Task<List<ExpenseType>> GetAllExpenseTypesAsync()
+    {
+        return await _expenseType.GetAllExpenseTypesAsync();
+    }
+    public ExpenseType GetExpenseTypeById(int id)
+    {
+        return _expenseType.GetExpenseTypeById(id);
+    }
 
+public void CreateExpenseType(CreateExpenseTypeDTO expenseTypeDTO)
+   {
+        _expenseType.CreateExpenseType(expenseTypeDTO);
+   }
+
+}
+}

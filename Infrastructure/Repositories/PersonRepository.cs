@@ -1,4 +1,4 @@
-using Application.Interfaces;
+using Application.Interface;
 using Domain.Entities;
 using Infrastructure.Data;
 using Application.DTO;
@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
                 FirstName = personDTO.FirstName,
                 LastName = personDTO.LastName,
                 Sex = personDTO.Sex,
-                Status = "Active",
+                Status = personDTO.Status,
                 DateOfBirth = DateTime.Now,
                 phoneNumber = personDTO.phoneNumber,
                 Email = personDTO.Email,
