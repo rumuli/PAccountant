@@ -38,6 +38,9 @@ namespace Infrastructure.DependencyInjection
          //Register authentication services
             services.AddAuthenticationService(configuration);
 
+            services.AddHttpContextAccessor();
+              services.AddScoped<IUserContext, UserContext>();
+
             //register repository
             services.AddScoped<IExpenseType, ExpenseTypeRepository>();
             services.AddScoped<IIncomeType, IncomeTypeRepository>();

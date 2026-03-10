@@ -1,111 +1,16 @@
-@page "/"
+@* @page "/" *@
 @page "/account/login"
 @layout Layout.AuthLayout
 
 @using MudBlazor
 @using Microsoft.AspNetCore.Components
-@using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
-@* <PageTitle>Login</PageTitle>
-
-<MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-flex align-center justify-center" Style="min-height: 100vh;">
-
-    <MudPaper Elevation="8" Class="pa-6" Style="width:100%; border-radius:16px;">
-
-        <!-- Title -->
-        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">
-            P Accountant
-        </MudText>
-
-        <MudText Typo="Typo.subtitle1" Align="Align.Center" Color="Color.Secondary" Class="mb-6">
-            Sign in to your account
-        </MudText>
-
-        @if (!string.IsNullOrEmpty(Error))
-        {
-            <MudAlert Severity="Severity.Error" Class="mb-4">
-                @Error
-            </MudAlert>
-        }
-
-        <form method="post" action="/api/account/login">
-            <input type="hidden" name="returnUrl" value="@ReturnUrl" />
-            <AntiforgeryToken />
-
-            <!-- Email -->
-            <MudTextField @bind-Value="email"
-                          Label="Email"
-                          Variant="Variant.Outlined"
-                          InputType="InputType.Email"
-                          FullWidth="true"
-                          Required="true"
-                          RequiredError="Email is required"
-                          Margin="Margin.Dense"
-                          Class="mb-4"
-                          UserAttributes="@(new Dictionary<string, object> { { "name", "email" } })" />
-
-            <!-- Password -->
-            <MudTextField @bind-Value="password"
-                          Label="Password"
-                          Variant="Variant.Outlined"
-                          InputType="@(showPassword ? InputType.Text : InputType.Password)"
-                          Adornment="Adornment.End"
-                          AdornmentIcon="@(showPassword ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
-                          OnAdornmentClick="TogglePasswordVisibility"
-                          FullWidth="true"
-                          Required="true"
-                          RequiredError="Password is required"
-                          Margin="Margin.Dense"
-                          Class="mb-2"
-                          UserAttributes="@(new Dictionary<string, object> { { "name", "password" } })" />
-
-            <MudGrid Class="mb-4">
-                <MudItem xs="6">
-                    <MudCheckBox @bind-Value="rememberMe"
-                                 Label="Remember me"
-                            
-                                 UserAttributes="@(new Dictionary<string, object> { { "name", "rememberMe" } })" />
-                </MudItem>
-                <MudItem xs="6" Class="d-flex justify-end align-center">
-                    <MudLink Href="/account/forgot-password">
-                        Forgot Password?
-                    </MudLink>
-                </MudItem>
-            </MudGrid>
-
-            <!-- Login Button -->
-            <MudButton ButtonType="ButtonType.Submit"
-                       Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       FullWidth="true"
-                       Size="Size.Large"
-                       Class="mb-4"
-                       Style="border-radius:10px;">
-                Sign In
-            </MudButton>
-        </form>
-
-        <!-- Divider -->
-        <MudDivider Class="my-4" />
-
-        <!-- Register -->
-        <MudText Align="Align.Center" Typo="Typo.body2">
-            Don't have an account?
-            <MudLink Href="/RegisterUser" Class="ml-1">
-                Register here
-            </MudLink>
-        </MudText>
-
-    </MudPaper>
-
-</MudContainer> *@
-<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pa-0 ma-0 overflow-hidden" Style="height: 100vh; background-color: #fbfbfb;">
-<MudGrid Spacing="0" Style="height: 100%;">
-
-    @* Left Column: Login Form *@
-    <MudItem xs="12" md="6" Class="d-flex flex-column justify-center align-center relative px-8 py-12">
+@* The Container centers everything on the screen with a light background *@
+<MudContainer MaxWidth="MaxWidth.False" Class="d-flex align-center justify-center pa-0" Style="height: 100vh; background-color: #f5f5f5;">
+    
+    @* Main Small Card *@
+    <MudPaper Elevation="4" Class="d-flex overflow-hidden" Style="width: 850px; height: 550px; border-radius: 24px;">
         
         @* Top Left Branding *@
         <div style="position: absolute; top: 40px; left: 40px;" class="d-flex align-center">
@@ -263,12 +168,73 @@
                      <MudProgressCircular Value="75" Color="Color.Success" Size="Size.Large" Class="my-2" />
                      <MudText Typo="Typo.caption" Style="font-weight: 800;">$ 6,248</MudText>
                 </MudPaper>
-            </MudPaper>
-        </div>
-    </MudItem>
-</MudGrid>
+                
+                <MudText Typo="Typo.caption" Class="mt-8" Style="opacity: 0.5;">© 2026 PAccountant</MudText>
+            </MudItem>
 
+            @* Right Side: Login Form *@
+            <MudItem xs="12" md="7" Class="pa-12 d-flex flex-column" Style="background-color: white;">
+                
+                @* Top Branding Bar *@
+                <div class="d-flex align-center mb-10">
+                    <MudIcon Icon="@Icons.Material.Filled.Circle" Style="color: #023d28;" Size="Size.Small" Class="mr-2" />
+                    <MudText Typo="Typo.h6" Style="font-weight: 800;">PAccountant</MudText>
+                    <MudSpacer />
+                    <MudLink href="/RegisterUser" Underline="Underline.None" Color="Color.Primary" Style="font-size: 0.85rem; font-weight: 600;">Sign Up</MudLink>
+                </div>
 
+                <MudText Typo="Typo.h5" Class="mb-6" Style="font-weight: 700;">Sign In</MudText>
+
+                <form method="post" action="/api/account/login">
+                    <AntiforgeryToken />
+                    <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+
+                    @if (!string.IsNullOrEmpty(Error))
+                    {
+                        <MudAlert Severity="Severity.Error" Dense="true" Class="mb-4" Variant="Variant.Outlined">@Error</MudAlert>
+                    }
+
+                    <MudTextField @bind-Value="email"
+                                  Label="Email or Username"
+                                  name="email"
+                                  InputType="InputType.Email" 
+                                  Variant="Variant.Outlined" 
+                                  Margin="Margin.Dense"
+                                  Class="mb-4" />
+
+                    <MudTextField @bind-Value="password" 
+                                  Label="Password"
+                                  name="password"
+                                  InputType="@_passwordInput"
+                                  Variant="Variant.Outlined" 
+                                  Margin="Margin.Dense"
+                                  Adornment="Adornment.End" 
+                                  AdornmentIcon="@_passwordInputIcon" 
+                                  OnAdornmentClick="TogglePasswordVisibility" />
+
+                    <div class="d-flex justify-start mt-2 mb-8">
+                        <MudLink Typo="Typo.body2" Style="color: #023d28; font-weight: 600; text-decoration: none;">Forgot password?</MudLink>
+                    </div>
+
+                    @* Custom Gradient Button via Inline Style *@
+                    <MudButton ButtonType="ButtonType.Submit"
+                               Variant="Variant.Filled"
+                               FullWidth="true" 
+                               Class="py-3 shadow-none"
+                               Style="background: linear-gradient(90deg, #023d28 0%, #023d28 100%); color: white; border-radius: 25px; text-transform: none; font-weight: 700;">
+                        Sign In
+                    </MudButton>
+                </form>
+
+                @* Language/Footer Context *@
+                <MudSpacer />
+                <div class="d-flex justify-space-between align-center" style="opacity: 0.5;">
+                    <MudText Typo="Typo.caption">English</MudText>
+                    <MudText Typo="Typo.caption">Contact Us</MudText>
+                </div>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
 </MudContainer>
 
 

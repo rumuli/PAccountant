@@ -55,7 +55,19 @@
             </MudMenu>
         </ToolBarContent>    
 
+        <!-- Toolbar -->
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Properties</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Property" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@(() => OpenDialog())">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+        <!-- Columns -->
         <Columns>
+            <SelectColumn T="Property" />
 
        <SelectColumn T="Property" />
         <PropertyColumn Property="x => x.Id"
@@ -156,9 +168,7 @@
             <MudDataGridPager T="Property" />
         </PagerContent>
     </MudDataGrid>
-
 </MudContainer>
-
 
 @code{
        List<Property> _property = new List<Property>();

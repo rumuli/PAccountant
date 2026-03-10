@@ -18,6 +18,8 @@ namespace Application.DTO
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
          public string Password { get; set; } = string.Empty;
 
+         public string Role { get; set;}
+
     }
      public class UserDetailDTO
     {
@@ -29,7 +31,25 @@ namespace Application.DTO
        public  bool EmailConfirmed { get; set; }
        public DateTime CreatedAt { get; set; }
        public DateTime UpdatedAt { get; set; }
+
+        /// <summary>
+        /// Gets the full name (FirstName LastName)
+        /// </summary>
+        public string FullName => $"{FirstName} {LastName}".Trim();
+
+        /// <summary>
+        /// Gets the avatar initials (first letter of first name + first letter of last name)
+        /// </summary>
+        public string Initials
+        {
+            get
+            {
+                var first = !string.IsNullOrEmpty(FirstName) ? FirstName[0].ToString().ToUpper() : "";
+                var last = !string.IsNullOrEmpty(LastName) ? LastName[0].ToString().ToUpper() : "";
+                return $"{first}{last}";
     }
+        }
+    }   
 
     public class UpdateUserDTO
     {
@@ -39,6 +59,8 @@ namespace Application.DTO
         public string PhoneNumber { get; set; }
         //biterwa na application urigisteruserdto
         public string Password { get; set; }
+
+        public string Role { get; set;}
     }
 
     public class LoginDTO

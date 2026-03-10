@@ -3,345 +3,218 @@
 @using Application.Services.Expenses
 @using Application.Services.ExpenseTypes
 @using MudBlazor
-@inject IExpenseService ExpenseService
-@inject IExpenseTypeService ExpenseTypeService
-@inject NavigationManager NavigationManager
-@inject IDialogService DialogService
 @using Domain.Entities
-
 @using System.ComponentModel.DataAnnotations
-@* @using Infrastructure.Data *@
-@inject IAccountService AccountService
 @using Microsoft.EntityFrameworkCore
 
-<MudDialog Style="border-radius:12px; overflow:hidden;">
+@inject IExpenseService ExpenseService
+@inject IExpenseTypeService ExpenseTypeService
+@inject IAccountService AccountService
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
 
-    <!-- ══════════ HEADER BANNER ══════════ -->
+<MudDialog Style="border-radius:16px; overflow:hidden; max-width: 750px;">
     <DialogContent>
-             @if (!string.IsNullOrEmpty(ErrorMessage))
-                {
-                    <MudAlert Severity="Severity.Error" Class="mb-4">
-                        @ErrorMessage
-                    </MudAlert>
-                }
-        <MudPaper Elevation="0"
-                  Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
-                         border-radius:8px; padding:14px 18px; margin-bottom:16px;">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                <MudIcon Icon="@Icons.Material.Filled.AttachMoney"
-                         Style="color:white; font-size:1.6rem;" />
+        @* @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Class="mb-4" CloseIconClicked="(() => ErrorMessage = string.Empty)" ShowCloseIcon="true">
+                @ErrorMessage
+            </MudAlert>
+        } *@
+
+        <MudPaper Elevation="0" 
+                  Class="pa-5 mb-6" 
+                  Style="background: linear-gradient(90deg, #023d28 0%, #057a52 100%); border-radius:12px; color:white; position:relative; overflow:hidden;">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="4">
+                <MudAvatar Color="Color.Default" Style="height:60px; width:60px; background: rgba(255,255,255,0.2);">
+                    <MudIcon Icon="@Icons.Material.Filled.ReceiptLong" Style="font-size:2.5rem; color: white;" />
+                </MudAvatar>
                 <MudStack Spacing="0">
-                    <MudText Typo="Typo.subtitle1"
-                             Style="color:white; font-weight:700; line-height:1.2;">
-                        New Expense Record
-                    </MudText>
-                    <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.80);">
-                        Fill in the details below to create an entry
-                    </MudText>
+                    <MudText Typo="Typo.h6" Style="font-weight:700;">New Expense Record</MudText>
+                    <MudText Typo="Typo.body2" Style="color:rgba(255,255,255,0.8);">Fill in the details below to create an entry</MudText>
                 </MudStack>
             </MudStack>
+            <MudIcon Icon="@Icons.Material.Filled.TrendingDown" 
+                     Style="position:absolute; right:-10px; bottom:-10px; font-size:6rem; color:rgba(255,255,255,0.1);" />
         </MudPaper>
 
-
-         <!-- ══════════ FORM ══════════ -->
         <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
             <DataAnnotationsValidator />
-            <ValidationSummary />
 
-            <MudStack Spacing="1">
+            <MudGrid Spacing="3">
+                <MudItem xs="12" sm="7">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-2">
+                        <MudDivider Vertical="true" FlexItem="true" Style="border-width: 3px; border-color: #057a52; height: 16px; border-radius: 2px;" />
+                        <MudText Typo="Typo.caption" Style="color:#057a52; font-weight:900; letter-spacing:.1em;">CLASSIFICATION</MudText>
+                    </MudStack>
 
-                <!-- ── Section: Classification ── -->
-                <MudText Typo="Typo.caption"
-                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
-                                text-transform:uppercase; margin-bottom:2px;">
-                    Classification
-                </MudText>
+                    <MudStack Spacing="3">
+                        <MudDatePicker Label="Date of Expense" @bind-Date="Model.Date"
+                                       Variant="Variant.Outlined" Margin="Margin.Dense"
+                                       Adornment="Adornment.Start" AdornmentColor="Color.Primary" />
 
+                        <MudStack Row="true" AlignItems="AlignItems.Center">
+                            <MudSelect T="int" Label="Expense Type" Value="Model.ExpenseTypeId" ValueChanged="OnExpenseTypeChanged"
+                                       Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true"
+                                       AdornmentIcon="@Icons.Material.Filled.Category" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                                <MudSelectItem Value="0">Select Expense Type</MudSelectItem>
+                                @foreach (var type in ExpenseTypes) { <MudSelectItem Value="@type.Id">@type.ExpenseTypeName</MudSelectItem> }
+                            </MudSelect>
+                            @* <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" Variant="Variant.Outlined" 
+                                           Size="Size.Small" OnClick="@GoToCreateExpenseType" Style="height:40px; width:40px;" /> *@
+                        </MudStack>
 
-                <!-- Due Date -->
-                <MudDatePicker Label="Date of Expense"
-                               Placeholder="Pick a date"
-                               Variant="Variant.Outlined"
-                               Margin="Margin.Dense"
-                               @bind-Date="Model.Date" />
-                <ValidationMessage For="@(() => Model.Date)" />
-
-                <!-- Income Type -->
-            <MudGrid Spacing="1" Class="align-items-center">
-                <MudItem xs="11">
-                    <MudSelect T="int"
-                            Label="Expense Type"
-                            Value="Model.ExpenseTypeId"
-                            ValueChanged="OnExpenseTypeChanged" 
-                            Variant="Variant.Outlined"
-                            Margin="Margin.Dense"
-                            Dense="true"
-                            AnchorOrigin="Origin.BottomCenter"
-                            AdornmentIcon="@Icons.Material.Filled.Category"
-                            Adornment="Adornment.Start"
-                            AdornmentColor="Color.Primary">
-                        <MudSelectItem Value="0">Select Expense Type</MudSelectItem>
-                        @foreach (var type in ExpenseTypes)
+                        @if (remaining.HasValue)
                         {
-                            <MudSelectItem Value="@type.Id">@type.ExpenseTypeName</MudSelectItem>
-                        }
-                    </MudSelect>
-                    <ValidationMessage For="@(() => Model.ExpenseTypeId)" />
-                </MudItem>
-
-                <MudItem xs="1" Class="d-flex justify-center">
-                    <MudTooltip Text="Add new income type">
-                        <MudIconButton Icon="@Icons.Material.Filled.Add"
-                                    Color="Color.Primary"
-                                    Size="Size.Small"
-                                    Variant="Variant.Outlined"
-                                    OnClick="@GoToCreateExpenseType" />
-                    </MudTooltip>
-                </MudItem>
-
-                @if (remaining.HasValue)
-                {
-                    <MudItem xs="12">
-                        <MudPaper Elevation="0"
-                                Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
-                                        border-radius:8px; padding:14px 18px; margin-top:8px;">
-                            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                                @if (isLoadingBudget)
-                                {
-                                    <MudProgressCircular Color="Color.Inherit" Size="Size.Small" Indeterminate="true" />
-                                }
-                                else
-                                {
-                                    <MudIcon Icon="@Icons.Material.Filled.Info" Style="color:white; font-size:1.6rem;" />
-                                }
-                                <MudStack Spacing="0">
-                                    <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.90); font-weight:600;">
-                                        BUDGET STATUS
-                                    </MudText>
-                                    <MudText Typo="Typo.body2" Style="color:white;">
-                                        Remaining planned expenses: <b>@remaining.Value.ToString("C")</b>
-                                    </MudText>
+                            <MudPaper Elevation="0" Class="pa-4" 
+                                      Style="background: linear-gradient(135deg, #057a52 0%, #057a52 100%); border-radius:8px; color:white;">
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3">
+                                    @if (isLoadingBudget) { <MudProgressCircular Size="Size.Small" Indeterminate="true" Color="Color.Inherit" /> }
+                                    else { <MudIcon Icon="@Icons.Material.Filled.Info" /> }
+                                    <MudStack Spacing="0">
+                                        <MudText Typo="Typo.caption" Style="font-weight:700; opacity:0.9;">BUDGET STATUS</MudText>
+                                        <MudText Typo="Typo.body2">Remaining: <b>@remaining.Value.ToString("C")</b></MudText>
+                                    </MudStack>
                                 </MudStack>
-                            </MudStack>
-                        </MudPaper>
-                    </MudItem>
-                }
+                            </MudPaper>
+                        }
+                    </MudStack>
+                </MudItem>
+
+                <MudItem xs="12" sm="5">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-2">
+                        <MudDivider Vertical="true" FlexItem="true" Style="border-width: 3px; border-color: #057a52; height: 16px; border-radius: 2px;" />
+                        <MudText Typo="Typo.caption" Style="color:#057a52; font-weight:900; letter-spacing:.1em;">FINANCIALS</MudText>
+                    </MudStack>
+
+                    <MudStack Spacing="3">
+                        <MudTextField T="decimal" Label="Amount" @bind-Value="Model.Amount"
+                                      Variant="Variant.Outlined" Margin="Margin.Dense"
+                                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" AdornmentColor="Color.Primary" />
+
+                        <MudSelect T="int" Label="Account" @bind-Value="Model.AccountId"
+                                   Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true"
+                                   AdornmentIcon="@Icons.Material.Filled.AccountBalance" Adornment="Adornment.Start" AdornmentColor="Color.Primary">
+                            <MudSelectItem Value="0">Select Account</MudSelectItem>
+                            @foreach (var account in _accounts) { <MudSelectItem Value="@account.Id">@account.AccountNumber</MudSelectItem> }
+                        </MudSelect>
+                    </MudStack>
+                </MudItem>
+
+                <MudItem xs="12"><MudDivider Class="my-2" /></MudItem>
+
+                <MudItem xs="12">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-2">
+                        <MudDivider Vertical="true" FlexItem="true" Style="border-width: 3px; border-color: #057a52; height: 16px; border-radius: 2px;" />
+                        <MudText Typo="Typo.caption" Style="color:#057a52; font-weight:900; letter-spacing:.1em;">RECIPIENT & NOTES</MudText>
+                    </MudStack>
+
+                    <MudGrid Spacing="2">
+                        <MudItem xs="7">
+                            <MudTextField T="string" Label="Paid To" @bind-Value="Model.PaidTo"
+                                          Variant="Variant.Outlined" Margin="Margin.Dense"
+                                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Person" AdornmentColor="Color.Primary" />
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudTextField T="string" Label="Description" @bind-Value="Model.Description"
+                                          Variant="Variant.Outlined" Margin="Margin.Dense" Lines="3"
+                                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Description" AdornmentColor="Color.Primary" />
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
             </MudGrid>
-
-            
-
-                <MudDivider Class="my-2" />
-
-                <!-- ── Section: Financial Details ── -->
-                <MudText Typo="Typo.caption"
-                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
-                                text-transform:uppercase; margin-bottom:2px;">
-                    Financial Details
-                </MudText>
-
-                <!-- Amount + Date side-by-side -->
-                <MudGrid Spacing="2">
-                    <MudItem xs="6">
-                        <MudTextField T="decimal"
-              Label="Amount"
-              Variant="Variant.Outlined"
-              Margin="Margin.Dense"
-              @bind-Value="Model.Amount"
-              Placeholder="0.00"
-              InputType="InputType.Number"
-              For="@(() => Model.Amount)" />
-<ValidationMessage For="@(() => Model.Amount)" />
-
-
-                    </MudItem>
-                </MudGrid>
-
-                <MudDivider Class="my-2" />
-
-                <!-- ── Section: Account Info ── -->
-                <MudText Typo="Typo.caption"
-                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
-                                text-transform:uppercase; margin-bottom:2px;">
-                    Account Info
-                </MudText>
-
-               <MudSelect T="int"
-           Label="Account"
-           @bind-Value="Model.AccountId"
-           Variant="Variant.Outlined"
-           Margin="Margin.Dense"
-           Dense="true"
-           Required="true">
-           <MudSelectItem Value="0"> Select Account</MudSelectItem>
-    @foreach (var account in _accounts)
-    {
-        <MudSelectItem Value="@account.Id">@account.AccountNumber</MudSelectItem>
-    }
-</MudSelect>
-                
-
-                <MudTextField T="string"
-                              Label=" PaidTo"
-                              Variant="Variant.Outlined"
-                              Margin="Margin.Dense"
-                              @bind-Value="Model.PaidTo"
-                              Placeholder="e.g. person name"
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Person"
-                              AdornmentColor="Color.Primary"
-                              For="@(() => Model.PaidTo)" />
-                <ValidationMessage For="@(() => Model.PaidTo)" />
-                
-
-                <!-- ── Section: Account Info ── -->
-                <MudText Typo="Typo.caption"
-                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
-                                text-transform:uppercase; margin-bottom:2px;">
-                    Details
-                </MudText>
-
-
-                <!-- description -->
-               <MudTextField T="string"
-              Label="Description"
-              Variant="Variant.Outlined"
-              Margin="Margin.Dense"
-              @bind-Value="Model.Description"
-              Placeholder="e.g. Description of expense"
-              Adornment="Adornment.Start"
-              AdornmentIcon="@Icons.Material.Filled.Description"
-              AdornmentColor="Color.Primary"
-              For="@(() => Model.Description)"
-              Lines="5" />   <!-- makes it bigger, multiline -->
-
-<ValidationMessage For="@(() => Model.Description)" />
-
-                
-            </MudStack>
         </EditForm>
     </DialogContent>
 
-    <!-- ══════════ ACTIONS ══════════ -->
     <DialogActions>
-        <MudStack Row="true" Spacing="2" Class="px-2 pb-2" Style="width:100%;">
-            
-
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       Size="Size.Small"
+        <MudStack Row="true" Class="px-4 pb-4" Style="width: 100%;">
+            <MudButton Variant="Variant.Filled" 
+                       OnClick="OnValidSubmit" 
                        StartIcon="@Icons.Material.Filled.Save"
-                       OnClick="OnValidSubmit"
-                       Style="flex:2; border-radius:8px;
-                              background: linear-gradient(135deg,#1976D2,#42A5F5);">
-                Save Expense
+                       FullWidth="true"
+                       Style="background-color: #023d28; color: white; border-radius: 8px; padding: 12px 0; font-weight: 700;">
+                SAVE EXPENSE
             </MudButton>
         </MudStack>
     </DialogActions>
-
 </MudDialog>
 
-@code{
+@code {
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+    private CreateExpenseDTO Model { get; set; } = new();
     private decimal? remaining;
     private bool isLoadingBudget = false;
-    private string ErrorMessage { get; set; } = string.Empty;
-
-     private List<Account> _accounts = new();
-
-
-     protected override async Task OnInitializedAsync()
-    {
-        try{
-                _accounts = await AccountService.GetAllAccountsAsync();
-                ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();
-            }
-        catch(Exception ex)
-        {
-            ErrorMessage =ex.Message;
-        }
-    }
-
-    [CascadingParameter]
-    private IDialogReference DialogReference { get; set; } = default!;
-    private CreateExpenseDTO Model { get; set; } = new();
-
-    [Parameter]
-    public EventCallback OnExpenseCreated { get; set; }
-
-    @* private bool ShowErrors { get; set; } = false; *@
-
+    private bool ShowErrors { get; set; } = false;
+    private bool _isProcessing { get; set; }
+    private List<Account> _accounts = new();
     private List<ExpenseType> ExpenseTypes = new();
 
-   
+     
+    @* [Parameter] public EventCallback OnExpenseCreated { get; set; }
+    private CreateExpenseDTO Model { get; set; } = new(); *@
 
- private async Task OnValidSubmit()
-{
-    try
-    {
-        await ExpenseService.CreateExpenseAsync(Model);
-
-        if (OnExpenseCreated.HasDelegate)
+    protected override async Task OnInitializedAsync()
+    
         {
-            await OnExpenseCreated.InvokeAsync();
+            _accounts = await AccountService.GetAllAccountsAsync();
+            ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();
+            if (Model.Date == null) Model.Date = DateTime.Today;
         }
+    
 
-        DialogReference?.Close(DialogResult.Ok(true));
-    }
-    catch (Exception ex)
+    private async Task OnValidSubmit()
     {
-        ErrorMessage = ex.Message;
+        _isProcessing = true;
+        ShowErrors = false;
+        
+        try 
+        {
+            await ExpenseService.CreateExpenseAsync(Model);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+           
+            ShowErrors = true;
+        }
+        finally
+        {
+            _isProcessing = false;
+        }
+        
+    
     }
-}
 
-     private void Cancel()
-    {
-        DialogReference.Close(DialogResult.Cancel());
-    }
+     private void Cancel() => MudDialog.Cancel(); 
 
     private async Task GoToCreateExpenseType()
     {
         var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
-        await DialogService.ShowAsync<CreateExpenseTypeDialog>(
-            "Create Expense Type",
-            new DialogParameters
-        {
-            { "OnExpenseTypeCreated", EventCallback.Factory.Create(this, async () =>
-                {
-                    ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();
-                    StateHasChanged();
-                })
-            }
-
+        await DialogService.ShowAsync<CreateExpenseTypeDialog>("Create Expense Type", new DialogParameters {
+            { "OnExpenseTypeCreated", EventCallback.Factory.Create(this, async () => {
+                ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();
+                StateHasChanged();
+            })}
         }, option);
     }
+
     private async Task OnExpenseTypeChanged(int newValue)
-{
-    Model.ExpenseTypeId = newValue;
-    await CalculateRemainingBudget();
-}
-
-private async Task CalculateRemainingBudget()
-{
-    // We need both a Type and a Date to determine which budget period to check
-    if (Model.ExpenseTypeId <= 0 || !Model.Date.HasValue)
     {
-        remaining = null;
-        return;
+        Model.ExpenseTypeId = newValue;
+        await CalculateRemainingBudget();
     }
 
-    isLoadingBudget = true;
-    try 
+    private async Task CalculateRemainingBudget()
     {
-        // Call a method in your service (you'll need to create this)
-        // It should return (PlannedAmount - TotalSpentSoFar)
-        remaining = await ExpenseService.GetRemainingBudgetAsync(Model.ExpenseTypeId, Model.Date.Value);
+        if (Model.ExpenseTypeId <= 0 || !Model.Date.HasValue) {
+            remaining = null;
+            return;
+        }
+        isLoadingBudget = true;
+        try { remaining = await ExpenseService.GetRemainingBudgetAsync(Model.ExpenseTypeId, Model.Date.Value); }
+        catch { remaining = null; }
+        finally { isLoadingBudget = false; }
     }
-    catch (Exception)
-    {
-        remaining = null;
-    }
-    finally
-    {
-        isLoadingBudget = false;
-    }
-}
 }

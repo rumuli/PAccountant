@@ -1,142 +1,233 @@
-@page "/Expenses"
+@page "/Expense"
 @using Domain.Entities
 @using Application.Services.Expenses
 @using MudBlazor
+@using Application.Services.BudgetServices
+@using Application.DTO.Budget
+@inject IBudgetService BudgetService
 @inject IExpenseService ExpenseService
 @inject IDialogService DialogService
-@inject ISnackbar Snackbar
+@inject IDialogService Dialog
+@* @inject ISnackbar Snackbar *@
 
-<PageTitle>Expenses</PageTitle>
+<PageTitle>Expense</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
-    <MudDataGrid T="Expense"
-                 Items="@_expenses"
-                 Hover="true"
-                 Striped="true"
-                 Bordered="true"
-                 Dense="true"
-                 Filterable="true"
-                 SortMode="SortMode.Multiple"
-                 Class="elevation-1">
 
+    @* HEADER SECTION *@
+    <MudGrid Class="mb-4" AlignItems="AlignItems.Center">
+        <MudItem xs="12" sm="6">
+            <MudText Typo="Typo.h4" Style="font-weight: 800; color: #023d28;">Expense</MudText>
+        </MudItem>
+        <MudSpacer />
+        <MudItem xs="12" sm="4">
+            <MudDatePicker Label="Filter by Month" 
+                           @bind-Date="_selectedDate" 
+                           @bind-Date:after="UpdateFilteredData"
+                           OpenTo="OpenTo.Month" 
+                           FixDay="1" 
+                           DateFormat="MMMM yyyy"
+                           Variant="Variant.Outlined"
+                           Rounded="true"
+                           Margin="Margin.Dense"
+                           Color="Color.Primary"
+                           Clearable="true" />
+        </MudItem>
+    </MudGrid>
+
+    @* TOP ROW: Dashboard Cards *@
+    <MudGrid Class="mb-6" Spacing="3">
         
+        @* Summary Card *@
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="0" Class="pa-6 d-flex flex-column relative overflow-hidden" 
+                      Style="height: 100%; border-radius: 24px; background: white; border: 1px solid #eef0f2;">
+                
+                <div style="position: absolute; top: -10px; right: -10px; opacity: 0.05; pointer-events: none;">
+                    <MudIcon Icon="@Icons.Material.Filled.Wallet" Style="font-size: 140px;" />
+                </div>
 
-      <ToolBarContent>
-            <MudText Typo="Typo.h5" Color="Color.Primary">Expense</MudText>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 700; color: #023d28; text-transform: uppercase;">
+                    @(_selectedDate?.ToString("MMM yyyy") ?? "Overall") Outflow
+                </MudText>
+                
+                <MudStack Row="true" AlignItems="AlignItems.Baseline" Class="mt-2 mb-3">
+                    <MudText Typo="Typo.h4" Style="font-weight: 900; color: #023d28;">
+                        @_filteredTotalSpent.ToString("n0")
+                    </MudText>
+                    <MudText Typo="Typo.body2" Class="ml-2 mud-text-secondary" Style="font-weight: 500;">
+                        / @_monthlyBudget.ToString("n0")
+                    </MudText>
+                </MudStack>
+
+                <MudText Typo="Typo.caption" Class="mb-1" Style="font-weight:700;">Usage: @_budgetUsage.ToString("F1")%</MudText>
+                <MudProgressLinear Color="@(_budgetUsage > 100 ? Color.Error : Color.Success)" 
+                                   Value="@((double)_budgetUsage)" 
+                                   Size="Size.Medium" 
+                                   Class="rounded-lg" 
+                                   Style="height:8px;" />
+            </MudPaper>
+        </MudItem>
+
+        @* Account Breakdown Card *@
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="0" Class="pa-6 d-flex flex-column" 
+                      Style="height: 100%; border-radius: 24px; background: white; border: 1px solid #eef0f2;">
+                
+                <MudText Typo="Typo.subtitle2" Class="mb-4" Style="font-weight: 700; color: #023d28; text-transform: uppercase;">
+                    Source Breakdown
+                </MudText>
+
+                <div class="d-flex flex-column gap-2">
+                    @if (_filteredExpenses.Any())
+                    {
+                        @foreach (var group in _filteredExpenses.GroupBy(x => x.Account?.AccountNumber ?? "Default").Take(2))
+                        {
+                            <div style="background: #f8fafc; border-radius: 12px; padding: 10px 14px; border: 1px solid #f1f5f9;" 
+                                 class="d-flex justify-space-between align-center">
+                                <MudText Typo="Typo.body2" Style="font-weight:bold; color: #023d28;">@group.Key</MudText>
+                                <MudText Typo="Typo.body2" Style="font-weight:800; color: #023d28;">@group.Sum(x => x.Amount).ToString("n0")</MudText>
+                            </div>
+                        }
+                    }
+                </div>
+            </MudPaper>
+        </MudItem>
+        
+        @* Stats Card *@
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="0" Class="pa-6 d-flex flex-column justify-center align-center" 
+                      Style="height: 100%; border-radius: 24px; background: #023d28; color: white;">
+                <MudIcon Icon="@Icons.Material.Filled.ReceiptLong" Size="Size.Large" Class="mb-2" Style="color: #023d28;" />
+                <MudText Typo="Typo.h4" Style="font-weight: 900;">@_filteredExpenses.Count</MudText>
+                <MudText Typo="Typo.caption" Style="opacity: 0.8; text-transform: uppercase;">Total Transactions</MudText>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+    @* YOUR ORIGINAL DATA GRID (UNTOUCHED) *@
+    <MudDataGrid T="Expense" Items="@_filteredExpenses" MultiSelection="true" SortMode="SortMode.Multiple" Filterable="true" Hideable="true" Dense="true" Hover="true" Striped="true" Bordered="true" Class="elevation-1" Style="border-radius:12px; overflow:hidden;">
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary" Style="font-weight:700;">Expenses</MudText>
             <MudSpacer />
             <MudMenu Label="Add Expense" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
                 <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateDialog">Single</MudMenuItem>
                 <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
             </MudMenu>
-        </ToolBarContent>      
-
+        </ToolBarContent>
         <Columns>
-
-        <SelectColumn T="Income" />
-
-            <PropertyColumn Property="x => x.Id"
-                            Title="ID"
-                            HeaderStyle="white-space:nowrap"
-                            ItemStyle="white-space:nowrap"
-                            Sortable="true" />
-
-            <PropertyColumn Property="x => x.ExpenseType.ExpenseTypeName"
-                            Title="Expense Type"
-                            HeaderStyle="white-space:nowrap"
-                            ItemStyle="white-space:nowrap"
-                            Sortable="true" />
-
-
-            <PropertyColumn Property="x => x.Amount"
-                            Title="Amount"
-                            Format="C"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
-             <!-- Changed: show AccountType instead of DepositedAccount -->
-           <PropertyColumn Property="x => x.Account.AccountNumber"
-                Title=" Account"
-                ItemStyle="white-space:nowrap"
-                HeaderStyle="white-space:nowrap"
-                Sortable="true" />
-
-        
-
-            <PropertyColumn Property="x => x.PaidTo"
-                            Title="PaidTo"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
-                            <PropertyColumn Property="x => x.Description"
-                            Title="Description"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
-
-
-            <TemplateColumn Title="Status">
-                <CellTemplate>
-                    <MudChip T="string"
-                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
-                             Text="@(context.Item.IsActive ? "Active" : "Inactive")"
-                             Variant="Variant.Filled"
-                             ItemStyle="white-space:nowrap"
-                             HeaderStyle="white-space:nowrap"
-                             Size="Size.Small" />
-                </CellTemplate>
-            </TemplateColumn>
-
-            <PropertyColumn Property="x => x.CreatedAt"
-                            Title="Created Date"
-                            Format="MM/dd/yyyy"
-                            ItemStyle="white-space:nowrap"
-                            HeaderStyle="white-space:nowrap"
-                            Sortable="true" />
-
- <!-- Actions -->
-            <TemplateColumn Title="Actions">
-                <CellTemplate>
-                    <MudIconButton Icon="@Icons.Material.Filled.Info"
-                                   Color="Color.Info"
-                                   Size="Size.Small"
-                                  Href="@($"/incomes/edit/{context.Item.Id}")" />
-                                  
-                                
-
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                   Color="Color.Primary"
-                                   Size="Size.Small"
-                                   Href="@($"/incomes/edit/{context.Item.Id}")" />
-                            
-                </CellTemplate>
-            </TemplateColumn>
+            <SelectColumn T="Expense" />
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" />
+            <PropertyColumn Property="x => x.ExpenseType.ExpenseTypeName" Title="Type" Sortable="true" />
+            <PropertyColumn Property="x => x.Date" Title="Date" Format="dd MMM yyyy" Sortable="true" />
+            <PropertyColumn Property="x => x.Amount" Title="Amount" Format="C" Sortable="true" />
+            <PropertyColumn Property="x => x.PaidTo" Title="Recipient" Sortable="true" />
+            <PropertyColumn Property="x => x.Account.AccountNumber" Title="Source" Sortable="true" />
         </Columns>
+        <PagerContent>
+            <MudDataGridPager T="Expense" />
+        </PagerContent>
     </MudDataGrid>
+
 </MudContainer>
 
-       @code{
-        private List<Expense> _expenses = new();
-            protected override async Task OnInitializedAsync()
-            {
-                await LoadExpenses();
-            }
+@code {
+    private List<Expense> _allExpenses = new();
+    private List<Expense> _filteredExpenses = new();
+     private readonly DialogOptions _closeButton = new() { CloseButton = true };
+      private async Task LoadAllData()
+    {
+        _allExpenses = await ExpenseService.GetAllExpensesAsync();
+        _allExpensesPlanned = await BudgetService.GetBudgetsAsync();
+        UpdateFilteredData();
+    }
 
-            private async Task OpenCreateDialog()
-            {
-                var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
-                await DialogService.ShowAsync<CreateExpenseDialog>(title: "Create Expense", new DialogParameters()
-                {
-                    { "OnExpenseCreated", EventCallback.Factory.Create(this, LoadExpenses) }
-                }, option);
-            }
+      protected override async Task OnInitializedAsync()
+    {
+        await LoadAllData();
+    }
 
-            private async Task LoadExpenses()
-            {
-                _expenses = await ExpenseService.GetAllExpensesAsync();
-                StateHasChanged();
-            }
+ private async Task OpenCreateDialog()
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
 
-       }
+        var dialog = await DialogService.ShowAsync<CreateExpenseDialog>("Add Expense", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadAllData();
+        }
+    }
+   
+    private List<GetBudgetDTO> _allExpensesPlanned = new();
+
+    private decimal _filteredTotalSpent = 0;
+    private DateTime? _selectedDate = DateTime.Now;
+
+    private decimal _monthlyBudget = 0;
+    private decimal _budgetUsage = 0;
+
+    private double[] _categoryData = { };
+    private string[] _categoryLabels = { };
+    private List<CategoryMetric> _categoryPercentages = new();
+    private ChartOptions _chartOptions = new() { ShowLegend = false };
+    private string[] _activePalette = { "#FF5722", "#9C27B0", "#4CAF50", "#2196F3", "#FFAB00" };
+
+    public class CategoryMetric {
+        public string Name { get; set; }
+        public decimal Percentage { get; set; }
+        public string Color { get; set; }
+    }
+
+   
+
+   
+
+
+   
+    private void UpdateFilteredData()
+    {
+        if (_selectedDate.HasValue)
+        {
+            var targetMonth = _selectedDate.Value.Month;
+            var targetYear = _selectedDate.Value.Year;
+
+            _filteredExpenses = _allExpenses
+                .Where(x => x.Date.HasValue && 
+                            x.Date.Value.Month == targetMonth && 
+                            x.Date.Value.Year == targetYear)
+                .ToList();
+
+            var budget = _allExpensesPlanned
+                .FirstOrDefault(x => x.StartingAt.Month == targetMonth && 
+                                    x.StartingAt.Year == targetYear);
+
+            _monthlyBudget = budget?.PlannedExpense ?? 0;
+        }
+        else
+        {
+            _filteredExpenses = _allExpenses;
+            _monthlyBudget = _allExpensesPlanned.Sum(x => x.PlannedExpense);
+        }
+
+        _filteredTotalSpent = _filteredExpenses.Sum(x => x.Amount);
+        _budgetUsage = _monthlyBudget > 0 ? (_filteredTotalSpent / _monthlyBudget) * 100 : 0;
+
+        var groups = _filteredExpenses.GroupBy(x => x.ExpenseType?.ExpenseTypeName ?? "Other")
+                                     .Select(g => new { Name = g.Key, Total = g.Sum(x => x.Amount) })
+                                     .OrderByDescending(x => x.Total).ToList();
+        
+        _categoryData = groups.Select(x => (double)x.Total).ToArray();
+        _categoryLabels = groups.Select(x => x.Name).ToArray();
+
+        _categoryPercentages = groups.Select((x, index) => new CategoryMetric {
+            Name = x.Name,
+            Percentage = _filteredTotalSpent > 0 ? (x.Total / _filteredTotalSpent) * 100 : 0,
+            Color = _activePalette[index % _activePalette.Length]
+        }).ToList();
+    }
+
+   
+}

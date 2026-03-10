@@ -4,91 +4,108 @@
 @inject IExpenseTypeService ExpenseTypeService
 @inject NavigationManager NavigationManager
 
-
-<MudDialog Style="border-radius:12px; overflow:hidden;">
-
- <!-- ══════════ HEADER BANNER ══════════ -->
+@* Increased MaxWidth and added a subtle border *@
+<MudDialog Style="border-radius:20px; overflow:hidden; max-width:450px; border: 1px solid rgba(25, 118, 210, 0.1);">
     <DialogContent>
+        @* Header Section with Gradient and Glassmorphism touch *@
         <MudPaper Elevation="0"
-                  Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
-                         border-radius:8px; padding:14px 18px; margin-bottom:16px;">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                <MudIcon Icon="@Icons.Material.Filled.Category"
-                         Style="color:white; font-size:1.6rem;" />
+                  Class="relative overflow-hidden"
+                  Style="background: linear-gradient(135deg, #057a52 0%, #057a52 100%);
+                         border-radius:16px; padding:24px; margin-bottom:24px; position:relative;">
+            
+            @* Background Icon for design depth *@
+            <MudIcon Icon="@Icons.Material.Filled.Category" 
+                     Style="position:absolute; right:-15px; top:-15px; font-size:6rem; color:rgba(255,255,255,0.1);" />
+
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="4" Style="position:relative; z-index:1;">
+                <MudAvatar Color="Color.Default" Style="height:56px; width:56px; background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);">
+                    <MudIcon Icon="@Icons.Material.Filled.AddCard" Style="color:white; font-size:1.8rem;" />
+                </MudAvatar>
                 <MudStack Spacing="0">
-                    <MudText Typo="Typo.subtitle1"
-                             Style="color:white; font-weight:700; line-height:1.2;">
+                    <MudText Typo="Typo.h6"
+                             Style="color:white; font-weight:800; letter-spacing:-0.5px;">
                         New Expense Type
                     </MudText>
                     <MudText Typo="Typo.caption"
-                             Style="color:rgba(255,255,255,0.80);">
-                        Define a new category for Expense classification
+                             Style="color:rgba(255,255,255,0.8); font-size:0.85rem;">
+                        Organize your spending habits
                     </MudText>
                 </MudStack>
             </MudStack>
         </MudPaper>
 
-
-         <!-- ══════════ FORM ══════════ -->
         <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
             <DataAnnotationsValidator />
-            <ValidationSummary />
+            
+            <MudStack Spacing="4" Class="px-2">
+                <div>
+                    @* Styled Label with Vertical Indicator *@
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-3">
+                        <MudDivider Vertical="true" FlexItem="true" Style="border-width: 3px; border-color: #057a52; height: 14px; border-radius: 2px;" />
+                        <MudText Typo="Typo.caption"
+                                 Style="color:#057a52; font-weight:900; letter-spacing:.12em; text-transform:uppercase;">
+                            CLASSIFICATION NAME
+                        </MudText>
+                    </MudStack>
 
-            <MudStack Spacing="1">
+                    <MudTextField T="string"
+              Label="Expense Type Name"
+              Variant="Variant.Outlined"
+              Margin="Margin.Dense" 
+              @bind-Value="Model.ExpenseTypeName"
+              Placeholder="e.g. Office Supplies"
+              Adornment="Adornment.Start"
+              AdornmentIcon="@Icons.Material.Filled.Label"
+              AdornmentColor="Color.Primary"
+              For="@(() => Model.ExpenseTypeName)"
+              Style="background: white; border-radius:12px;" />
+                </div>
 
-                <!-- ── Section Label ── -->
-                <MudText Typo="Typo.caption"
-                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
-                                text-transform:uppercase; margin-bottom:2px;">
-                    Type Details
-                </MudText>
-
-                <!-- Income Type Name -->
-                <MudTextField T="string"
-                              Label="Expense Type Name"
-                              Variant="Variant.Outlined"
-                              Margin="Margin.Dense"
-                              @bind-Value="Model.ExpenseTypeName"
-                              Placeholder="e.g. Transportation , Groceries..."
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Label"
-                              AdornmentColor="Color.Primary"
-                              For="@(() => Model.ExpenseTypeName)" />
-                <ValidationMessage For="@(() => Model.ExpenseTypeName)" />
-
+                @if (ShowErrors)
+                {
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Text" Dense="true" Class="mt-2" 
+                              Style="border-radius:8px; background: rgba(244, 67, 54, 0.05);">
+                        An error occurred while saving. Please try again.
+                    </MudAlert>
+                }
             </MudStack>
         </EditForm>
     </DialogContent>
 
-    <!-- ══════════ ACTIONS ══════════ -->
     <DialogActions>
-        <MudStack Row="true" Spacing="2" Class="px-2 pb-2" Style="width:100%;">
-
-           
+        <MudStack Row="true" Spacing="3" Class="px-6 pb-6" Style="width:100%;">
+            @* <MudButton Variant="Variant.Text"
+                       Color="Color.Default"
+                       OnClick="Cancel"
+                       Size="Size.Large"
+                       Style="flex:1; font-weight:700; border-radius:12px; color:#757575;">
+                Cancel
+            </MudButton> *@
 
             <MudButton Variant="Variant.Filled"
                        Color="Color.Primary"
-                       Size="Size.Small"
+                       Size="Size.Large"
                        StartIcon="@Icons.Material.Filled.Save"
                        OnClick="OnValidSubmit"
-                       Style="flex:2; border-radius:8px;
-                              background: linear-gradient(135deg,#1976D2,#42A5F5);">
-                Save Type
+                       Style="flex:2; border-radius:12px; font-weight:700;
+                              background: #057a52;
+                              box-shadow: 0 6px 20px rgba(25, 118, 210, 0.25);
+                              padding: 12px 0;">
+                SAVE TYPE
             </MudButton>
-
         </MudStack>
     </DialogActions>
-
 </MudDialog>
 
-@code{
+@code {
     [CascadingParameter]
-    private IDialogReference DialogReference { get; set; } = default!;
+    private IMudDialogInstance MudDialog { get; set; }
 
     private CreateExpenseTypeDTO Model { get; set; } = new();
 
     [Parameter]
     public EventCallback OnExpenseTypeCreated { get; set; }
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
 
     private bool ShowErrors { get; set; } = false;
 
@@ -97,10 +114,7 @@
         try
         {
             await ExpenseTypeService.CreateExpenseTypeAsync(Model);
-            await OnExpenseTypeCreated.InvokeAsync();
-
-            Model = new CreateExpenseTypeDTO();
-            @* DialogReference.Close(DialogResult.Ok(true)); *@
+            MudDialog.Close(DialogResult.Ok(true));  
         }
         catch
         {
@@ -108,8 +122,5 @@
         }
     }
 
-     private void Cancel()
-    {
-        DialogReference.Close(DialogResult.Cancel());
-    }
+    private void Cancel() => MudDialog.Cancel(); 
 }
