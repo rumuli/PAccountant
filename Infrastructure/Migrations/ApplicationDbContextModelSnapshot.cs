@@ -461,9 +461,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Lend", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -635,6 +637,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<double>("PurchasePrice")
                         .HasColumnType("float");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("UpdateBy")
                         .IsRequired()

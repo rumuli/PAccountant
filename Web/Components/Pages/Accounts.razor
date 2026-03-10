@@ -1,133 +1,197 @@
 @page "/Accounts"
-@using Microsoft.EntityFrameworkCore
-@using MudBlazor
 @using Domain.Entities
 @using Application.Services.Accounts
-@using Microsoft.AspNetCore.Authorization
-@* @attribute [Authorize] *@
-@inject IDialogService DialogService
+@using MudBlazor
+@using Domain.ValueObjects
+@using Web.Components.Shared
 @inject IAccountService AccountService
+@inject IDialogService DialogService
 
-<PageTitle>Account</PageTitle>
-<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
-     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-6">
-        <MudText Typo="Typo.h4" Class="font-weight-bold">
-            Account
-        </MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(()=>OpenDialog())">
-                +Add Account
-            </MudButton>
-    </div>  
+<PageTitle>Accounts</PageTitle>
 
-     <MudDataGrid T="Account"
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+   
+<MudGrid Spacing="3" Class="mb-4">
+    <!-- Summary cards -->
+    <MudItem xs="12" md="3">
+            <StatCards
+        Icon="@Icons.Material.Filled.KeyboardArrowDown"
+        ValueColor="Color.Success"
+        Title="Total Balance"
+        Value="@accounts.Sum(x => x.Balance).ToString("C")"
+        />
+    </MudItem>
+
+    <!-- Accounts by Status -->
+    @foreach (var statusGroup in accounts.GroupBy(x => x.Status))
+    {
+        <MudItem xs="12" md="3">
+            <StatCards
+                Icon="@Icons.Material.Filled.AccountBalance"
+                ValueColor="@GetStatusColor(statusGroup.Key)"
+                Title="@statusGroup.Key.ToString()"
+                Value="@statusGroup.Count().ToString()"
+            />
+        </MudItem>
+    }
+</MudGrid>
+
+    
+        <!-- Total Balance Card -->
+        @* <MudItem xs="12" sm="6" md="4" lg="3">
+            <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Total Balance</MudText>
+                    <MudText Typo="Typo.h5" Color="Color.Success" Class="fw-bold">@accounts.Sum(x => x.Balance).ToString("C")</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- Accounts by Status -->
+        @foreach (var statusGroup in accounts.GroupBy(x => x.Status))
+        {
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">@statusGroup.Key</MudText>
+                        <MudText Typo="Typo.h5" Color="@GetStatusColor(statusGroup.Key)" Class="fw-bold">@statusGroup.Count()</MudText>
+                        <MudText Typo="Typo.caption">Accounts</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        } *@
+    <MudDataGrid T="Account"
                  Items="@accounts"
-                 Hover="true"
-                 Striped="true"
-                 Bordered="true"
-                 Dense="true"
+                 MultiSelection="true" 
+                 SortMode="SortMode.Multiple" 
                  Filterable="true"
-                 SortMode="SortMode.Multiple"
-                 Class="elevation-1">
+                 Hideable="true" 
+                 Dense="true"
+                 RowClick="@RowClicked" 
+                 SelectedItemsChanged="@SelectedItemsChanged">
+
+        <!-- Toolbar -->
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Account</MudText>
+            <MudSpacer />
+
+            <MudMenu Label="Add Account"
+                     Variant="Variant.Filled"
+                     EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                     Color="Color.Primary">
+
+                <MudMenuItem Icon="@Icons.Material.Filled.Add"
+                             OnClick="OpenDialog">
+                    Single
+                </MudMenuItem>
+
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">
+                    Import
+                </MudMenuItem>
+
+            </MudMenu>
+        </ToolBarContent>
 
         <Columns>
+            <SelectColumn T="Account" />
 
-        <PropertyColumn Property="x => x.Id"
+            <PropertyColumn Property="x => x.Id"
                             Title="ID"
                             Sortable="true" />
 
-
-        <PropertyColumn Property="x => x.AccountType.Name"
+            <PropertyColumn Property="x => x.AccountType.Name"
                             Title="Account Type"
-                            Sortable="true" /> 
-                                   
-              
-               <PropertyColumn Property="x => x.AccountNumber"
-                            Title="AccountNumber"
                             Sortable="true" />
 
-              <PropertyColumn Property="x => x.Provider"
+            <PropertyColumn Property="x => x.AccountNumber"
+                            Title="Account Number"
+                            Sortable="true" />
+
+            <PropertyColumn Property="x => x.Provider"
                             Title="Provider"
-                            Sortable="true" /> 
+                            Sortable="true" />
 
-
-               <PropertyColumn Property="x => x.Balance"
+            <PropertyColumn Property="x => x.Balance"
                             Title="Balance"
-                            Sortable="true" /> 
+                            Format="C"
+                            Sortable="true" />
 
-               <PropertyColumn Property="x => x.Status"
-                            Title="Status"
-                            Sortable="true" /> 
+            <TemplateColumn Title="Status">
+                <CellTemplate>
+                    <MudChip T="string" 
+                            Color="@GetStatusColor(context.Item.Status)" 
+                            Size="Size.Small" 
+                            Variant="Variant.Text">
+                        @context.Item.Status
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
 
-               <PropertyColumn Property="x => x.UpdateBy"
+            @* <PropertyColumn Property="x => x.UpdateBy"
                             Title="UpdateBy"
-                            Sortable="true" /> 
-                            
-               <PropertyColumn Property="x => x.CreatedBy"
+                            Sortable="true" />
+
+            <PropertyColumn Property="x => x.CreatedBy"
                             Title="CreatedBy"
-                            Sortable="true" /> 
+                            Sortable="true" />
 
             <PropertyColumn Property="x => x.CreatedAt"
-                            Title="CreatedAt"
+                            Title="Created Date"
                             Format="MM/dd/yyyy"
-                            Sortable="true" />  
+                            Sortable="true" /> *@
 
+            <!-- Actions -->
+            @* <TemplateColumn Title="Actions">
+                <CellTemplate>
 
-       
-   
-         <MudTd DataLabel="Actions">
-     
-       <TemplateColumn Title="Actions" Context="context">
-            <CellTemplate>
-                  <MudStack Row="true" Spacing="2" Justify="Justify.Center">
-                <MudButton Size="Size.Small" 
-                           Variant="Variant.Filled" 
-                           Color="Color.Warning"
-                           StartIcon="@Icons.Material.Filled.Edit" 
-                           OnClick="@(() => OpenEditDialog(context.Item.Id))">
-                    Edit
-                </MudButton>
-                 <MudButton Size="Size.Small" 
-                           Variant="Variant.Filled" 
-                           Color="Color.Primary" 
-                           StartIcon="@Icons.Material.Filled.MoreHoriz"
-                           OnClick="@(() => OpenDetailDialog(context.Item.Id))">
-                    Details
-                </MudButton>
-                </MudStack>
-            </CellTemplate>
-        </TemplateColumn>
-    </MudTd>
+                    <MudIconButton Icon="@Icons.Material.Filled.Info"
+                                   Color="Color.Info"
+                                   Size="Size.Small"
+                                   OnClick="@(()=>OpenDetailDialog(context.Item.Id))" />
 
-   
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Primary"
+                                   Size="Size.Small"
+                                   OnClick="@(()=>OpenEditDialog(context.Item.Id))" />
+
+                </CellTemplate>
+            </TemplateColumn> *@
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        @* Ensure the method name here matches exactly what is in @code *@
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => OpenEditDialog(context.Item.Id))">Edit</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.MonetizationOn" 
+                                    IconColor="Color.Info" 
+                                    OnClick="@(() => OpenDetailDialog(context.Item.Id))">
+                            Details
+                        </MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+
         </Columns>
+        <PagerContent>
+            <MudDataGridPager T="Account" />
+        </PagerContent>
 
     </MudDataGrid>
-
 </MudContainer>
 
-
 @code{
-    List<Account> accounts = new List<Account>();
+
+    List<Account> accounts = new();
+
     protected override async Task OnInitializedAsync()
     {
         await LoadAccounts();
     }
-    protected IDialogReference dialogReference;
-    private Color GetStatusColor(string status)
+
+    private async Task OpenDialog()
     {
-        return status switch
-        {
-            "Active" => Color.Success,
-            "Completed" => Color.Info,
-            "Pending" => Color.Warning,
-            "Cancelled" => Color.Error,
-            _ => Color.Default
-        };
-    }
-    private async Task OpenDialog(List<Account>? accounts = null)
-    {
-        var dialog = await DialogService.ShowAsync<CreateAccountDialog>("Add Account");
+       DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = await DialogService.ShowAsync<CreateAccountDialog>("Add Account", options);
         var result = await dialog.Result;
 
         if (result != null && !result.Canceled)
@@ -138,11 +202,9 @@
 
     private async Task OpenDetailDialog(int id)
     {
-
         var parameters = new DialogParameters<AccountDetailDialog> { { x => x.Id, id } };
         await DialogService.ShowAsync<AccountDetailDialog>("View Details", parameters);
     }
-
 
     private async Task OpenEditDialog(int id)
     {
@@ -151,15 +213,24 @@
 
         var dialog = await DialogService.ShowAsync<EditAccountDialog>("Edit Account", parameters, options);
         var result = await dialog.Result;
-
-
     }
 
     private async Task LoadAccounts()
     {
         accounts = await AccountService.GetAllAccountsAsync();
-
         StateHasChanged();
     }
+        private Color GetStatusColor(AccountStatus status)
+    {
+        return status.ToString() switch
+        {
+            "Dormant" => Color. Warning,
+            "Active" => Color.Success,
+            "Closed" => Color.Error,
+            _ => Color.Default
+        };
+    }
+    private void RowClicked(DataGridRowClickEventArgs<Account> args) { }
+    private void SelectedItemsChanged(HashSet<Account> items) { }
+
 }
-     

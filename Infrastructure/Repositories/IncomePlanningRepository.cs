@@ -14,8 +14,8 @@ namespace Infrastructure.Repositories{
         }
         public async Task <List<IncomePlanning>> GetIncomePlanningsAsync(){
             return await _context.IncomePlannings
-            .Include(x=> x.IncomeType)
-            .Include(x =>x.Budget)
+            // .Include(x=> x.IncomeType)
+            // .Include(x =>x.Budget)
             .ToListAsync();
         }
         public async Task AddIncomePlanning(CreateIncomePlanningDTO dto){
