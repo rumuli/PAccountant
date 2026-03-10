@@ -20,14 +20,25 @@ namespace Infrastructure.DependencyInjection
               services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("PAccountant")),ServiceLifetime.Scoped);
                 
-                services.AddAuthenticationService(configuration);
-                services.AddScoped<IBudget, BudgetRepository>();
-                services.AddScoped<IIncomePlanning, IncomePlanningRepository>();
-                services.AddScoped<IIncomeType, IncomeTypeRepository>();
-                services.AddScoped<IExpenseType, ExpenseTypeRepository>();
-                services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
-                services.AddScoped<IIdentity, IdentityRepository>();
-                            services.AddScoped<IAccount, AccountRepository>(); 
+         //Register authentication services
+            services.AddAuthenticationService(configuration);
+
+            services.AddHttpContextAccessor();
+              services.AddScoped<IUserContext, UserContext>();
+
+            //register repository
+            services.AddScoped<IExpenseType, ExpenseTypeRepository>();
+            services.AddScoped<IIncomeType, IncomeTypeRepository>();
+            services.AddScoped<IIncome, IncomeRepository>();
+            services.AddScoped<IExpense, ExpenseRepository>();
+            services.AddScoped<IPaymentMethod, PaymentMethodRepository>();
+            services.AddScoped<IDebt, DebtRepository>();
+            services.AddScoped<IDebtType, DebtTypeRepository>();
+            services.AddScoped<IBudget, BudgetRepository>();
+            services.AddScoped<IIncomePlanning, IncomePlanningRepository>();
+            services.AddScoped<IExpensePlanning, ExpensePlanningRepository>();
+            services.AddScoped<IIdentity, IdentityRepository>();
+             services.AddScoped<IAccount, AccountRepository>(); 
             services.AddScoped<IAccountType, AccountTypeRepository>(); 
             services.AddScoped<IPerson, PersonRepository>(); 
 

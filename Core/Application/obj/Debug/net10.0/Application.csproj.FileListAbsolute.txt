@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.deps.json
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.dll
 C:\Users\hirwa\PersonalProjects\PAccountant\Core\Application\bin\Debug\net10.0\Application.pdb
@@ -94,6 +95,8 @@ C:\PAccountant\Core\Application\obj\Debug\net10.0\Application.dll
 C:\PAccountant\Core\Application\obj\Debug\net10.0\refint\Application.dll
 C:\PAccountant\Core\Application\obj\Debug\net10.0\Application.pdb
 C:\PAccountant\Core\Application\obj\Debug\net10.0\ref\Application.dll
+=======
+>>>>>>> 41a37146ce24eff43f2809fd00186435d1fc6373
 C:\Users\HP\source\repos\PAccountant\Core\Application\bin\Debug\net10.0\Application.deps.json
 C:\Users\HP\source\repos\PAccountant\Core\Application\bin\Debug\net10.0\Application.dll
 C:\Users\HP\source\repos\PAccountant\Core\Application\bin\Debug\net10.0\Application.pdb

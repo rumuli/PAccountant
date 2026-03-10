@@ -19,8 +19,9 @@
                 +Add Account
             </MudButton>
     </div>  
-
-     <MudDataGrid T="Property"
+</MudContainer>
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    <MudDataGrid T="Property"
                  Items="@_property"
                  Hover="true"
                  Striped="true"
@@ -28,96 +29,59 @@
                  Dense="true"
                  Filterable="true"
                  SortMode="SortMode.Multiple"
-                 Class="elevation-1">
+                 Class="elevation-1"
+                 RowClick="@RowClicked"
+                 SelectedItemsChanged="@SelectedItemsChanged">
 
+        <!-- Toolbar -->
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Properties</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Property" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@(() => OpenDialog())">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+        <!-- Columns -->
         <Columns>
+            <SelectColumn T="Property" />
 
-        <PropertyColumn Property="x => x.Id"
-                            Title="ID"
-                            Sortable="true" />
+            <PropertyColumn Property="x => x.Id" Title="ID" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Name" Title="Name" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.PropertyCategory.Name" Title="Account Type" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Person.FirstName" Title="Owner" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Value" Title="Value" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Location" Title="Location" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.AssignedTo" Title="Assigned To" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.PurchasePrice" Title="Purchase Price" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Identification" Title="Identification" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.CreatedBy" Title="Created By" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.CreatedAt" Title="Created At" Format="MM/dd/yyyy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.PurchaseDate" Title="Purchase Date" Format="MM/dd/yyyy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
 
-        <PropertyColumn Property="x => x.Name"
-                            Title="ID"
-                            Sortable="true" />
-
-
-        <PropertyColumn Property="x => x.PropertyCategory.Name"
-                            Title="Account Type"
-                            Sortable="true" /> 
-
-        <PropertyColumn Property="x => x.Person.FirstName"
-                            Title=" Owner"
-                            Sortable="true" />
-                                   
-              
-               <PropertyColumn Property="x => x.Value"
-                            Title="Value"
-                            Sortable="true" />
-
-              <PropertyColumn Property="x => x.Location"
-                            Title="Location"
-                            Sortable="true" /> 
-
-
-               <PropertyColumn Property="x => x.AssignedTo"
-                            Title="AssignedTo"
-                            Sortable="true" /> 
-
-               <PropertyColumn Property="x => x.PurchasePrice"
-                            Title="PurchasePrice"
-                            Sortable="true" /> 
-
-               <PropertyColumn Property="x => x.Identification"
-                            Title="Identification"
-                            Sortable="true" /> 
-                            
-               <PropertyColumn Property="x => x.CreatedBy"
-                            Title="CreatedBy"
-                            Sortable="true" /> 
-
-            <PropertyColumn Property="x => x.CreatedAt"
-                            Title="CreatedAt"
-                            Format="MM/dd/yyyy"
-                            Sortable="true" />  
-
-            <PropertyColumn Property="x => x.PurchaseDate"
-                            Title="PurchaseDate"
-                            Format="MM/dd/yyyy"
-                            Sortable="true" />  
-
-
-       
-   
-         <MudTd DataLabel="Actions">
-     
-       <TemplateColumn Title="Actions" Context="context">
-            <CellTemplate>
-                  <MudStack Row="true" Spacing="2" Justify="Justify.Center">
-                <MudButton Size="Size.Small" 
-                           Variant="Variant.Filled" 
-                           Color="Color.Warning"
-                           StartIcon="@Icons.Material.Filled.Edit" 
-                           OnClick="@(() => OpenEditDialog(context.Item.Id))">
-                    Edit
-                </MudButton>
-                 <MudButton Size="Size.Small" 
-                           Variant="Variant.Filled" 
-                           Color="Color.Primary" 
-                           StartIcon="@Icons.Material.Filled.MoreHoriz"
-                           OnClick="@(() => OpenDetailDialog(context.Item.Id))">
-                    Details
-                </MudButton>
-                </MudStack>
-            </CellTemplate>
-        </TemplateColumn>
-    </MudTd>
-
-   
+           <!-- Actions Menu -->
+<TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+    <CellTemplate>
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+            <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => OpenEditDialog(context.Item.Id))">Edit</MudMenuItem>
+            <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => OpenDetailDialog(context.Item.Id))">Details</MudMenuItem>
+            @* <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconColor="Color.Error"  *@
+                         @* OnClick="@(() => Snackbar.Add($"Deleting Property {context.Item.Id}", Severity.Error))"> *@
+                @* Delete *@
+            @* </MudMenuItem> *@
+        </MudMenu>
+    </CellTemplate>
+</TemplateColumn>
         </Columns>
 
+        <!-- Pager -->
+        <PagerContent>
+            <MudDataGridPager T="Property" />
+        </PagerContent>
     </MudDataGrid>
-
 </MudContainer>
+
 
 
 @code{
@@ -167,6 +131,6 @@
 
             
           }
-
-   }
+}
+   
      

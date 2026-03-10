@@ -32,18 +32,19 @@
     private CreateBudgetDTO newBudget = new();
     private List<GetBudgetDTO> _budgets = new();
     private void Cancel() => MudDialog.Cancel();
+    private string ErrorMessage { get; set; }
 
-    private async Task SaveBudget()
+private async Task SaveBudget()
+{
+    try
     {
-        await BudgetService.AddBudgetAsync(newBudget);
-        // Close the dialog and pass a 'true' result back to the page
-        MudDialog.Close(DialogResult.Ok(true));
-
-         _budgets = await BudgetService.GetBudgetsAsync() ?? new List<GetBudgetDTO>();    
-            NavigationManager.NavigateTo("/budgets");
+        var createdBudget = await BudgetService.AddBudgetAsync(newBudget);
+        
+        MudDialog.Close(DialogResult.Ok(createdBudget));
     }
-    @* private async Task CloseDialogAsync(){
-        MudDialog.Close(DialogResult.Ok(true));
-    } *@
-
+    catch(Exception ex)
+    {
+        ErrorMessage = ex.Message;
+    }
+}
 }

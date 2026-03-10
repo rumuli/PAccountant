@@ -4,23 +4,13 @@
 @using Domain.Entities
 @using Application.Services.Accounts
 @using Microsoft.AspNetCore.Authorization
-@* @attribute [Authorize] *@
 @inject IDialogService DialogService
 @inject IAccountService AccountService
 
-<PageTitle>Account</PageTitle>
-<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
-     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-6">
-        <MudText Typo="Typo.h4" Class="font-weight-bold">
-            Account
-        </MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(()=>OpenDialog())">
-                +Add Account
-            </MudButton>
-    </div>  
+<PageTitle>Accounts</PageTitle>
 
-     <MudDataGrid T="Account"
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    <MudDataGrid T="Account"
                  Items="@accounts"
                  Hover="true"
                  Striped="true"
@@ -28,86 +18,54 @@
                  Dense="true"
                  Filterable="true"
                  SortMode="SortMode.Multiple"
-                 Class="elevation-1">
+                 Class="elevation-1"
+                 RowClick="@RowClicked"
+                 SelectedItemsChanged="@SelectedItemsChanged">
 
+        <!-- Toolbar -->
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Accounts</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Account" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@(() => OpenDialog())">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+        <!-- Columns -->
         <Columns>
+            <SelectColumn T="Account" />
 
-        <PropertyColumn Property="x => x.Id"
-                            Title="ID"
-                            Sortable="true" />
+            <PropertyColumn Property="x => x.Id" Title="ID" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.AccountType.Name" Title="Account Type" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.AccountNumber" Title="Account Number" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Provider" Title="Provider" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Balance" Title="Balance" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.Status" Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.UpdateBy" Title="Updated By" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.CreatedBy" Title="Created By" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
+            <PropertyColumn Property="x => x.CreatedAt" Title="Created At" Format="MM/dd/yyyy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
 
-
-        <PropertyColumn Property="x => x.AccountType.Name"
-                            Title="Account Type"
-                            Sortable="true" /> 
-                                   
-              
-               <PropertyColumn Property="x => x.AccountNumber"
-                            Title="AccountNumber"
-                            Sortable="true" />
-
-              <PropertyColumn Property="x => x.Provider"
-                            Title="Provider"
-                            Sortable="true" /> 
-
-
-               <PropertyColumn Property="x => x.Balance"
-                            Title="Balance"
-                            Sortable="true" /> 
-
-               <PropertyColumn Property="x => x.Status"
-                            Title="Status"
-                            Sortable="true" /> 
-
-               <PropertyColumn Property="x => x.UpdateBy"
-                            Title="UpdateBy"
-                            Sortable="true" /> 
-                            
-               <PropertyColumn Property="x => x.CreatedBy"
-                            Title="CreatedBy"
-                            Sortable="true" /> 
-
-            <PropertyColumn Property="x => x.CreatedAt"
-                            Title="CreatedAt"
-                            Format="MM/dd/yyyy"
-                            Sortable="true" />  
-
-
-       
-   
-         <MudTd DataLabel="Actions">
-     
-       <TemplateColumn Title="Actions" Context="context">
-            <CellTemplate>
-                  <MudStack Row="true" Spacing="2" Justify="Justify.Center">
-                <MudButton Size="Size.Small" 
-                           Variant="Variant.Filled" 
-                           Color="Color.Warning"
-                           StartIcon="@Icons.Material.Filled.Edit" 
-                           OnClick="@(() => OpenEditDialog(context.Item.Id))">
-                    Edit
-                </MudButton>
-                 <MudButton Size="Size.Small" 
-                           Variant="Variant.Filled" 
-                           Color="Color.Primary" 
-                           StartIcon="@Icons.Material.Filled.MoreHoriz"
-                           OnClick="@(() => OpenDetailDialog(context.Item.Id))">
-                    Details
-                </MudButton>
-                </MudStack>
-            </CellTemplate>
-        </TemplateColumn>
-    </MudTd>
-
-   
+            <!-- Actions Menu -->
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => OpenEditDialog(context.Item.Id))">Edit</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => OpenDetailDialog(context.Item.Id))">Details</MudMenuItem>
+                        @* <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconColor="Color.Error" OnClick="@(() => Snackbar.Add($"Deleting Account {context.Item.Id}", Severity.Error))">Delete</MudMenuItem> *@
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
         </Columns>
 
+        <!-- Pager -->
+        <PagerContent>
+            <MudDataGridPager T="Account" />
+        </PagerContent>
     </MudDataGrid>
-
 </MudContainer>
 
-
-@code{
+@code {
     List<Account> accounts = new List<Account>();
         protected override async Task OnInitializedAsync()
             {
