@@ -179,13 +179,12 @@
     </DialogContent>
 </MudDialog>
 @code{
-    @* [CascadingParameter]  *@
-    @* MudDialogInstance MudDialog { get; set; } = default!; *@
+
     private string ErrorMessage { get; set; } = string.Empty;
 
     [Parameter] public int BudgetId { get; set; }
     [Parameter] public string BudgetName{get;set;}
-    @* private GetBudgetByIdDTO budgetbyid; *@
+    [Parameter] public EventCallback OnSaveSuccess { get; set; }
     
     private CreateIncomePlanningDTO newIncomePlan { get; set; } = new();
     private CreateExpensePlanningDTO newExpensePlan { get; set; } = new();
@@ -195,6 +194,10 @@
     private List<ExpenseType> _expensetype = new List<ExpenseType>();
     private List<IncomePlanning> _incomeplanning = new List<IncomePlanning>();
     private List<ExpensePlanning> _expenseplaning = new List<ExpensePlanning>();
+    private List<CountStatusBudgetDTO> _countStatusBudgets= new();
+    private decimal TotalPlannedRevenue => _incomeplanning.Sum(b => b.Amount);    
+    private decimal TotalPlannedExpenses => _expenseplaning.Sum(b => b.Amount);    
+    private int TotalBudgets=> _countStatusBudgets.Sum(x=>x.Counts);
     private GetBudgetDTO? currentBudget;
     protected override async Task OnParametersSetAsync()
     {        // Assign BudgetId to DTOs (CRITICAL)
@@ -213,51 +216,71 @@
         _expenseplaning = expenses
             .Where(x => x.BudgetId == BudgetId)
             .ToList();
+           
+    }
+    private async Task LoadTotalPlannedRevenue(){
+        _incomeplanning = await IncomePlanningService.GetIncomePlanningsAsync() ?? new List<IncomePlanning>();
+    }
+    private async Task LoadTotalPlannedExpenses(){
+        _expenseplaning = await ExpensePlanningService.GetExpensePlanningsAsync() ?? new List<ExpensePlanning>();
     }
 
-
-    private async Task SaveIncomePlan()
+    private async Task LoadCountStatusBudgets()
     {
-        try{
-            await IncomePlanningService.AddIncomePlanning(newIncomePlan);
-                var incomes = await IncomePlanningService.GetIncomePlanningsAsync();
-
-                _incomeplanning = incomes
+       _countStatusBudgets= await BudgetService.CountBudgetByStatusAsync();
+    }
+        private async Task LoadIncomePlanning()
+    {
+        var incomes = await IncomePlanningService.GetIncomePlanningsAsync();
+        _incomeplanning = incomes
             .Where(x => x.BudgetId == BudgetId)
             .ToList();
-
+    }
+    private async Task LoadExpensePlanning()
+    {
         var expenses = await ExpensePlanningService.GetExpensePlanningsAsync();
         _expenseplaning = expenses
             .Where(x => x.BudgetId == BudgetId)
             .ToList();
+    }
+    private async Task SaveIncomePlan()
+    {
+        try
+        {
+            await IncomePlanningService.AddIncomePlanning(newIncomePlan);
+            await LoadExpensePlanning();
+            await LoadIncomePlanning();
+            if (OnSaveSuccess.HasDelegate)
+            {
+                await OnSaveSuccess.InvokeAsync();
+            }
         }
         catch(Exception ex)
         {
             ErrorMessage =ex.Message;  
         }
         
-        @* MudDialog.Close(DialogResult.Ok(true)); *@
     }
+
 
     private async Task SaveExpensePlanning()
     {
-        try{
-        await ExpensePlanningService.AddExpensePlanningAsync(newExpensePlan);
+        try
+        {
+            
+            await ExpensePlanningService.AddExpensePlanningAsync(newExpensePlan);
+            await LoadExpensePlanning();
+            await LoadIncomePlanning();
+            
+            if (OnSaveSuccess.HasDelegate)
+            {
+                await OnSaveSuccess.InvokeAsync();
+            }
+
         }
         catch(Exception ex)
         {
             ErrorMessage =ex.Message;  
         }
-
-                var incomes = await IncomePlanningService.GetIncomePlanningsAsync();
-        _incomeplanning = incomes
-            .Where(x => x.BudgetId == BudgetId)
-            .ToList();
-
-        var expenses = await ExpensePlanningService.GetExpensePlanningsAsync();
-        _expenseplaning = expenses
-            .Where(x => x.BudgetId == BudgetId)
-            .ToList();
-        @* MudDialog.Close(DialogResult.Ok(true)); *@
     }
 }

@@ -7,4 +7,9 @@ namespace Application.DTO.IncomePlanning{
         public string Description {get;set;}
 
     }
+    public class SummaryIncomePlanningDTO{
+        public int BudgetId {get;set;}
+        public int IncomeTypeId {get;set;}
+        public decimal Amount{get;set;}
+    }
 }

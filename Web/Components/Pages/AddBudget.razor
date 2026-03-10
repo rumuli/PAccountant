@@ -44,15 +44,17 @@
     private void Cancel() => MudDialog.Cancel();
     private string ErrorMessage { get; set; }
 
-
-    private async Task SaveBudget()
+private async Task SaveBudget()
+{
+    try
     {
-        try{
-        await BudgetService.AddBudgetAsync(newBudget);
-        MudDialog.Close(DialogResult.Ok(true));
-        }
-        catch(Exception ex){
-            ErrorMessage = ex.Message;
-        }
+        var createdBudget = await BudgetService.AddBudgetAsync(newBudget);
+        
+        MudDialog.Close(DialogResult.Ok(createdBudget));
     }
+    catch(Exception ex)
+    {
+        ErrorMessage = ex.Message;
+    }
+}
 }

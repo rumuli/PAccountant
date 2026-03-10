@@ -16,5 +16,9 @@ namespace Application.Services.ExpensePlanningServices{
         public async Task AddExpensePlanningAsync(CreateExpensePlanningDTO dto){
             await _expensePlanning.AddExpensePlanningAsync(dto);
         }
+        public async Task <List<ExpensePlanning>> GetSummaryExpensePlanningAsync(int BudgetId)
+        {
+            return await _expensePlanning.GetSummaryExpensePlanningAsync(BudgetId);
+        }
     }
 }
