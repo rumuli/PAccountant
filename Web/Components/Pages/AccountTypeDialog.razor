@@ -1,11 +1,12 @@
 @using Application.DTO
-@using Application.Interfaces
+@using Application.Interface
 @using Application.Services.AccountTypes
 @using MudBlazor
 @inject IAccountTypeService AccountTypesService
 @inject ISnackbar Snackbar
 
-@rendermode InteractiveServer  
+@* Required for button clicks and form submission to work in .NET 8/9 *@
+@rendermode InteractiveServer 
 
 <MudDialog Style="border-radius:20px; overflow:hidden; max-width:450px; border: 1px solid rgba(103, 58, 183, 0.1);">
     <DialogContent>
@@ -92,6 +93,7 @@
 @code {
     [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
 
+    // Model initialized with default "Admin" as seen in your Repository logic
     private AccountTypeCreateDTO Model { get; set; } = new() { CreatedBy = "Admin" };
 
     [Parameter] public EventCallback OnAccountTypeCreated { get; set; }

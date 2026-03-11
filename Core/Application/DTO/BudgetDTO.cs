@@ -1,5 +1,3 @@
-using Domain.ValueObjects;
-
 namespace Application.DTO.Budget{
     public class GetBudgetDTO
     {

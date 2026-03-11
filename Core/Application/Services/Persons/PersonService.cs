@@ -1,7 +1,6 @@
-using Application.Interfaces;
+using Application.Interface;
 using Domain.Entities; 
 using Application.DTO;
-using Application.Interfaces;
 
 namespace  Application.Services.Persons
 {

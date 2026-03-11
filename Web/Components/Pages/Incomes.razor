@@ -24,7 +24,7 @@
                 
                 <MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-2">
                     <MudText Typo="Typo.h3" Style="font-weight: 900; color: #023d28;">
-                        @_incomes.Sum(x => x.AmountPaid).ToString("n")
+                        @_incomes.Sum(x => x.AmountPaid).ToString("N")
                     </MudText>
                     <MudChip T="string" Color="Color.Success" Variant="Variant.Text" Size="Size.Small" Icon="@Icons.Material.Filled.NorthEast">Total Gained</MudChip>
                 </MudStack>

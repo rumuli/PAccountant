@@ -6,7 +6,7 @@ using Domain.Entities;
 using Domain.ValueObjects;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repository
 {
     public class BudgetRepository : IBudget
     {

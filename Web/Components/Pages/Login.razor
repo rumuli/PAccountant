@@ -8,7 +8,7 @@
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-@* <PageTitle>Login</PageTitle>
+<PageTitle>Login</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-flex align-center justify-center" Style="min-height: 100vh;">
 
@@ -283,10 +283,8 @@
 
     private string email = "";
     private string password = "";
-    private bool _isPasswordVisible = false;
+    private bool showPassword = false;
     private bool rememberMe = false;
-    private InputType _passwordInput = InputType.Password;
-   private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     @* protected override async Task OnInitializedAsync()
     {
@@ -297,21 +295,9 @@
         }
     } *@
 
-    private List<MockOrder> _mockRows = new()
-{
-    new(5298, "iPad Gen 10", "Paid", Color.Success),
-    new(5299, "iPhone 15", "Pending", Color.Warning),
-    new(5300, "MacBook Air", "Paid", Color.Success)
-};
-public record MockOrder(int Id, string Name, string Status, Color Color);
-
-public void TogglePasswordVisibility()
-{
-    if (_isPasswordVisible)
+    private void TogglePasswordVisibility()
     {
-        _isPasswordVisible = false;
-        _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
-        _passwordInput = InputType.Password;
+        showPassword = !showPassword;
     }
     else
     {

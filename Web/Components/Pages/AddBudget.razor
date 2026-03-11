@@ -10,9 +10,6 @@
     </TitleContent>
     <DialogContent>
         <EditForm Model="@newBudget" OnValidSubmit="SaveBudget" >
-            @if(!string.IsNullOrEmpty(ErrorMessage)){
-                <MudAlert Severity="Severity.Error" Elevation="0">@ErrorMessage</MudAlert>
-            }
             <MudGrid>
                 <MudItem xs="12">
                 <MudDatePicker @bind-Date="newBudget.StartingAt" Label="Starting At" Editable="true" Mask="@(new DateMask("0000-00-00"))" DateFormat="yyyy-MM-dd" Placeholder="Starting At" Variant="Variant.Outlined" Margin="Margin.Dense" />
@@ -21,14 +18,7 @@
                 <MudDatePicker @bind-Date="newBudget.EndingAt" Label="Ending At" Editable="true" Mask="@(new DateMask("0000-00-00"))" DateFormat="yyyy-MM-dd" Placeholder="Ending At" Variant="Variant.Outlined" Margin="Margin.Dense" />
                 </MudItem>
                 <MudItem xs="12">
-                <MudButton 
-                    Variant="Variant.Filled" 
-                    Color="Color.Primary" 
-                    FullWidth="true" 
-                    ButtonType="ButtonType.Submit" 
-                    Style="height: 40px; font-weight: bold;">
-                    SAVE
-                </MudButton>
+                <MudButton Style="background-color: #051d6e; color: white; height: 40px; font-weight: bold;" FullWidth="true" ButtonType="ButtonType.Submit" >SAVE</MudButton>
                 </MudItem>
             </MudGrid>
         </EditForm>

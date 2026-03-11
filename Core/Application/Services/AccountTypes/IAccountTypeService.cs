@@ -1,7 +1,7 @@
 using Domain.Entities;
 using Application.DTO;
 
-namespace Application.Interfaces
+namespace Application.Interface
 {
    public interface IAccountTypeService
     {
