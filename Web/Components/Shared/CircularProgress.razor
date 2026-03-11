@@ -1,0 +1,38 @@
+@implements IDisposable
+<MudStack Class="py-4 px-4 justify-content" Justify="Justify.Center" Spacing="1">
+    <MudProgressCircular Color="@Color" 
+                         Value="@Value" 
+                         Size="@Size" 
+                         Thickness="@Thickness"
+                         Style="@Style">
+        <ChildContent>
+            <MudStack Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                <MudText Typo="@ValueTypo" Color="@Color" Class="font-weight-bold">
+                    @($"{Value}{Unit}")
+                </MudText>
+            </MudStack>
+        </ChildContent>
+    </MudProgressCircular>
+
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <MudText Typo="Typo.caption" Class="mud-text-secondary text-uppercase font-weight-bold">
+            @Label
+        </MudText>
+    }
+</MudStack>
+
+@code {
+    [Parameter] public double Value { get; set; }
+    [Parameter] public string Label { get; set; }
+    [Parameter] public string Unit { get; set; } = "%";
+    
+    [Parameter] public Color Color { get; set; } = Color.Primary;
+    [Parameter] public Size Size { get; set; } = Size.Large; // Fixed Size/Style conflict
+    [Parameter] public int Thickness { get; set; } = 5;
+    [Parameter] public Typo ValueTypo { get; set; } = Typo.subtitle2;
+    [Parameter] public string Style { get; set; } = "height: 80px; width: 80px;";
+
+    private bool _disposed;
+    public void Dispose() => _disposed = true;
+}

@@ -1,23 +1,129 @@
 ﻿@inherits LayoutComponentBase
+@using MudBlazor
+@inject NavigationManager NavigationManager
 
-<div class="page">
-    <div class="sidebar">
+<MudThemeProvider 
+    DefaultScrollbar="true" 
+    @bind-IsDarkMode="_isDarkMode" 
+    Theme="_theme" />
+
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+
+    <MudAppBar>
+        <MudIconButton 
+            Icon="@Icons.Material.Filled.Menu" 
+            Color="Color.Inherit" 
+            Edge="Edge.Start" 
+            OnClick="DrawerToggle" />
+
+        P Accountant
+
+        <MudSpacer />
+
+        <MudIconButton
+            Icon="@(_isDarkMode 
+                ? Icons.Material.Filled.LightMode 
+                : Icons.Material.Filled.DarkMode)"
+            Color="Color.Inherit"
+            OnClick="ToggleTheme" />
+
+             @* User Profile Section *@
+        @if (UserContext.IsAuthenticated)
+        {
+            <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+                <ActivatorContent>
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="cursor-pointer ml-2">
+                        <MudAvatar Color="Color.Secondary" Size="Size.Small">@UserContext.Initials</MudAvatar>
+                        <div Class="d-sm-none d-md-flex">
+                            <MudStack Spacing="0">
+                                <MudText Typo="Typo.body2" Style="line-height: 1.2;">@UserContext.FullName</MudText>
+                                <MudText Typo="Typo.caption" Style="line-height: 1.2; opacity: 0.8;">@UserContext.Email</MudText>
+                            </MudStack>
+                        </div>
+                        <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Size="Size.Small" />
+                    </MudStack>
+                </ActivatorContent>
+                <ChildContent>
+                    <MudMenuItem Icon="@Icons.Material.Filled.Person">Profile</MudMenuItem>
+                    <MudDivider />
+                    <MudMenuItem Icon="@Icons.Material.Filled.Logout" OnClick="Logout">Logout</MudMenuItem>
+                </ChildContent>
+            </MudMenu>
+             }
+        else
+        {
+
+        <MudIconButton
+            Icon="@Icons.Material.Filled.Logout"
+            Color="Color.Inherit"
+            OnClick="Logout" />
+
+              }
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen">
         <NavMenu />
-    </div>
+    </MudDrawer>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+</MudLayout>
 
-<div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
-</div>
+@code {
+
+    bool _drawerOpen = true;
+    bool _isDarkMode = false;
+
+    private MudTheme _theme = new()
+{
+    PaletteLight = new PaletteLight()
+    {
+        Primary = "#023d28",          // --primary-color
+        Secondary = "#71877e",        // --text-color2
+        AppbarBackground = "#023d28", // --primary-color
+        AppbarText = "#FFFFFF",
+        Background = "#FFFFFF",       // --body-color
+        DrawerBackground = "#FFFFFF", // --sidebar-color
+        DrawerText = "#71877e",       // --text-sidebar-color
+        Surface = "#FFFFFF",
+        TextPrimary = "#023d28",      // --text-color1
+        TextSecondary = "#71877e",    // --text-color2
+        ActionDefault = "#023d28",
+        Success = "#45dc59",          // --tablestatusactivetext
+        Warning = "#e8a950",          // --tablestatusinactivetext
+        Error = "#fe0808",            // --deletetextcoloraction
+        Divider = "#E5E7EB",          // --borders
+    },
+    PaletteDark = new PaletteDark()
+    {
+        Primary = "#22a075",          // --primary-color (dark)
+        Secondary = "#71877e",        // --text-color2
+        AppbarBackground = "#064632", // --sidebar-color (dark)
+        Background = "#021b12",       // --body-color (dark)
+        DrawerBackground = "#064632", // --sidebar-color (dark)
+        DrawerText = "#71877e",
+        Surface = "#064632",          // Cards and Paper look better in sidebar color in dark mode
+        TextPrimary = "#5cf1bd",      // --text-color1 (dark)
+        TextSecondary = "#71877e",
+        ActionDefault = "#5cf1bd",
+        Success = "#45dc59",
+        Warning = "#e8a950",
+        Error = "#f55b5b",            // --deletetextcoloraction (dark)
+        Divider = "#5cf1bd",          // --borders (dark)
+    }
+};
+
+    void DrawerToggle() => _drawerOpen = !_drawerOpen;
+
+    void ToggleTheme() => _isDarkMode = !_isDarkMode;
+    void Logout()
+    {
+        NavigationManager.NavigateTo("/account/logout");
+    }
+}

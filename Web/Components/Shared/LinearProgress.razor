@@ -1,0 +1,34 @@
+<MudCard Spacing="2" Class="px-4 py-3 mt-3" Elevation="1">
+    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+        <MudStack Spacing="0">
+            <MudText Typo="Typo.body2" Class="font-weight-semibold">@Title</MudText>
+        </MudStack>
+
+        <MudText Typo="Typo.caption" Class="mud-text-secondary">Day @AllDays of @RemainingDays</MudText>
+        <MudText Typo="Typo.body2" Color="@Color" Class="font-weight-bold">
+            @($"{Value}%")
+        </MudText>
+    </MudStack>
+
+    <MudProgressLinear Color="@Color" 
+                       Rounded="true" 
+                       Size="@Size" 
+                       Value="@Value" 
+                       Striped="@Striped" />
+</MudCard>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Subtitle { get; set; }
+    
+    [Parameter] public double Value { get; set; }
+    [Parameter] public bool Striped { get; set; }
+    
+    [Parameter] public Color Color { get; set; } = Color.Success;
+    [Parameter] public Size Size { get; set; } = Size.Medium;
+    [Parameter] public string Class { get; set; }
+    [Parameter] public int RemainingDays { get; set; }
+
+    [Parameter] public int AllDays { get; set; }
+
+}

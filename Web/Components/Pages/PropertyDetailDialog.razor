@@ -1,0 +1,85 @@
+@using Domain.Entities
+@using Application.Services.Properties
+@using System.Globalization
+
+@inject NavigationManager NavigationManager
+
+ <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="BackToProperty" StartIcon="@Icons.Material.Filled.ArrowBack">
+                    Back to Campaigns
+                </MudButton>
+<MudDialog>
+    
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2"/> Account Details
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (_property == null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else
+        {
+            <MudGrid Spacing="2">
+                <MudItem xs="6">
+                    <MudTextField Label="Account ID" Value="@_property.Id" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField Label="Type" Value="@(_property.Name)" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Account Number" Value="@_property.Location" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Account Number" Value="@_property.AssignedTo" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Account Number" Value="@_property.PurchasePrice" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Account Number" Value="@_property.Identification" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="CreatedBy" Value="@_property.CreatedBy" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="CreatedAt" Value="@_property.CreatedAt" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="PurchaseDate" Value="@_property.PurchaseDate" ReadOnly Variant="Variant.Outlined" />
+                </MudItem>
+            </MudGrid>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Close">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public int Id { get; set; } 
+    
+    [Inject] IPropertyService PropertyService { get; set; }
+
+    private Property _property;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _property = await PropertyService.GetPropertyById(Id);
+    }
+
+    private void Close() => MudDialog.Close();
+
+    private Color GetStatusColor(string status) => status?.ToLower() switch
+    {
+        "active" => Color.Success,
+        "inactive" => Color.Error,
+        _ => Color.Default
+    };
+     private void BackToProperty()
+    {
+        NavigationManager.NavigateTo("/Property");
+    }
+}

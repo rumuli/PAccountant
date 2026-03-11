@@ -1,0 +1,32 @@
+
+using Domain.ValueObjects;
+
+namespace Application.DTO
+{
+    public class AccountCreateDTO
+    {
+        public int AccountTypeId {get;set;}
+        public string AccountNumber {get;set;}
+        public string Provider {get;set;}
+        public decimal InitialBalance {get;set;}
+        public decimal Balance
+        {
+            get
+            {
+                return InitialBalance;
+            }
+        }
+        public AccountStatus  Status{get;set;}
+        public string CreatedBy {get;set;}
+        public DateTime CreatedAt { get; set; } 
+        
+    }
+    public class AccountUpdateDTO
+    {
+        public string AccountNumber {get;set;}
+        public string Provider {get;set;}
+        public decimal Balance {get;set;}
+        public AccountStatus  Status{get;set;}
+         public string UpdateBy{get;set;}
+    }
+}

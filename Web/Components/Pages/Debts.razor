@@ -1,0 +1,94 @@
+@page "/Debts"
+@using Domain.Entities
+@using Application.Services.Debts
+@using MudBlazor
+@inject IDebtService DebtService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    <MudDataGrid T="Debt"
+                 Items="@_debts"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
+                 Hover="true"
+                 Striped="true"
+                 Bordered="true"
+                 Class="elevation-1"
+                 >
+
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Debts</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Debt" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateDialog">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+        <Columns>
+            <SelectColumn T="Debt" />
+
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.DebtType.DebtTypeName" Title="Debt Type" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.Amount" Title="Amount" Format="C" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.Creditor" Title="Creditor" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.DueDate" Title="Start Date" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.DateIncurred" Title="End Date" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+
+            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
+                             Size="Size.Small"
+                             Variant="Variant.Text">
+                        @(context.Item.IsActive ? "Active" : "Inactive")
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+
+            @* <PropertyColumn Property="x => x.CreatedAt" Title="Created Date" Format="MM/dd/yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => Snackbar.Add($"Viewing {context.Item.Id}", Severity.Info))">Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Snackbar.Add($"Editing {context.Item.Id}", Severity.Info))">Edit</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="Debt" />
+        </PagerContent>
+    </MudDataGrid>
+</MudContainer>
+
+@code {
+    private List<Debt> _debts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDebts();
+    }
+
+    private async Task OpenCreateDialog()
+    {
+        var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateDebtDialog>("Create Debt", new DialogParameters()
+        {
+            { "OnDebtCreated", EventCallback.Factory.Create(this, LoadDebts) }
+        }, option);
+    }
+
+    private async Task LoadDebts()
+    {
+        _debts = await DebtService.GetAllDebtsAsync();
+        StateHasChanged();
+    }
+}
+

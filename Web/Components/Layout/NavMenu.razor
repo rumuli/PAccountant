@@ -1,30 +1,26 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Web</a>
+﻿
+    <div class="d-flex align-center justify-center py-4">
+    <MudAvatar Style="color:white" Size="Size.Medium" Class="mr-2">
+        <MudIcon Icon="@Icons.Material.Filled.Autorenew" Color="Color.Primary" Style="color: white;" />
+    </MudAvatar>
+        <MudText Typo="Typo.h5" Style="font-weight: 700;" Color="Color.Primary">PAccountant</MudText>
     </div>
-</div>
+    <MudNavLink  Href="/Dashboard"  Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard"> Dashboard</MudNavLink>
+     <MudNavLink Href="/persons" Icon="@Icons.Material.Filled.People"> persons</MudNavLink>
+      <MudNavLink Href="/Accounts" Icon="@Icons.Material.Filled.AccountBalance"> Accounts</MudNavLink>
+      <MudNavLink Href="/Property" Icon="@Icons.Material.Filled.Home"> Property</MudNavLink>
+    <MudNavLink Href="/incomes" Icon="@Icons.Material.Filled.AttachMoney">Incomes</MudNavLink>
+    <MudNavLink Href="/Expense" Icon="@Icons.Material.Filled.Money"> Expenses</MudNavLink>
+    <MudNavLink Href="/budgets" Icon="@Icons.Material.Filled.AccountBalanceWallet"> Budget Planning</MudNavLink>
+    <MudNavLink Href="/Debts" Icon="@Icons.Material.Filled.AccountBalance"> Debts</MudNavLink>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <MudNavGroup Title="Settings" Icon="@Icons.Material.Filled.Settings" Expanded="false">
+            <MudNavLink Href="/users" Icon="@Icons.Material.Filled.People">Users</MudNavLink>
+            <MudNavLink Href="/Settings"Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+        </MudNavGroup>
+    
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
+   
+    
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
 
