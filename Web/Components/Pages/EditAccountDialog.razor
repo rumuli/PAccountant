@@ -1,7 +1,9 @@
 @using Application.Services.Accounts
+@using Application.Services.AccountTypes
+
 @using Domain.Entities
 @using Application.DTO
-@using Application.Interface
+@using Application.Interfaces
 @using MudBlazor
 @inject IAccountService AccountService
 @inject IAccountTypeService AccountTypeService
@@ -35,10 +37,10 @@
                     <MudNumericField Label="Balance" @bind-Value="_editModel.Balance" 
                                      Variant="Variant.Outlined" For="@(() => _editModel.Balance)" />
 
-                    <MudSelect T="string" Label="Status" @bind-Value="_editModel.Status" Variant="Variant.Outlined">
+                    @* <MudSelect T="string" Label="Status" @bind-Value="_editModel.Status" Variant="Variant.Outlined">
                         <MudSelectItem Value="@("Active")">Active</MudSelectItem>
                         <MudSelectItem Value="@("Inactive")">Inactive</MudSelectItem>
-                    </MudSelect>
+                    </MudSelect> *@
 
                 </MudStack>
             </EditForm>

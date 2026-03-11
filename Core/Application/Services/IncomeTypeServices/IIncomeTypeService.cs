@@ -1,13 +1,14 @@
 using Domain.Entities;
 using Application.DTO;
+using Application.Services.IncomeTypes;
 
-namespace Application.Services.IncomeTypeServices
+
+namespace Application.Services.IncomeTypes
 {
     public interface IIncomeTypeService
     {
         Task<List<IncomeType>> GetAllIncomeTypesAsync();
         Task<IncomeType?> GetIncomeTypeByIdAsync(int id);
-        Task CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO);
+        Task<int> CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO);
     }
 }
-

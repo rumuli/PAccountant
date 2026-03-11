@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Infrastructure.Data;
 using Application.DTO;
-using Application.Interface;
+using Application.Interfaces;
 using Application.Services.Properties;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,6 +48,7 @@ public class PropertyRepository : IProperty
                  Identification = propertyDTO.Identification,
                  CreatedBy = "Admin",
                  UpdateBy = "Admin",
+                 Status = propertyDTO.Status,
                  PurchaseDate = DateTime.Now,
                  CreatedAt = DateTime.Now,
                

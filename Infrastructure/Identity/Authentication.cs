@@ -34,17 +34,18 @@ namespace Infrastructure.Identity
                 options.SignIn.RequireConfirmedAccount = false; // Allow immediate login after registration
                 
                 // Lockout settings
-                options.Lockout.MaxFailedAccessAttempts = 5;     // Increased from 3
+                options.Lockout.MaxFailedAccessAttempts = 5;    
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             })
               .AddRoles<IdentityRole<int>>()
               .AddEntityFrameworkStores<ApplicationDbContext>()
               .AddSignInManager()
-              .AddDefaultTokenProviders();
+              .AddDefaultTokenProviders()
+            .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>();
 
             services.Configure<DataProtectionTokenProviderOptions>(options =>
             {
-                options.TokenLifespan = TimeSpan.FromHours(6);
+                options.TokenLifespan = TimeSpan.FromMinutes(3);
             });
 
             services.ConfigureApplicationCookie(options =>
@@ -53,9 +54,9 @@ namespace Infrastructure.Identity
               options.Cookie.HttpOnly = true;
               options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
               options.Cookie.SameSite = SameSiteMode.Lax;
-              options.LoginPath = "/";
-              options.LogoutPath = "/logout";
-              options.AccessDeniedPath = "/access-denied";
+            //   options.LoginPath = "/account/login";
+            // //   options.LogoutPath = "/account/logout";
+            // //   options.AccessDeniedPath = "/access-denied";
             });
 
             return services;

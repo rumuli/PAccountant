@@ -1,0 +1,534 @@
+@page "/settings"
+@using Application.Services.DebtTypes
+@using Domain.Entities
+@using Application.Services.PaymentMethods
+@using Application.Services.AccountTypes
+@using Application.Services.IncomeTypes
+@using Application.Services.ExpenseTypes
+@using Application.Services.PropertyCategories
+@using Application.Services.DebtTypes
+@inject IPaymentMethodService PaymentMethodService
+@inject IDialogService DialogService
+@inject IDialogService Dialog
+@inject IAccountTypeService AccountTypeService
+@inject IIncomeTypeService IncomeTypeService
+@inject IExpenseTypeService ExpenseTypeService
+@inject IPropertycategoryService PropertyCategoryService
+@inject IDebtTypeService DebtTypeService
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6 p-3">
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" TabPanelsClass="pa-6">
+    <MudTabPanel Text="Payment Method">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6 py-3">
+    <MudDataGrid T="PaymentMethod"
+                 Items="@PaymentMethods"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
+                 Hover="true"
+                 Striped="true"
+                 
+                 Class="elevation-1"
+                 >
+
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Payment Methods</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add PaymentMethod" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@GoToCreatePaymentMethod">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+        <Columns>
+            <SelectColumn T="PaymentMethod" />
+
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.PaymentMethodName" Title="Method" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            @* <PropertyColumn Property="x => x.IsActive" Title="Status" Format="C" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            @* <PropertyColumn Property="x => x.UpdatedAt" Title="Upadated At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            <PropertyColumn Property="x => x.CreatedAt" Title="Create At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+
+            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
+                             Size="Size.Small"
+                             Variant="Variant.Text">
+                        @(context.Item.IsActive ? "Active" : "Inactive")
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+
+
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" >Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" >Edit</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="PaymentMethod" />
+          </PagerContent>
+    </MudDataGrid>
+</MudContainer>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Account Types">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6 py-3">
+    <MudDataGrid T="AccountType"
+                 Items="@AccountTypes"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
+                 Hover="true"
+                 Striped="true"
+                 Class="elevation-1">
+
+                 <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Account Types</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Account Type" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@GoToCreateAccountType">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+         <Columns>
+            <SelectColumn T="AccountType" />
+
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.Name" Title="Account Type" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            @* <PropertyColumn Property="x => x.IsActive" Title="Status" Format="C" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            @* <PropertyColumn Property="x => x.UpdatedAt" Title="Upadated At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            <PropertyColumn Property="x => x.CreatedAt" Title="Create At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+
+          <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+    <CellTemplate>
+        <MudChip T="string"
+                 Color="@(context.Item.Status == "Active" ? Color.Success : Color.Error)"
+                 Size="Size.Small"
+                 Variant="Variant.Text">
+            @context.Item.Status
+        </MudChip>
+    </CellTemplate>
+</TemplateColumn>
+
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" >Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" >Edit</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+         <PagerContent>
+            <MudDataGridPager T="AccountType" />
+        </PagerContent>
+    </MudDataGrid>
+</MudContainer>
+    </MudTabPanel>
+    <MudTabPanel Text="Income Types">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6 py-3">
+    <MudDataGrid T="IncomeType"
+                 Items="@IncomeTypes"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
+                 Hover="true"
+                 Striped="true"
+                 
+                 Class="elevation-1"
+                 >
+
+                 
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Income Types</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Income Type" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@GoToCreateIncomeType">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+        <Columns>
+            <SelectColumn T="IncomeType" />
+
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.IncomeTypeName" Title="Method" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            @* <PropertyColumn Property="x => x.IsActive" Title="Status" Format="C" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            @* <PropertyColumn Property="x => x.UpdatedAt" Title="Upadated At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            <PropertyColumn Property="x => x.CreatedAt" Title="Create At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+
+            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
+                             Size="Size.Small"
+                             Variant="Variant.Text">
+                        @(context.Item.IsActive ? "Active" : "Inactive")
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" >Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" >Edit</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+         <PagerContent>
+            <MudDataGridPager T="IncomeType" />
+          </PagerContent>
+    </MudDataGrid>
+</MudContainer>
+
+    </MudTabPanel>
+
+     <MudTabPanel Text="Expense Types">
+         <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6 py-3">
+    <MudDataGrid T="ExpenseType"
+                 Items="@ExpenseTypes"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
+                 Hover="true"
+                 Striped="true"
+                 
+                 Class="elevation-1"
+                 >
+
+                  <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Expense Types</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Expense Type" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@GoToCreateExpenseType">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+         <Columns>
+            <SelectColumn T="ExpenseType" />
+
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.ExpenseTypeName" Title="Method" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            @* <PropertyColumn Property="x => x.IsActive" Title="Status" Format="C" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            @* <PropertyColumn Property="x => x.UpdatedAt" Title="Upadated At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            <PropertyColumn Property="x => x.CreatedAt" Title="Create At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+
+            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
+                             Size="Size.Small"
+                             Variant="Variant.Text">
+                        @(context.Item.IsActive ? "Active" : "Inactive")
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" >Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" >Edit</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+         <PagerContent>
+            <MudDataGridPager T="ExpenseType" />
+          </PagerContent>
+    </MudDataGrid>
+</MudContainer>
+
+    </MudTabPanel>
+
+     <MudTabPanel Text=" Propety Category">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6 py-3">
+    <MudDataGrid T="PropertyCategory"
+                 Items="@PropertyCategory"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
+                 Hover="true"
+                 Striped="true"
+                 Class="elevation-1">
+
+             <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Property Category</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Property Category" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@GoToCreatePropertyCategory">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+         <Columns>
+            <SelectColumn T="PropertyCategory" />
+
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.Name" Title="Account Type" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            @* <PropertyColumn Property="x => x.IsActive" Title="Status" Format="C" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            @* <PropertyColumn Property="x => x.UpdatedAt" Title="Upadated At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            <PropertyColumn Property="x => x.CreatedAt" Title="Create At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+
+          <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+    <CellTemplate>
+        <MudChip T="string"
+                 Color="@(context.Item.Status == "Active" ? Color.Success : Color.Error)"
+                 Size="Size.Small"
+                 Variant="Variant.Text">
+            @context.Item.Status
+        </MudChip>
+    </CellTemplate>
+</TemplateColumn>
+
+ <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" >Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" >Edit</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="PropertyCategory" />
+          </PagerContent>
+    </MudDataGrid>
+</MudContainer>
+
+    </MudTabPanel>
+
+<MudTabPanel Text=" Debt Types">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6 py-3">
+    <MudDataGrid T="DebtType"
+                 Items="@DebtTypes"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
+                 Hover="true"
+                 Striped="true"
+                 
+                 Class="elevation-1"
+                 >
+<ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Debt Types</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Debt Type" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="@GoToCreateDebtType">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+         <Columns>
+            <SelectColumn T="DebtType" />
+
+            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.DebtTypeName" Title="Debt Type" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            @* <PropertyColumn Property="x => x.IsActive" Title="Status" Format="C" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            @* <PropertyColumn Property="x => x.UpdatedAt" Title="Upadated At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            <PropertyColumn Property="x => x.CreatedAt" Title="Create At" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+
+            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
+                             Size="Size.Small"
+                             Variant="Variant.Text">
+                        @(context.Item.IsActive ? "Active" : "Inactive")
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" >Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" >Edit</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+    </Columns>
+         <PagerContent>
+            <MudDataGridPager T="DebtType" />
+          </PagerContent>
+    </MudDataGrid>
+</MudContainer>
+
+    </MudTabPanel>
+</MudTabs>
+</MudContainer>
+
+
+@code{
+    private List<PaymentMethod> PaymentMethods = new();
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
+    //Account Type
+    private List<AccountType> AccountTypes = new();
+    private readonly DialogOptions _closeButton2 = new() { CloseButton = true };
+
+    //Income Type
+
+    private List <IncomeType> IncomeTypes = new();
+    private readonly DialogOptions _closeButton3 = new() { CloseButton = true };
+
+    //Expense Type
+
+    private List <ExpenseType> ExpenseTypes = new();
+    private readonly DialogOptions _closeButton4 = new() { CloseButton = true };
+
+    //Property Category
+    private List <PropertyCategory> PropertyCategory = new(); 
+     private readonly DialogOptions _closeButton5 = new() { CloseButton = true };     
+
+     // Debt Type
+
+     private List<DebtType> DebtTypes = new List<DebtType>();
+     private readonly DialogOptions _closeButton6 = new() { CloseButton = true };   
+
+
+    private async Task LoadPaymentMethod(){
+        PaymentMethods = await PaymentMethodService.GetAllPaymentMethodsAsync();
+        
+    }
+    private async Task LoadAccountType(){
+        AccountTypes = await AccountTypeService.GetAllAccountTypes();
+    }
+
+    private async Task LoadIncomeType(){
+        IncomeTypes = await IncomeTypeService.GetAllIncomeTypesAsync();
+    }
+
+    private async Task LoadExpenseType(){
+        ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();
+    }
+
+    private async Task LoadPropertyCategory(){
+        PropertyCategory = await PropertyCategoryService.GetAllPropertyCategorysAsync();
+    }
+
+    private async Task LoadDebtType(){
+        DebtTypes = await DebtTypeService.GetAllDebtTypesAsync();
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+      await LoadPaymentMethod();
+      await LoadAccountType();  
+      await LoadIncomeType();
+      await LoadExpenseType(); 
+      await LoadPropertyCategory();
+      await LoadDebtType();
+    }
+
+    
+    private async Task GoToCreatePaymentMethod()
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = await DialogService.ShowAsync<CreatePaymentMethodDialog>("Add Payment Method", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadPaymentMethod();
+        }
+        }
+
+        // go to create Account type
+
+        private async Task GoToCreateAccountType()
+        {
+             DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = await DialogService.ShowAsync<AccountTypeDialog>("Add Account Type", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadAccountType();
+        }
+            
+
+    }
+        private async Task GoToCreateIncomeType()
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = await DialogService.ShowAsync<CreateIncomeTypeDialog>("Add Income Type", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadIncomeType();
+        }
+        }
+
+          private async Task GoToCreateExpenseType()
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = await DialogService.ShowAsync<CreateExpenseTypeDialog>("Add Expense Type", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadExpenseType();
+        }
+        }
+
+        private async Task GoToCreatePropertyCategory()
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = await DialogService.ShowAsync<PropertyCategoryDialog>("Add Property Category", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadPropertyCategory();
+        }
+        }
+
+        private async Task GoToCreateDebtType()
+        {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = await DialogService.ShowAsync<CreateDebtTypeDialog>("Add Debt Type", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadDebtType();
+        }
+        }
+    }

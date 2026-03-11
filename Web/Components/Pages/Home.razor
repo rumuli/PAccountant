@@ -1,12 +1,425 @@
-﻿@page "/home"
-
-
-
+﻿
 @page "/home"
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize]
-<PageTitle>Home</PageTitle>
+@rendermode InteractiveServer
+@namespace Web.Pages
+@using Application.DTO
+@using Application.Services.Properties
+@using Application.DTO.Budget
+@using Application.Services.BudgetServices
+@using Application.Services.Incomes
+@using Application.Services.Expenses
+@using Application.Services.Accounts
+@using Application.Services.Debts
+@using Domain.Entities
+@using System.Linq
+@using MudBlazor
+@using Components.Pages
+@using Web.Components.Shared
+@* @attribute [Authorize] *@
 
-<h1>Hello, world!</h1>
+@inject IAccountService AccountService
+@inject IIncomeService IncomeService
+@inject IExpenseService ExpenseService
+@inject IDebtService DebtService
+@inject IBudgetService BudgetService
+@inject IPropertyService PropertyService
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
 
-Welcome to your new app.
+@* <MudText Typo="Typo.h3" GutterBottom="true">Financial Tracker Dashboard</MudText>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mb-4 mr-2" OnClick="OpenAddTransactionDialog">
+    Add Income
+</MudButton>
+<MudButton Variant="Variant.Outlined" Color="Color.Secondary" Class="mb-4" OnClick="NavigateToTransactions">
+    View All Incomes
+</MudButton> *@
+
+<MudGrid Justify="Justify.Center">
+            <MudItem xs="12" sm="4" md="2">
+           <StatCards 
+               Title="Net Worth"
+               TrendIcon="@GetTrendIcon(netWorthTrend)"
+               TrendColor="@GetTrendColor(netWorthTrend)"
+               Value="@netWorth.ToString("N")"
+               ValueColor="Color.Primary"
+               Icon="@Icons.Material.Filled.AccountBalanceWallet" 
+               IconColor="Color.Primary"
+               />
+        </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4" Elevation="2" MaxWidth="MaxWidth.Small">
+            <div class="d-flex align-center">
+                <MudText Typo="Typo.subtitle1" Class="flex-grow-1">Total Assets</MudText>
+                <MudIcon Icon="@GetTrendIcon(assetTrend)" Color="@GetTrendColor(assetTrend)" />
+            </div>
+            <MudText Typo="Typo.h4" Color="Color.Success">@totalAccountBalance.ToString("C")</MudText>
+            @if (assetTrend != 0)
+            {
+                <MudText Typo="Typo.caption" Color="@GetTrendColor(assetTrend)">
+                    @GetTrendArrow(assetTrend) @Math.Abs(assetTrend).ToString("F1")% from last month
+                </MudText>
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4" Elevation="2" MaxWidth="MaxWidth.Small">
+            <div class="d-flex align-center">
+                <MudText Typo="Typo.subtitle1" Class="flex-grow-1">Total Liabilities</MudText>
+                <MudIcon Icon="@GetTrendIcon(liabilityTrend)" Color="@GetTrendColor(liabilityTrend)" />
+            </div>
+            <MudText Typo="Typo.h4" Color="Color.Error">@totalLiabilities.ToString("C")</MudText>
+            @if (liabilityTrend != 0)
+            {
+                <MudText Typo="Typo.caption" Color="@GetTrendColor(liabilityTrend)">
+                    @GetTrendArrow(liabilityTrend) @Math.Abs(liabilityTrend).ToString("F1")% from last month
+                </MudText>
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        @* <MudPaper Class="pa-4" Elevation="2" MaxWidth="MaxWidth.Small">
+            <div class="d-flex align-center">
+                <MudText Typo="Typo.subtitle1" Class="flex-grow-1">Total Accounts</MudText>
+                <MudIcon Icon="@GetTrendIcon(accountTrend)" Color="@GetTrendColor(accountTrend)" />
+            </div>
+            <MudText Typo="Typo.h4" Color="Color.Primary">@totalAccounts</MudText>
+            @if (accountTrend != 0)
+            {
+                <MudText Typo="Typo.caption" Color="@GetTrendColor(accountTrend)">
+                    @GetTrendArrow(accountTrend) @Math.Abs(accountTrend).ToString("F1")% from last month
+                </MudText>
+            }
+        </MudPaper> *@
+    </MudItem>
+</MudGrid>
+<MudGrid Class="mt-4">
+    <!-- Account Balances Chart -->
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4" Elevation="2">
+            <MudText Typo="Typo.h5" GutterBottom="true">Account Balances</MudText>
+            @if (accounts.Any())
+            {
+                <MudChart ChartType="@ChartType.Donut"
+                          Data="@accountSeries.Data"
+                          Labels="@accountLabels"
+                          Colors="@accountColors"
+                          Height="250px" />
+            }
+            else
+            {
+                <MudText>No accounts yet. Showing sample data:</MudText>
+                <MudChart ChartType="@ChartType.Donut"
+                          Data="@accountSeries.Data"
+                          Labels="@accountLabels"
+                          Colors="@accountColors"
+                          Height="250px" />
+            }
+        </MudPaper>
+    </MudItem>
+
+    <!-- Income vs Expenses Chart -->
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4" Elevation="2">
+            <MudText Typo="Typo.h5" GutterBottom="true">Income vs Expenses</MudText>
+            @if (recentTransactions.Any())
+            {
+                <MudChart ChartType="@ChartType.Bar"
+                          Data="@(new List<double[]> { incomeSeries.Data, expenseSeries.Data })"
+                          Labels="@incomeExpenseLabels"
+                          Colors="@incomeExpenseColors"
+                          Height="250px" />
+            }
+            else
+            {
+                <MudText>No transactions yet. Showing sample data:</MudText>
+                <MudChart ChartType="@ChartType.Bar"
+                          Data="@(new List<double[]> { incomeSeries.Data, expenseSeries.Data })"
+                          Labels="@incomeExpenseLabels"
+                          Colors="@incomeExpenseColors"
+                          Height="250px" />
+            }
+        </MudPaper>
+    </MudItem>
+
+    <!-- Budget Status Chart -->
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4" Elevation="2">
+            <MudText Typo="Typo.h5" GutterBottom="true">Budgets by Status</MudText>
+            @if (budgetStatusCounts.Any())
+            {
+                <MudChart ChartType="@ChartType.Pie"
+                          Data="@budgetSeries.Data"
+                          Labels="@budgetLabels"
+                          Colors="@budgetColors"
+                          Height="250px" />
+            }
+            else
+            {
+                <MudText>No budgets set. Showing sample data:</MudText>
+                <MudChart ChartType="@ChartType.Pie"
+                          Data="@budgetSeries.Data"
+                          Labels="@budgetLabels"
+                          Colors="@budgetColors"
+                          Height="250px" />
+            }
+        </MudPaper>
+    </MudItem>
+
+    <!-- Recent Transactions -->
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4" Elevation="2">
+            <MudText Typo="Typo.h5" GutterBottom="true">Recent Transactions</MudText>
+            @if (recentTransactions.Any())
+            {
+                <MudTable Items="@recentTransactions" Hover="true" Dense="true">
+                    <HeaderContent>
+                        <MudTh>Date</MudTh>
+                        <MudTh>Type</MudTh>
+                        <MudTh>Amount</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>@context.Date.ToLocalTime().ToString("d")</MudTd>
+                        <MudTd>@context.Kind</MudTd>
+                        <MudTd>@context.Amount.ToString("C")</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            }
+            else
+            {
+                <MudText>No transactions yet.</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudPaper Class="pa-4 mt-4" Elevation="2" MaxWidth="MaxWidth.Small">
+    <MudText Typo="Typo.h5" GutterBottom="true">All Accounts</MudText>
+    @if (accounts.Any())
+    {
+        <MudGrid>
+            @foreach (var account in accounts)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard Elevation="2">
+                        <MudCardContent>
+                            <MudText Typo="Typo.h6">@account.AccountNumber</MudText>
+                            <MudText Typo="Typo.h5" Color="Color.Primary">@account.Balance.ToString("C")</MudText>  
+                            <MudText Typo="Typo.caption">@account.Provider</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else
+    {
+        <MudText>No accounts available.</MudText>
+    }
+</MudPaper>
+
+<MudPaper Class="pa-4 mt-4" Elevation="2" MaxWidth="MaxWidth.Small">
+    <MudText Typo="Typo.h5" GutterBottom="true">Budget Summary</MudText>
+    @if (budgets.Any())
+    {
+        <MudGrid>
+            @foreach (var budget in budgets)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard Elevation="2">
+                        <MudCardContent>
+                            <MudText Typo="Typo.h6">@budget.Name</MudText>
+                            <MudText Typo="Typo.caption">@budget.Status</MudText>
+                            <MudText Typo="Typo.caption">@budget.StartingAt.ToString("d") - @budget.EndingAt.ToString("d")</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else
+    {
+        <MudText>No budgets set.</MudText>
+    }
+</MudPaper>
+
+@code {
+    private List<Account> accounts = new();
+    private List<Income> incomes = new();
+    private List<Expense> expenses = new();
+    private List<Debt> debts = new();
+    private List<GetBudgetDTO> budgets = new();
+    private List<CountStatusBudgetDTO> budgetStatusCounts = new();
+    private List<TransactionItem> recentTransactions = new();
+    private List<Property> properties = new List<Property>();
+
+    // Chart data
+    private string[] accountLabels = Array.Empty<string>();
+    private ChartSeries accountSeries = new();
+    private string[] accountColors = { "#4CAF50", "#2196F3", "#FFC107", "#FF5722", "#9C27B0", "#00BCD4" };
+// 
+    private string[] incomeExpenseLabels = { "Income", "Expenses" };
+    private ChartSeries incomeSeries = new();
+    private ChartSeries expenseSeries = new();
+    private string[] incomeExpenseColors = { "#4CAF50", "#F44336" };
+
+    private string[] budgetLabels = Array.Empty<string>();
+    private ChartSeries budgetSeries = new();
+    private string[] budgetColors = { "#4CAF50", "#2196F3", "#FFC107", "#FF5722", "#9C27B0", "#00BCD4", "#E91E63", "#795548" };
+
+    // summary fields
+    private decimal totalAccountBalance = 0;
+    private decimal totalLiabilities = 0;
+    private decimal totalproertyvalue=0;
+    private decimal netWorth = 0;
+    private int totalAccounts = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+        properties = (await PropertyService.GetAllPropertysAsync()) ?? new List<Property>();
+        accounts = (await AccountService.GetAllAccountsAsync()) ?? new List<Account>();
+        incomes = (await IncomeService.GetAllIncomesAsync()) ?? new List<Income>();
+        expenses = (await ExpenseService.GetAllExpensesAsync()) ?? new List<Expense>();
+        debts = (await DebtService.GetAllDebtsAsync()) ?? new List<Debt>();
+        budgets = (await BudgetService.GetBudgetsAsync()) ?? new List<GetBudgetDTO>();
+        budgetStatusCounts = (await BudgetService.CountBudgetByStatusAsync()) ?? new List<CountStatusBudgetDTO>();
+
+        // Debug output
+        Console.WriteLine($"Loaded {accounts.Count} accounts, {incomes.Count} incomes, {expenses.Count} expenses, {debts.Count} debts, {budgets.Count} budgets, {budgetStatusCounts.Count} budget status counts");
+
+        ComputeSummaries();
+        PrepareChartData();
+        PrepareTransactions();
+    }
+
+    private void ComputeSummaries()
+    {
+        totalAccountBalance = accounts.Sum(a => a.Balance);
+        totalproertyvalue= properties.Sum(a => a.Value);
+        totalLiabilities = debts.Sum(d => d.Amount);
+        netWorth = (totalAccountBalance + totalproertyvalue) - totalLiabilities;
+        totalAccounts = accounts.Count;
+
+        // trends are not calculated yet; keep zero for now
+        netWorthTrend = assetTrend = liabilityTrend = accountTrend = 0;
+    }
+
+    private void PrepareChartData()
+    {
+        // Account Balances Chart - Donut chart with account balances
+        if (accounts.Any())
+        {
+            accountLabels = accounts.Select(a => a.AccountNumber).ToArray();
+            var accountValues = accounts.Select(a => Math.Max(0, (double)a.Balance)).ToArray();
+            accountSeries = new ChartSeries { Name = "Balances", Data = accountValues };
+            Console.WriteLine($"Account chart data: Labels={string.Join(",", accountLabels)}, Data={string.Join(",", accountValues)}");
+        }
+        else
+        {
+            // Sample data for testing
+            accountLabels = new string[] { "Sample Account 1", "Sample Account 2" };
+            accountSeries = new ChartSeries { Name = "Balances", Data = new double[] { 1000, 2000 } };
+            Console.WriteLine("Using sample account data for chart");
+        }
+
+        // Budget Status Chart - Pie chart with budget status counts
+        if (budgetStatusCounts.Any())
+        {
+            budgetLabels = budgetStatusCounts.Select(x => x.Status.ToString()).ToArray();
+            var budgetValues = budgetStatusCounts.Select(x => Math.Max(0, (double)x.Counts)).ToArray();
+            budgetSeries = new ChartSeries { Name = "Budgets", Data = budgetValues };
+            Console.WriteLine($"Budget chart data: Labels={string.Join(",", budgetLabels)}, Data={string.Join(",", budgetValues)}");
+        }
+        else
+        {
+            // Sample data for testing
+            budgetLabels = new string[] { "Planned", "Running", "Executed" };
+            budgetSeries = new ChartSeries { Name = "Budgets", Data = new double[] { 5, 3, 2 } };
+            Console.WriteLine("Using sample budget data for chart");
+        }
+
+        // Income vs Expense Chart - Bar chart with totals
+        PrepareTransactions();
+    }
+
+    private void PrepareTransactions()
+    {
+        recentTransactions = incomes.Select(i => new TransactionItem { Date = i.Date, Kind = "Income", Amount = i.AmountPaid })
+            .Concat(expenses.Select(e => new TransactionItem { Date = e.Date ?? DateTime.Now, Kind = "Expense", Amount = e.Amount }))
+            .OrderByDescending(t => t.Date)
+            .Take(5)
+            .ToList();
+
+        decimal totalIncome = incomes.Sum(i => i.AmountPaid);
+        decimal totalExpense = expenses.Sum(e => e.Amount);
+
+        if (totalIncome == 0 && totalExpense == 0)
+        {
+            // Sample data for testing
+            incomeSeries = new ChartSeries { Name = "Income", Data = new double[] { 5000 } };
+            expenseSeries = new ChartSeries { Name = "Expense", Data = new double[] { 3000 } };
+            Console.WriteLine("Using sample income/expense data for chart");
+        }
+        else
+        {
+            incomeSeries = new ChartSeries { Name = "Income", Data = new double[] { Math.Max(0, (double)totalIncome) } };
+            expenseSeries = new ChartSeries { Name = "Expense", Data = new double[] { Math.Max(0, (double)totalExpense) } };
+        }
+
+        Console.WriteLine($"Income vs Expense chart data: Income={incomeSeries.Data[0]}, Expense={expenseSeries.Data[0]}");
+        Console.WriteLine($"Total income: {totalIncome}, Total expense: {totalExpense}");
+    }
+
+    private async Task OpenAddTransactionDialog()
+    {
+        var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateIncomeDialog>("Add Income", new DialogParameters
+        {
+            { "OnIncomeCreated", EventCallback.Factory.Create(this, LoadDataAsync) }
+        }, option);
+    }
+
+    private void NavigateToTransactions()
+    {
+        NavigationManager.NavigateTo("/incomes");
+    }
+
+    // Trend variables
+    private double netWorthTrend = 0;
+    private double assetTrend = 0;
+    private double liabilityTrend = 0;
+    private double accountTrend = 0;
+
+    private string GetTrendIcon(double trend)
+    {
+        if (trend > 0) return Icons.Material.Filled.TrendingUp;
+        if (trend < 0) return Icons.Material.Filled.TrendingDown;
+        return Icons.Material.Filled.TrendingFlat;
+    }
+
+    private Color GetTrendColor(double trend)
+    {
+        if (trend > 0) return Color.Success;
+        if (trend < 0) return Color.Error;
+        return Color.Default;
+    }
+
+    private string GetTrendArrow(double trend)
+    {
+        if (trend > 0) return "↑";
+        if (trend < 0) return "↓";
+        return "";
+    }
+
+    private class TransactionItem
+    {
+        public DateTime Date { get; set; }
+        public string Kind { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
+    }
+}

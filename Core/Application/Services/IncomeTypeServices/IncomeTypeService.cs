@@ -2,7 +2,7 @@ using Domain.Entities;
 using Application.DTO;
 using Application.Interfaces;
 
-namespace Application.Services.IncomeTypeServices
+namespace Application.Services.IncomeTypes
 {
     public class IncomeTypeService : IIncomeTypeService
     {
@@ -23,10 +23,11 @@ namespace Application.Services.IncomeTypeServices
             return await _incomeType.GetAllIncomeTypesAsync();
         }
 
-        public async Task CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO)
+        public async Task<int> CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO)
         {
-            await _incomeType.CreateIncomeTypeAsync(incomeTypeDTO);
+            return await _incomeType.CreateIncomeTypeAsync(incomeTypeDTO);
         }
     }
-}
 
+   
+}

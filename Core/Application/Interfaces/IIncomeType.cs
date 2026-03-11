@@ -7,7 +7,6 @@ namespace Application.Interfaces
     {
         Task<List<IncomeType>> GetAllIncomeTypesAsync();
         Task<IncomeType?> GetIncomeTypeByIdAsync(int id);
-        Task CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO);
+        Task<int> CreateIncomeTypeAsync(CreateIncomeTypeDTO incomeTypeDTO);
     }
 }
-

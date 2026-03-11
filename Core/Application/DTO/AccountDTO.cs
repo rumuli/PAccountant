@@ -1,3 +1,6 @@
+
+using Domain.ValueObjects;
+
 namespace Application.DTO
 {
     public class AccountCreateDTO
@@ -5,15 +8,15 @@ namespace Application.DTO
         public int AccountTypeId {get;set;}
         public string AccountNumber {get;set;}
         public string Provider {get;set;}
-        public double InitialBalance {get;set;}
-        public double Balance
+        public decimal InitialBalance {get;set;}
+        public decimal Balance
         {
             get
             {
                 return InitialBalance;
             }
         }
-        public string  Status{get;set;}
+        public AccountStatus  Status{get;set;}
         public string CreatedBy {get;set;}
         public DateTime CreatedAt { get; set; } 
         
@@ -22,8 +25,8 @@ namespace Application.DTO
     {
         public string AccountNumber {get;set;}
         public string Provider {get;set;}
-        public double Balance {get;set;}
-        public string  Status{get;set;}
+        public decimal Balance {get;set;}
+        public AccountStatus  Status{get;set;}
          public string UpdateBy{get;set;}
     }
 }

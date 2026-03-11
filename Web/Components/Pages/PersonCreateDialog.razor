@@ -1,7 +1,7 @@
 
 @using  Application.DTO
 @using System.ComponentModel.DataAnnotations
-@using Application.Interface
+@using Application.Interfaces
 @using Domain.Entities
 @using Application.Services.Persons
 @using MudBlazor
@@ -16,64 +16,175 @@
 @inject IDialogService DialogService
 
 
-<MudDialog>
-<DialogContent>
-    <EditForm Model="Model" OnValidSubmit="onValidSubmit">
-        <DataAnnotationsValidator />
-        <MudGrid>
-            <MudItem xs="12">
-                <MudTextField Label="Name" @bind-Value="Model.FirstName" For="@(() => Model.FirstName)" />
-            </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="LastName" @bind-Value="Model.LastName" For="@(() => Model.LastName)" />
-            </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="Sex" @bind-Value="Model.Sex" For="@(() => Model.Sex)" />
-            </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="Status" @bind-Value="Model.Status" For="@(() => Model.Status)" />
-            </MudItem>
-            <MudDatePicker>
-                <MudTextField Label="DateOfBirth" @bind-Value="Model.DateOfBirth" For="@(() => Model.DateOfBirth)" />
-            </MudDatePicker>
-           <MudItem xs="12">
-                <MudTextField Label="phoneNumber" @bind-Value="Model.phoneNumber" For="@(() => Model.phoneNumber)" />
-            </MudItem >
-             <MudItem xs="12">
-                <MudTextField Label="Email" @bind-Value="Model.Email" For="@(() => Model.Email)" />
-            </MudItem>
-           <MudItem xs="12">
-                <MudTextField Label="Country" @bind-Value="Model.Country" For="@(() => Model.Country)" />
-            </MudItem>
-           <MudItem xs="12">
-                <MudTextField Label="City" @bind-Value="Model.City" For="@(() => Model.City)" />
-            </MudItem>
-           <MudItem xs="12">
-                <MudTextField Label="Street" @bind-Value="Model.Street" For="@(() => Model.Street)" />
-            </MudItem>
-            
-            <MudItem xs="12" class="d-flex justify-content-end">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary"  ButtonType="ButtonType.Submit" OnClick="onValidSubmit">Add persons</MudButton>
-                <MudButton Href="/persons" Variant="Variant.Filled" Color="Color.Error">Cancel</MudButton>
+<MudDialog Style=" overflow:hidden;">
 
-            </MudItem>
-        </MudGrid>
+    <DialogContent>
 
-    </EditForm>
-</DialogContent>
+        <!-- ══════════ HEADER ══════════ -->
+        <MudPaper Elevation="0"
+                  Style="background: linear-gradient(135deg, #023d28 0%, #4bf5ba 100%);
+                        padding:14px 18px; margin-bottom:16px;">
+
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+
+                <MudIcon Icon="@Icons.Material.Filled.PersonAdd"
+                         Style="color:white; font-size:1.0rem;" />
+
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle1"
+                             Style="color:white; font-weight:700;">
+                        Add Person
+                    </MudText>
+                    <MudText Typo="Typo.caption"
+                             Style="color:rgba(255,255,255,0.80);">
+                        Enter personal information below
+                    </MudText>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+
+
+        <!-- ══════════ FORM ══════════ -->
+        <EditForm Model="Model" OnValidSubmit="onValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <MudStack Spacing="2">
+                <!-- SECTION : BASIC INFO -->
+                @* <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600;
+                         letter-spacing:.08em; text-transform:uppercase;">
+                    Basic Information *@
+                @* </MudText> *@
+
+               <MudGrid Spacing="1" Class="align-items-center">
+
+                    <MudItem xs="6">
+                        <MudTextField Label="First Name"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      @bind-Value="Model.FirstName"
+                                      For="@(() => Model.FirstName)" />
+                    </MudItem>
+
+                    <MudItem xs="6">
+                        <MudTextField Label="Last Name"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      @bind-Value="Model.LastName"
+                                      For="@(() => Model.LastName)" />
+                    </MudItem>
+
+                    <MudItem xs="6">
+                        <MudTextField Label="Sex"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      @bind-Value="Model.Sex"
+                                      For="@(() => Model.Sex)" />
+                    </MudItem>
+
+                    <MudItem xs="6">
+                      <MudDatePicker Label="Date Of Birth"
+                       Date="Model.DateOfBirth"
+                      DateChanged="@(d => Model.DateOfBirth = d ?? DateTime.Now)"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Dense" />
+                    </MudItem>
+
+
+                <!-- SECTION : CONTACT -->
+              <MudItem xs="6">
+                <MudTextField Label="Phone Number"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.phoneNumber"
+                              For="@(() => Model.phoneNumber)"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Phone"
+                              AdornmentColor="Color.Primary" />
+                              </MudItem>
+         <MudItem xs="6">
+                <MudTextField Label="Email"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.Email"
+                              For="@(() => Model.Email)"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Email"
+                              AdornmentColor="Color.Primary" />
+               </MudItem>
+               
+
+                    <MudItem xs="6">
+                        <MudTextField Label="Country"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      @bind-Value="Model.Country"
+                                      For="@(() => Model.Country)" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Label="City"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      @bind-Value="Model.City"
+                                      For="@(() => Model.City)" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField Label="Street"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      @bind-Value="Model.Street"
+                                      For="@(() => Model.Street)" />
+                    </MudItem>
+                </MudGrid>
+            </MudStack>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+
+        <MudStack Row="true" Spacing="2" Style="width:100%;" Class="px-2 pb-2">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.Save"
+                       FullWidth="true"
+                       ButtonType="ButtonType.Submit"
+                       OnClick="onValidSubmit"
+                       Style="height: 40px; font-weight: bold; margin-top:5px; margin-bottom:5px; flex:1; border-radius:8px;">
+
+                Add Person
+            </MudButton>
+
+            @* <MudButton Href="/persons"
+                       Variant="Variant.Outlined"
+                       Color="Color.Error"
+                       Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.Cancel"
+                       Style="flex:1; border-radius:8px;">
+
+                Cancel
+
+            </MudButton> *@
+
+        </MudStack>
+    </DialogActions>
+
 </MudDialog>
 
 @code{
-    [CascadingParameter] IMudDialogInstance DialogInstance { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+    private void Cancel() => MudDialog.Cancel();
+
     private PersonCreateDTO Model {get;set;} = new ();
 
-     [Parameter]
-    public EventCallback OnPersonCreated { get; set; }
+    @* [Parameter]
+    public EventCallback OnPersonCreated { get; set; } *@
     private async Task onValidSubmit()
     {
         PersonService.CreatePerson(Model);
         Snackbar.Add("Owner created successfully!", Severity.Success);
-        DialogInstance.Close();
+
+        MudDialog.Close(DialogResult.Ok(true));
 
         PersonService.GetAllPersons();
     }
@@ -83,5 +194,4 @@
 
       
     
-
 
