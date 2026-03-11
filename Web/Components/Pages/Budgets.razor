@@ -25,7 +25,7 @@
         <MudItem xs="12" sm="4" md="2">
            <StatCards 
                Title="Total Budgets"
-               Value="@TotalBudgets.ToString()"
+               Value="@TotalBudgets.ToString("N")"
                ValueColor="Color.Primary"
                Icon="@Icons.Material.Filled.AccountBalanceWallet" 
                IconColor="Color.Primary"
@@ -35,7 +35,7 @@
             {
                 <MudItem xs="12" sm="4" md="2">
                     <StatCards Title="@($"{statusCount.Status} Budgets")"
-                               Value="@statusCount.Counts.ToString()"
+                               Value="@statusCount.Counts.ToString("N")"
                                ValueColor="Color.Primary"
                                Icon="@GetStatusIcon(statusCount.Status)"
                                IconColor="@GetStatusColor(statusCount.Status)" />
@@ -44,7 +44,7 @@
             <MudItem xs="12" sm="4" md="2">
                 <StatCards
                 Title="Total Planned Revenue"
-                Value="@TotalPlannedRevenue.ToString()"
+                Value="@TotalPlannedRevenue.ToString("N")"
                 ValueColor="Color.Primary"
                 Icon="@Icons.Material.Filled.AccountBalanceWallet"
                 IconColor="Color.Primary"
@@ -53,7 +53,7 @@
             <MudItem xs="12" sm="4" md="2">
                 <StatCards
                 Title="Total Planned Expense"
-                Value="@TotalPlannedExpenses.ToString()"
+                Value="@TotalPlannedExpenses.ToString("N")"
                 ValueColor="Color.Primary"
                 Icon="@Icons.Material.Filled.AccountBalanceWallet"
                 IconColor="Color.Primary"

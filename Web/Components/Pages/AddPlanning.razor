@@ -89,7 +89,7 @@
                 <RowTemplate>
                     <MudTd DataLabel="ID"><MudText Typo="Typo.caption">#@context.Id</MudText></MudTd>
                     <MudTd DataLabel="Income Type"><MudText Typo="Typo.caption">@context.IncomeType.IncomeTypeName</MudText></MudTd>
-                    <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Amount</MudText></MudTd>
+                    <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Amount.ToString("N")</MudText></MudTd>
                     @* <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Budget.Id</MudText></MudTd> *@
 
 
@@ -101,7 +101,7 @@
                     <MudTd Style="font-weight:bold;">Total</MudTd>
                     <MudTd></MudTd>
                     <MudTd Style="font-weight:bold;">
-                        @_incomeplanning.Sum(x=>x.Amount)
+                        @_incomeplanning.Sum(x=>x.Amount).ToString("N")
                     </MudTd>
                 </FooterContent>
             </MudTable>
@@ -156,7 +156,7 @@
                 <RowTemplate>
                     <MudTd DataLabel="ID"><MudText Typo="Typo.caption">#@context.Id</MudText></MudTd>
                     <MudTd DataLabel="Income Type"><MudText Typo="Typo.caption">@context.ExpenseType.ExpenseTypeName</MudText></MudTd>
-                    <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Amount</MudText></MudTd>
+                    <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Amount.ToString("N")</MudText></MudTd>
                     @* <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Budget.Id</MudText></MudTd> *@
 
                     @* <MudTd DataLabel="Status">

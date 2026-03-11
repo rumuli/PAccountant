@@ -78,7 +78,7 @@
 
                                             <tr>
                                                 <td style="white-space: nowrap;">@item.IncomeType?.IncomeTypeName</td>
-                                                <td style="white-space: nowrap; color: #757575;">$@item.Amount.ToString("N")</td>
+                                                <td style="white-space: nowrap; color: #757575;">@item.Amount.ToString("N")</td>
                                                 <td style="white-space: nowrap;"><b>@actualAmount.ToString("N")</b></td>
                                                 <td style="white-space: nowrap;">
                                                     <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
@@ -155,8 +155,8 @@
 
                                             <tr>
                                                 <td style="white-space: nowrap;">@item.ExpenseType?.ExpenseTypeName</td>
-                                                <td style="white-space: nowrap; color: #757575;">$@item.Amount.ToString("N0")</td>
-                                                <td style="white-space: nowrap;"><b>$@actualAmount.ToString("N0")</b></td>
+                                                <td style="white-space: nowrap; color: #757575;">@item.Amount.ToString("N")</td>
+                                                <td style="white-space: nowrap;"><b>@actualAmount.ToString("N")</b></td>
                                                 <td style="white-space: nowrap;">
                                                     <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
                                                         <MudIcon Icon="@(isWarning ? Icons.Material.Filled.ErrorOutline : Icons.Material.Filled.CheckCircleOutline)" 
