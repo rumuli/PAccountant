@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 // using Domain.ValueObjects;
 
+using Domain.Entities;
+
+
 namespace Infrastructure.Identity
 {
     public class IdentityRepository : IIdentity
@@ -67,6 +70,25 @@ namespace Infrastructure.Identity
                     Console.WriteLine($"[RegisterUser] User already exists: {dto.Email}");
                     throw new InvalidOperationException($"A user with email '{dto.Email}' already exists.");
                 }
+                var _person = new Person
+                    {
+                        FirstName = dto.FirstName,
+                        LastName = dto.LastName,
+                        Sex = dto.Sex,
+                        Status = "Active",
+                        DateOfBirth = DateTime.Now,
+                        phoneNumber = dto.PhoneNumber,
+                        Email = dto.Email,
+                        Country = dto.Country,
+                        City = dto.City,
+                        Street = dto.Street,
+                        CreatedBy=dto.Email, 
+                        UpdateBy=dto.Email,
+                                
+
+                    };
+                    _dbContext.Persons.Add(_person);
+                    _dbContext.SaveChanges();
 
                 var newUser = new User
                 {
@@ -74,10 +96,12 @@ namespace Infrastructure.Identity
                     LastName = dto.LastName,
                     Email = dto.Email,
                     UserName = dto.Email,
+                     PersonId = _person.Id,
                     PhoneNumber = dto.PhoneNumber,
                     EmailConfirmed = true, // Set to true for immediate access
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
+                    
                 };
 
                 Console.WriteLine($"[RegisterUser] Creating user with UserManager...");

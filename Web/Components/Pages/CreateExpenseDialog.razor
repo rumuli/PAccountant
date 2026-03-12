@@ -1,3 +1,4 @@
+
 @using Application.DTO
 @using Application.Services.Accounts
 @using Application.Services.Expenses
@@ -8,6 +9,7 @@
 
 @inject IExpenseService ExpenseService
 @inject IExpenseTypeService ExpenseTypeService
+@inject IAccountService AccountService
 @inject IAccountService AccountService
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
@@ -35,6 +37,8 @@
                     </MudText>
                 </MudStack>
             </MudStack>
+            <MudIcon Icon="@Icons.Material.Filled.TrendingDown" 
+                     Style="position:absolute; right:-10px; bottom:-10px; font-size:6rem; color:rgba(255,255,255,0.1);" />
         </MudPaper>
 
         <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
@@ -154,6 +158,9 @@
                        FullWidth="true"
                        Style="background-color: #023d28; color: white; border-radius: 8px; padding: 12px 0; font-weight: 700;">
                 SAVE EXPENSE
+                       FullWidth="true"
+                       Style="background-color: #023d28; color: white; border-radius: 8px; padding: 12px 0; font-weight: 700;">
+                SAVE EXPENSE
             </MudButton>
         </MudStack>
     </DialogActions>
@@ -217,6 +224,11 @@
     private async Task GoToCreateExpenseType()
     {
         var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateExpenseTypeDialog>("Create Expense Type", new DialogParameters {
+            { "OnExpenseTypeCreated", EventCallback.Factory.Create(this, async () => {
+                ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();
+                StateHasChanged();
+            })}
         await DialogService.ShowAsync<CreateExpenseTypeDialog>("Create Expense Type", new DialogParameters {
             { "OnExpenseTypeCreated", EventCallback.Factory.Create(this, async () => {
                 ExpenseTypes = await ExpenseTypeService.GetAllExpenseTypesAsync();

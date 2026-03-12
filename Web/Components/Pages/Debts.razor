@@ -45,6 +45,11 @@
                  Filterable="true"
                  Hideable="true"
                  Dense="true"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Hideable="true"
+                 Dense="true"
                  Hover="true"
                  Striped="true"
                  Bordered="true"
@@ -53,6 +58,7 @@
         <ToolBarContent>
             <MudText Typo="Typo.h5" Color="Color.Primary">Debts</MudText>
             <MudSpacer />
+            <MudMenu Label="Add Debt" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
             <MudMenu Label="Add Debt" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
                 <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateDialog">Single</MudMenuItem>
                 <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
@@ -70,9 +76,14 @@
             <PropertyColumn Property="x => x.DateIncurred" Title="End Date" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
 
             <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+            <TemplateColumn Title="Status" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
                 <CellTemplate>
                     <MudChip T="string"
                              Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
+                             Size="Size.Small"
+                             Variant="Variant.Text">
+                        @(context.Item.IsActive ? "Active" : "Inactive")
+                    </MudChip>
                              Size="Size.Small"
                              Variant="Variant.Text">
                         @(context.Item.IsActive ? "Active" : "Inactive")
@@ -83,7 +94,12 @@
             <PropertyColumn Property="x => x.CreatedAt" Title="Created Date" Format="MM/dd/yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
 
             <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
+            <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
                 <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => Snackbar.Add($"Viewing {context.Item.Id}", Severity.Info))">Details</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Snackbar.Add($"Editing {context.Item.Id}", Severity.Info))">Edit</MudMenuItem>
+                    </MudMenu>
                     <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
                         <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => Snackbar.Add($"Viewing {context.Item.Id}", Severity.Info))">Details</MudMenuItem>
                         <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Snackbar.Add($"Editing {context.Item.Id}", Severity.Info))">Edit</MudMenuItem>
@@ -91,6 +107,10 @@
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="Debt" />
+        </PagerContent>
 
         <PagerContent>
             <MudDataGridPager T="Debt" />

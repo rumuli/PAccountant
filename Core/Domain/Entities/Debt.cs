@@ -22,4 +22,3 @@ namespace Domain.Entities
         public int? UpdatedBy { get; set; }
     }
 }
-

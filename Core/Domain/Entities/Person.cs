@@ -1,3 +1,5 @@
+
+
 namespace Domain.Entities
 {
     public class Person
@@ -16,6 +18,9 @@ namespace Domain.Entities
         public string CreatedBy {get;set;}
         public DateTime CreatedAt {get;set;}
         public string UpdateBy {get;set;}
+        public List<Account> Accounts {get;set;} 
+       
+
 
 
     }

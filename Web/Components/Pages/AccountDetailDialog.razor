@@ -1,4 +1,6 @@
 @using Domain.Entities
+@using Domain.ValueObjects
+
 @using Application.Services.Accounts
 @using System.Globalization
 
@@ -34,9 +36,9 @@
                 <MudItem xs="12">
                     <MudTextField Label="Balance" Value="@_account.Balance.ToString("C")" ReadOnly Variant="Variant.Outlined" />
                 </MudItem>
-                <MudItem xs="12">
+                @* <MudItem xs="12">
                     <MudChip T="string" Color="@GetStatusColor(_account.Status)">@_account.Status</MudChip>
-                </MudItem>
+                </MudItem> *@
             </MudGrid>
         }
     </DialogContent>
@@ -60,12 +62,16 @@
 
     private void Close() => MudDialog.Close();
 
-    private Color GetStatusColor(string status) => status?.ToLower() switch
+        private Color GetStatusColor(AccountStatus status)
     {
-        "active" => Color.Success,
-        "inactive" => Color.Error,
-        _ => Color.Default
-    };
+        return status.ToString() switch
+        {
+            "Dormant" => Color. Warning,
+            "Active" => Color.Success,
+            "Closed" => Color.Error,
+            _ => Color.Default
+        };
+    }
      private void BackToAccounts()
     {
         NavigationManager.NavigateTo("/Accounts");

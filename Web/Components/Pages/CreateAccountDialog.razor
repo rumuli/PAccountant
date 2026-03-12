@@ -3,6 +3,7 @@
 @using Application.Interfaces
 @using Application.Services.Accounts
 @using Application.Services.AccountTypes
+@using Domain.ValueObjects
 
 @using Domain.Entities
 @using MudBlazor
@@ -18,66 +19,132 @@
 @inject IDialogService DialogService
 
 
-<MudDialog>
-<DialogContent>
-    @* <EditForm Model="Model" OnValidSubmit="onValidSubmit"> *@
-        <EditForm Model="Model" OnValidSubmit="onValidSubmit" FormName="CreateAccountForm">
-        <DataAnnotationsValidator />
-        <MudGrid>
-             <MudStack Row="true" Spacing="2" Justify="Justify.Center">
-<MudItem xs="12">
-   
-    <MudSelect T="int"
-            Label="Account Type" 
-                
-               Placeholder="--Select Account Type--"
-               @bind-Value="Model.AccountTypeId" 
-               Variant="Variant.Outlined"
-               Style="width: 550px; 
+<MudDialog Style="overflow:hidden;">
 
-               AnchorOrigin="Origin.BottomCenter">
-               <MudSelectItem Value="0">--Select Account Type--</MudSelectItem>
-        @if (acctype != null)
-        {
-            foreach (var type in acctype)
-            {
-                <MudSelectItem T="int" Value="@type.Id">@type.Name</MudSelectItem>
-            }
-        }
-    </MudSelect>
-</MudItem>
-            <MudIconButton
-            Icon="@Icons.Material.Filled.Add"
-            Color="Color.Secondary"
-            OnClick="openAccountType"/>
+    <DialogContent>
+
+        <!-- ══════════ HEADER BANNER ══════════ -->
+        <MudPaper Elevation="0"
+                  Style="background: linear-gradient(135deg, #023d28 0%, #4bf5ba 100%);
+                         padding:14px 18px; margin-bottom:16px;">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+
+                <MudIcon Icon="@Icons.Material.Filled.AccountBalance"
+                         Style="color:white; font-size:1.6rem;" />
+
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle1"
+                             Style="color:white; font-weight:700; line-height:1.2;">
+                        Create Account
+                    </MudText>
+
+                    <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.80);">
+                        Fill the form below to create a new account
+                    </MudText>
+                </MudStack>
+
             </MudStack>
-          
-            <MudItem xs="12">
-                
-                <MudTextField Label="AccountNumber" @bind-Value="Model.AccountNumber" For="@(() => Model.AccountNumber)" />
-            </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="Provider" @bind-Value="Model.Provider" For="@(() => Model.Provider)" />
-            </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="Balance" @bind-Value="Model.InitialBalance" For="@(() => Model.InitialBalance)" />
-            </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="Status" @bind-Value="Model.Status" For="@(() => Model.Status)" />
-            </MudItem>
-            @* <MudItem xs="12">
-                <MudTextField Label="CreatedBy" @bind-Value="Model.CreatedBy" For="@(() => Model.CreatedBy)" />
-            </MudItem> *@
-            
-            <MudItem xs="12" class="d-flex justify-content-end">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Add Account</MudButton>
-                <MudButton Href="/Accounts" Variant="Variant.Filled" Color="Color.Error">Cancel</MudButton>
+        </MudPaper>
 
-            </MudItem>
-        </MudGrid>
 
-    </EditForm>
-</DialogContent>
+        <!-- ══════════ FORM ══════════ -->
+        <EditForm Model="Model" OnValidSubmit="onValidSubmit" FormName="CreateAccountForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            @* <MudStack Spacing="2"> *@
+
+                <!-- Section -->
+                @* <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600; letter-spacing:.08em;
+                                text-transform:uppercase;">
+                    Account Type
+                </MudText> *@
+
+                <MudGrid Spacing="1" Class="align-items-center">
+
+                    <MudItem xs="12">
+
+                        <MudSelect T="int"
+                                   Label="Account Type"
+                                   Placeholder="--Select Account Type--"
+                                   @bind-Value="Model.AccountTypeId"
+                                   Variant="Variant.Outlined"
+                                   Dense="true"
+                                   Margin="Margin.Dense"
+                                   AdornmentIcon="@Icons.Material.Filled.Category"
+                                   AdornmentColor="Color.Primary">
+
+                            <MudSelectItem Value="0">--Select Account Type--</MudSelectItem>
+
+                            @if (acctype != null)
+                            {
+                                foreach (var type in acctype)
+                                {
+                                    <MudSelectItem T="int" Value="@type.Id">@type.Name</MudSelectItem>
+                                }
+                            }
+
+                        </MudSelect>
+
+                    </MudItem>
+
+                   
+                <MudItem  xs="12">
+                <MudTextField Label="Account Number"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.AccountNumber"
+                              For="@(() => Model.AccountNumber)" />
+                </MudItem>
+                <MudItem  xs="12">
+                <MudTextField Label="Provider"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.Provider"
+                              For="@(() => Model.Provider)" />
+                </MudItem>
+                <MudItem  xs="12"> 
+                <MudTextField Label="Balance"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.InitialBalance"
+                              For="@(() => Model.InitialBalance)"
+                              InputType="InputType.Number" />
+                </MudItem>
+                <MudItem  xs="12">
+                    <MudSelect T="AccountStatus"
+                            Label="Status"
+                            @bind-Value="Model.Status"
+                            Variant="Variant.Outlined"
+                            Dense="true"
+                            Margin="Margin.Dense"
+                            AdornmentIcon="@Icons.Material.Filled.Category"
+                            AdornmentColor="Color.Primary">
+
+                        <MudSelectItem T="AccountStatus">--Select Account Status--</MudSelectItem>
+
+                        @foreach (AccountStatus status in Enum.GetValues(typeof(AccountStatus)))
+                        {
+                            <MudSelectItem T="AccountStatus" Value="status">@status.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                        Color="Color.Primary"
+                        Size="Size.Small"
+                        FullWidth="true"
+                        ButtonType="ButtonType.Submit"
+                        Style="height: 40px; font-weight: bold; margin-top:5px; margin-bottom:5px;">
+                    Add Account
+                </MudButton>
+                </MudItem>
+
+            </MudGrid>
+
+        </EditForm>
+    </DialogContent>
 </MudDialog>
 
 @code{
@@ -97,12 +164,8 @@
         @* NavigationManager.NavigateTo("uri:/Accounts"); *@
         AccountService.GetAllAccountsAsync();
     }
-    private async Task openAccountType()
-    {
-        var dialog = await DialogService.ShowAsync<AccountTypeDialog>("Add Account type");
-        var result = await dialog.Result;
-    }
-// Initialize with an empty list so the foreach doesn't break
+   
+
 private List<AccountType> acctype = new List<AccountType>();
 
 protected override async Task OnInitializedAsync()
@@ -124,5 +187,4 @@ protected override async Task OnInitializedAsync()
     }
 }
 }
-
 

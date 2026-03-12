@@ -20,7 +20,7 @@
             <MudText Typo="Typo.h6">Budget Planning</MudText>
             <MudSpacer />
             @* <MudText Color="Color.Error">@BudgetId</MudText> *@
-            <MudText Class="d-flex align-center pa-2" 
+           <MudText Class="d-flex align-center pa-2" 
                     Style="@($"background-color: var(--mud-palette-primary); border-radius: 4px; color: var(--mud-palette-primary-text); font-weight: bold;")">
                 <MudIcon Icon="@Icons.Material.Filled.AccountBalanceWallet" Class="mr-2" /> 
                 @BudgetName
@@ -28,12 +28,6 @@
         </div>
     </TitleContent>
     <DialogContent>
-        @if (!string.IsNullOrEmpty(ErrorMessage))
-        {
-            <MudAlert Severity="Severity.Error" Class="mb-4">
-                @ErrorMessage
-            </MudAlert>
-        }
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" TabPanelsClass="pa-10">
         <MudTabPanel Text="Income Planning">
             
@@ -57,8 +51,7 @@
                 <MudTextField @bind-Value="newIncomePlan.Description" Label="Description" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
                 </MudItem>
                 <MudItem xs="6" Class="d-flex justify-center">
-                @* <MudButton Style="background-color: #051d6e; color: white; height: 40px; font-weight: bold;" FullWidth="true" ButtonType="ButtonType.Submit" >SAVE</MudButton> *@
-                <MudButton 
+                                <MudButton 
                     Variant="Variant.Filled" 
                     Color="Color.Primary" 
                     FullWidth="true" 
@@ -89,7 +82,7 @@
                 <RowTemplate>
                     <MudTd DataLabel="ID"><MudText Typo="Typo.caption">#@context.Id</MudText></MudTd>
                     <MudTd DataLabel="Income Type"><MudText Typo="Typo.caption">@context.IncomeType.IncomeTypeName</MudText></MudTd>
-                    <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Amount</MudText></MudTd>
+                    <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Amount.ToString("N")</MudText></MudTd>
                     @* <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Budget.Id</MudText></MudTd> *@
 
 
@@ -101,7 +94,7 @@
                     <MudTd Style="font-weight:bold;">Total</MudTd>
                     <MudTd></MudTd>
                     <MudTd Style="font-weight:bold;">
-                        @_incomeplanning.Sum(x=>x.Amount)
+                        @_incomeplanning.Sum(x=>x.Amount).ToString("N")
                     </MudTd>
                 </FooterContent>
             </MudTable>
@@ -127,8 +120,7 @@
                 <MudTextField @bind-Value="newExpensePlan.Description" Label="Description" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
                 </MudItem>
                 <MudItem xs="6" Class="d-flex justify-center">
-                @* <MudButton Style="background-color: #051d6e; color: white; height: 40px; font-weight: bold;" FullWidth="true" ButtonType="ButtonType.Submit" >SAVE</MudButton> *@
-                <MudButton 
+                                <MudButton 
                     Variant="Variant.Filled" 
                     Color="Color.Primary" 
                     FullWidth="true" 
@@ -156,7 +148,7 @@
                 <RowTemplate>
                     <MudTd DataLabel="ID"><MudText Typo="Typo.caption">#@context.Id</MudText></MudTd>
                     <MudTd DataLabel="Income Type"><MudText Typo="Typo.caption">@context.ExpenseType.ExpenseTypeName</MudText></MudTd>
-                    <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Amount</MudText></MudTd>
+                    <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Amount.ToString("N")</MudText></MudTd>
                     @* <MudTd DataLabel="Amount Planned"><MudText Typo="Typo.caption">@context.Budget.Id</MudText></MudTd> *@
 
                     @* <MudTd DataLabel="Status">
@@ -179,13 +171,12 @@
     </DialogContent>
 </MudDialog>
 @code{
-    @* [CascadingParameter]  *@
-    @* MudDialogInstance MudDialog { get; set; } = default!; *@
+
     private string ErrorMessage { get; set; } = string.Empty;
 
     [Parameter] public int BudgetId { get; set; }
     [Parameter] public string BudgetName{get;set;}
-    @* private GetBudgetByIdDTO budgetbyid; *@
+    [Parameter] public EventCallback OnSaveSuccess { get; set; }
     
     private CreateIncomePlanningDTO newIncomePlan { get; set; } = new();
     private CreateExpensePlanningDTO newExpensePlan { get; set; } = new();
@@ -195,6 +186,10 @@
     private List<ExpenseType> _expensetype = new List<ExpenseType>();
     private List<IncomePlanning> _incomeplanning = new List<IncomePlanning>();
     private List<ExpensePlanning> _expenseplaning = new List<ExpensePlanning>();
+    private List<CountStatusBudgetDTO> _countStatusBudgets= new();
+    private decimal TotalPlannedRevenue => _incomeplanning.Sum(b => b.Amount);    
+    private decimal TotalPlannedExpenses => _expenseplaning.Sum(b => b.Amount);    
+    private int TotalBudgets=> _countStatusBudgets.Sum(x=>x.Counts);
     private GetBudgetDTO? currentBudget;
     protected override async Task OnParametersSetAsync()
     {        // Assign BudgetId to DTOs (CRITICAL)
@@ -213,51 +208,71 @@
         _expenseplaning = expenses
             .Where(x => x.BudgetId == BudgetId)
             .ToList();
+           
+    }
+    private async Task LoadTotalPlannedRevenue(){
+        _incomeplanning = await IncomePlanningService.GetIncomePlanningsAsync() ?? new List<IncomePlanning>();
+    }
+    private async Task LoadTotalPlannedExpenses(){
+        _expenseplaning = await ExpensePlanningService.GetExpensePlanningsAsync() ?? new List<ExpensePlanning>();
     }
 
-
-    private async Task SaveIncomePlan()
+    private async Task LoadCountStatusBudgets()
     {
-        try{
-            await IncomePlanningService.AddIncomePlanning(newIncomePlan);
-                var incomes = await IncomePlanningService.GetIncomePlanningsAsync();
-
-                _incomeplanning = incomes
+       _countStatusBudgets= await BudgetService.CountBudgetByStatusAsync();
+    }
+        private async Task LoadIncomePlanning()
+    {
+        var incomes = await IncomePlanningService.GetIncomePlanningsAsync();
+        _incomeplanning = incomes
             .Where(x => x.BudgetId == BudgetId)
             .ToList();
-
+    }
+    private async Task LoadExpensePlanning()
+    {
         var expenses = await ExpensePlanningService.GetExpensePlanningsAsync();
         _expenseplaning = expenses
             .Where(x => x.BudgetId == BudgetId)
             .ToList();
+    }
+    private async Task SaveIncomePlan()
+    {
+        try
+        {
+            await IncomePlanningService.AddIncomePlanning(newIncomePlan);
+            await LoadExpensePlanning();
+            await LoadIncomePlanning();
+            if (OnSaveSuccess.HasDelegate)
+            {
+                await OnSaveSuccess.InvokeAsync();
+            }
         }
         catch(Exception ex)
         {
             ErrorMessage =ex.Message;  
         }
         
-        @* MudDialog.Close(DialogResult.Ok(true)); *@
     }
+
 
     private async Task SaveExpensePlanning()
     {
-        try{
-        await ExpensePlanningService.AddExpensePlanningAsync(newExpensePlan);
+        try
+        {
+            
+            await ExpensePlanningService.AddExpensePlanningAsync(newExpensePlan);
+            await LoadExpensePlanning();
+            await LoadIncomePlanning();
+            
+            if (OnSaveSuccess.HasDelegate)
+            {
+                await OnSaveSuccess.InvokeAsync();
+            }
+
         }
         catch(Exception ex)
         {
             ErrorMessage =ex.Message;  
         }
-
-                var incomes = await IncomePlanningService.GetIncomePlanningsAsync();
-        _incomeplanning = incomes
-            .Where(x => x.BudgetId == BudgetId)
-            .ToList();
-
-        var expenses = await ExpensePlanningService.GetExpensePlanningsAsync();
-        _expenseplaning = expenses
-            .Where(x => x.BudgetId == BudgetId)
-            .ToList();
-        @* MudDialog.Close(DialogResult.Ok(true)); *@
     }
 }

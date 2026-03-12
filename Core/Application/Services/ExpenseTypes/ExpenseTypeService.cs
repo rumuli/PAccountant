@@ -37,4 +37,3 @@ namespace Application.Services.ExpenseTypes
         
     }
 }
-

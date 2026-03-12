@@ -11,4 +11,3 @@ namespace Application.Interfaces
 
     }
 }
-

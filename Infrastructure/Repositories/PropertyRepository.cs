@@ -48,6 +48,7 @@ public class PropertyRepository : IProperty
                  Identification = propertyDTO.Identification,
                  CreatedBy = "Admin",
                  UpdateBy = "Admin",
+                 Status = propertyDTO.Status,
                  PurchaseDate = DateTime.Now,
                  CreatedAt = DateTime.Now,
                

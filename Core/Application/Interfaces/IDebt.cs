@@ -10,4 +10,3 @@ namespace Application.Interfaces
         Task<int> CreateDebtAsync(CreateDebtDTO debtDTO);
     }
 }
-

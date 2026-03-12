@@ -9,6 +9,7 @@
             <MudText Typo="Typo.h6">Create Budget</MudText>
     </TitleContent>
     <DialogContent>
+        
         <EditForm Model="@newBudget" OnValidSubmit="SaveBudget" >
             @if(!string.IsNullOrEmpty(ErrorMessage)){
                 <MudAlert Severity="Severity.Error" Elevation="0">@ErrorMessage</MudAlert>
@@ -21,7 +22,7 @@
                 <MudDatePicker @bind-Date="newBudget.EndingAt" Label="Ending At" Editable="true" Mask="@(new DateMask("0000-00-00"))" DateFormat="yyyy-MM-dd" Placeholder="Ending At" Variant="Variant.Outlined" Margin="Margin.Dense" />
                 </MudItem>
                 <MudItem xs="12">
-                <MudButton 
+                    <MudButton 
                     Variant="Variant.Filled" 
                     Color="Color.Primary" 
                     FullWidth="true" 
@@ -44,15 +45,17 @@
     private void Cancel() => MudDialog.Cancel();
     private string ErrorMessage { get; set; }
 
-
-    private async Task SaveBudget()
+private async Task SaveBudget()
+{
+    try
     {
-        try{
-        await BudgetService.AddBudgetAsync(newBudget);
-        MudDialog.Close(DialogResult.Ok(true));
-        }
-        catch(Exception ex){
-            ErrorMessage = ex.Message;
-        }
+        var createdBudget = await BudgetService.AddBudgetAsync(newBudget);
+        
+        MudDialog.Close(DialogResult.Ok(createdBudget));
     }
+    catch(Exception ex)
+    {
+        ErrorMessage = ex.Message;
+    }
+}
 }
