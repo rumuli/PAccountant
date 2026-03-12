@@ -11,6 +11,13 @@ namespace Application.DTO
         [Required(ErrorMessage = "Email is required.")]
          [EmailAddress(ErrorMessage = "Invalid email Address.")]
          public string Email { get; set; } = string.Empty;
+         public string Status { get; set; } = string.Empty; 
+         public DateTime DateOfBirth { get; set; }
+         public string Country { get; set; }
+         public string City { get; set; }
+         public string Street { get; set; }
+         public string Sex { get; set; }
+
         
         public string PhoneNumber { get; set; }
         //biterwa na application urigisteruserdto
@@ -19,6 +26,7 @@ namespace Application.DTO
          public string Password { get; set; } = string.Empty;
 
          public string Role { get; set;}
+         public int PersonId { get; set; }
 
     }
      public class UserDetailDTO

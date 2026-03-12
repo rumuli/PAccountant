@@ -1,4 +1,5 @@
 using Web.Components;
+using Infrastructure.Identity;
 using MudBlazor.Services;
 using Infrastructure.DependencyInjection;
 using Application.Services.BudgetServices;
@@ -27,6 +28,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddMudServices();//mudblazor services for UI components
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<UserContext>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -45,11 +48,14 @@ builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 builder.Services.AddScoped<IDebtService, DebtService>();
 builder.Services.AddScoped<IDebtTypeService, DebtTypeService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountTypeService, AccountTypeService>();
 builder.Services.AddScoped<IPropertyService, PropertyService>();
 builder.Services.AddScoped<IPropertycategoryService, PropertyCategoryService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
+
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();  

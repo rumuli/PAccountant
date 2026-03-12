@@ -47,51 +47,27 @@
                IconColor="Color.Primary"
                />
         </MudItem>
-    <MudItem xs="12" sm="4">
-        <MudPaper Class="pa-4" Elevation="2" MaxWidth="MaxWidth.Small">
-            <div class="d-flex align-center">
-                <MudText Typo="Typo.subtitle1" Class="flex-grow-1">Total Assets</MudText>
-                <MudIcon Icon="@GetTrendIcon(assetTrend)" Color="@GetTrendColor(assetTrend)" />
-            </div>
-            <MudText Typo="Typo.h4" Color="Color.Success">@totalAccountBalance.ToString("C")</MudText>
-            @if (assetTrend != 0)
-            {
-                <MudText Typo="Typo.caption" Color="@GetTrendColor(assetTrend)">
-                    @GetTrendArrow(assetTrend) @Math.Abs(assetTrend).ToString("F1")% from last month
-                </MudText>
-            }
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="4">
-        <MudPaper Class="pa-4" Elevation="2" MaxWidth="MaxWidth.Small">
-            <div class="d-flex align-center">
-                <MudText Typo="Typo.subtitle1" Class="flex-grow-1">Total Liabilities</MudText>
-                <MudIcon Icon="@GetTrendIcon(liabilityTrend)" Color="@GetTrendColor(liabilityTrend)" />
-            </div>
-            <MudText Typo="Typo.h4" Color="Color.Error">@totalLiabilities.ToString("C")</MudText>
-            @if (liabilityTrend != 0)
-            {
-                <MudText Typo="Typo.caption" Color="@GetTrendColor(liabilityTrend)">
-                    @GetTrendArrow(liabilityTrend) @Math.Abs(liabilityTrend).ToString("F1")% from last month
-                </MudText>
-            }
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="4">
-        @* <MudPaper Class="pa-4" Elevation="2" MaxWidth="MaxWidth.Small">
-            <div class="d-flex align-center">
-                <MudText Typo="Typo.subtitle1" Class="flex-grow-1">Total Accounts</MudText>
-                <MudIcon Icon="@GetTrendIcon(accountTrend)" Color="@GetTrendColor(accountTrend)" />
-            </div>
-            <MudText Typo="Typo.h4" Color="Color.Primary">@totalAccounts</MudText>
-            @if (accountTrend != 0)
-            {
-                <MudText Typo="Typo.caption" Color="@GetTrendColor(accountTrend)">
-                    @GetTrendArrow(accountTrend) @Math.Abs(accountTrend).ToString("F1")% from last month
-                </MudText>
-            }
-        </MudPaper> *@
-    </MudItem>
+        <MudItem xs="12" sm="4" md="2">
+            <StatCards Title="Total Assets"
+            TrendColor="@GetTrendColor(assetTrend)"
+            TrendIcon="@GetTrendIcon(assetTrend)"
+            Value="@totalAccountBalance.ToString("N")"
+            ValueColor="Color.Success"
+            Icon="@Icons.Material.Filled.AccountBalanceWallet" 
+             IconColor="Color.Primary"/>
+
+        </MudItem>
+        <MudItem xs="12" sm="4" md="2">
+            <StatCards Title="Total Liabilities "
+            TrendColor="@GetTrendColor(liabilityTrend)"
+            TrendIcon="@GetTrendIcon(liabilityTrend)"
+            Value="@totalLiabilities.ToString("N")"
+            ValueColor="Color.Error"
+            Icon="@Icons.Material.Filled.AccountBalanceWallet" 
+             IconColor="Color.Secondary"/>
+
+        </MudItem>
+   
 </MudGrid>
 <MudGrid Class="mt-4">
     <!-- Account Balances Chart -->
@@ -296,7 +272,6 @@
         PrepareChartData();
         PrepareTransactions();
     }
-
     private void ComputeSummaries()
     {
         totalAccountBalance = accounts.Sum(a => a.Balance);

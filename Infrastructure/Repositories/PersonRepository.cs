@@ -35,8 +35,9 @@ namespace Infrastructure.Repositories
                 Country = personDTO.Country,
                 City = personDTO.City,
                 Street = personDTO.Street,
-                CreatedBy="Admin", 
-                UpdateBy="Admin"          
+                CreatedBy=personDTO.Email, 
+                UpdateBy=personDTO.Email,
+                          
 
             };
             dbContext.Persons.Add(_person);

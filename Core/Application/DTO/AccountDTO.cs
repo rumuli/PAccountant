@@ -20,6 +20,7 @@ namespace Application.DTO
         public string CreatedBy {get;set;}
         public DateTime CreatedAt { get; set; } 
         
+        
     }
     public class AccountUpdateDTO
     {
