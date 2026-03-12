@@ -41,7 +41,21 @@ namespace Infrastructure.Repositories
 
         return expenseType.Id; // return the generated primary key
     }
-}
+    // ExpenseTypeRepository.cs
+    public async Task<List<ExpenseType>> GetExpenseTypesByMonthAsync(int month, int year)
+    {
+    // Assuming you have an Expense table to check which types were used in a month
+    var expenseTypesInMonth = await _dbContext.Expenses
+        .Where(e => e.Date.HasValue &&
+                    e.Date.Value.Month == month &&
+                    e.Date.Value.Year == year)
+        .Select(e => e.ExpenseType)
+        .Distinct()
+        .ToListAsync();
+
+    return expenseTypesInMonth;
+    }
+   }
 
  
 }   

@@ -7,6 +7,37 @@
 @inject ISnackbar Snackbar
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    @* --- DASHBOARD SECTION --- *@
+    <MudGrid Class="mb-6">
+        @* Total Count Card *@
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="4" Class="pa-4" Style="background-color: var(--mud-palette-primary); color: white;">
+                <MudText Typo="Typo.h6">Total Debts</MudText>
+                <MudText Typo="Typo.h3"><b>@_debts.Count</b></MudText>
+            </MudPaper>
+        </MudItem>
+
+        @* Full List Summary Card *@
+        <MudItem xs="12" sm="6" md="9">
+            <MudPaper Elevation="4" Class="pa-4" Style="max-height: 150px; overflow-y: auto;">
+                <MudText Typo="Typo.subtitle2" Class="mb-2"><b>Quick List (All Items)</b></MudText>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var debt in _debts)
+                    {
+                        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Info">
+                            ID: @debt.Id | @debt.Amount.ToString("n")
+                        </MudChip>
+                    }
+                    @if (!_debts.Any())
+                    {
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">No debts found in the list.</MudText>
+                    }
+                </div>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+    @* --- YOUR ORIGINAL DATA GRID --- *@
     <MudDataGrid T="Debt"
                  Items="@_debts"
                  MultiSelection="true"
@@ -17,8 +48,7 @@
                  Hover="true"
                  Striped="true"
                  Bordered="true"
-                 Class="elevation-1"
-                 >
+                 Class="elevation-1">
 
         <ToolBarContent>
             <MudText Typo="Typo.h5" Color="Color.Primary">Debts</MudText>
@@ -34,7 +64,7 @@
 
             <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.DebtType.DebtTypeName" Title="Debt Type" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
-            <PropertyColumn Property="x => x.Amount" Title="Amount" Format="C" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.Amount" Title="Amount" Format="n" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.Creditor" Title="Creditor" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.DueDate" Title="Start Date" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.DateIncurred" Title="End Date" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
@@ -50,7 +80,7 @@
                 </CellTemplate>
             </TemplateColumn>
 
-            @* <PropertyColumn Property="x => x.CreatedAt" Title="Created Date" Format="MM/dd/yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" /> *@
+            <PropertyColumn Property="x => x.CreatedAt" Title="Created Date" Format="MM/dd/yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
 
             <TemplateColumn Title="Actions" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap">
                 <CellTemplate>
@@ -71,6 +101,13 @@
 @code {
     private List<Debt> _debts = new();
 
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
+
+    private async Task LoadDebts()
+    {
+        _debts = await DebtService.GetAllDebtsAsync();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await LoadDebts();
@@ -78,17 +115,15 @@
 
     private async Task OpenCreateDialog()
     {
-        var option = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
-        await DialogService.ShowAsync<CreateDebtDialog>("Create Debt", new DialogParameters()
-        {
-            { "OnDebtCreated", EventCallback.Factory.Create(this, LoadDebts) }
-        }, option);
-    }
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
 
-    private async Task LoadDebts()
-    {
-        _debts = await DebtService.GetAllDebtsAsync();
-        StateHasChanged();
+        var dialog = await DialogService.ShowAsync<CreateDebtDialog>("Add Debt", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadDebts();
+        }
     }
 }
-

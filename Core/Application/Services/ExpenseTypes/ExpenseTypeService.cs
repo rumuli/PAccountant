@@ -28,6 +28,13 @@ namespace Application.Services.ExpenseTypes
         {
             return await _expenseType.CreateExpenseTypeAsync(expenseTypeDTO);
         }
+
+         // Add implementation
+       public async Task<List<ExpenseType>> GetExpenseTypesByMonthAsync(int month, int year)
+       {
+        return await _expenseType.GetExpenseTypesByMonthAsync(month, year);
+       }
+        
     }
 }
 

@@ -8,7 +8,6 @@
 @inject IExpenseService ExpenseService
 @inject IDialogService DialogService
 @inject IDialogService Dialog
-@* @inject ISnackbar Snackbar *@
 
 <PageTitle>Expense</PageTitle>
 
@@ -35,77 +34,95 @@
         </MudItem>
     </MudGrid>
 
-    @* TOP ROW: Dashboard Cards *@
+    @* TOP ROW: Dashboard Cards Styled Like Image *@
     <MudGrid Class="mb-6" Spacing="3">
         
-        @* Summary Card *@
+        @* 1. Outflow Card *@
         <MudItem xs="12" md="4">
             <MudPaper Elevation="0" Class="pa-6 d-flex flex-column relative overflow-hidden" 
-                      Style="height: 100%; border-radius: 24px; background: white; border: 1px solid #eef0f2;">
+                      Style="height: 160px; border-radius: 20px; background: white; border: 1px solid #f0f2f5;">
                 
-                <div style="position: absolute; top: -10px; right: -10px; opacity: 0.05; pointer-events: none;">
-                    <MudIcon Icon="@Icons.Material.Filled.Wallet" Style="font-size: 140px;" />
+                @* Ghost Icon in background *@
+                <div style="position: absolute; top: 10px; right: -10px; opacity: 0.05; pointer-events: none;">
+                    <MudIcon Icon="@Icons.Material.Filled.CreditCard" Style="font-size: 120px;" />
                 </div>
 
-                <MudText Typo="Typo.subtitle2" Style="font-weight: 700; color: #023d28; text-transform: uppercase;">
-                    @(_selectedDate?.ToString("MMM yyyy") ?? "Overall") Outflow
+                <MudText Typo="Typo.caption" Style="font-weight: 800; color: #023d28; text-transform: uppercase; letter-spacing: 1px;">
+                    @(_selectedDate?.ToString("MMM yyyy") ?? "Overall") OUTFLOW
                 </MudText>
                 
-                <MudStack Row="true" AlignItems="AlignItems.Baseline" Class="mt-2 mb-3">
-                    <MudText Typo="Typo.h4" Style="font-weight: 900; color: #023d28;">
+                <MudStack Row="true" AlignItems="AlignItems.Baseline" Class="mt-2 mb-2">
+                    <MudText Typo="Typo.h3" Style="font-weight: 900; color: #023d28;">
                         @_filteredTotalSpent.ToString("n0")
                     </MudText>
-                    <MudText Typo="Typo.body2" Class="ml-2 mud-text-secondary" Style="font-weight: 500;">
+                    <MudText Typo="Typo.h6" Class="ml-2" Style="font-weight: 500; color: #9e9e9e;">
                         / @_monthlyBudget.ToString("n0")
                     </MudText>
                 </MudStack>
 
-                <MudText Typo="Typo.caption" Class="mb-1" Style="font-weight:700;">Usage: @_budgetUsage.ToString("F1")%</MudText>
-                <MudProgressLinear Color="@(_budgetUsage > 100 ? Color.Error : Color.Success)" 
-                                   Value="@((double)_budgetUsage)" 
-                                   Size="Size.Medium" 
-                                   Class="rounded-lg" 
-                                   Style="height:8px;" />
+                <MudSpacer />
+                
+                <MudStack Spacing="1">
+                    <MudText Typo="Typo.caption" Style="font-weight:800; color: #023d28;">Usage: @_budgetUsage.ToString("F1")%</MudText>
+                    <MudProgressLinear Color="@(_budgetUsage > 100 ? Color.Error : Color.Success)" 
+                                       Value="@((double)_budgetUsage)" 
+                                       Size="Size.Medium" 
+                                       Class="rounded-lg" 
+                                       Style="height:10px; background-color: #f0fdf4;" />
+                </MudStack>
             </MudPaper>
         </MudItem>
 
-        @* Account Breakdown Card *@
+        @* 2. Source Breakdown Card *@
         <MudItem xs="12" md="4">
             <MudPaper Elevation="0" Class="pa-6 d-flex flex-column" 
-                      Style="height: 100%; border-radius: 24px; background: white; border: 1px solid #eef0f2;">
+                      Style="height: 160px; border-radius: 20px; background: white; border: 1px solid #f0f2f5;">
                 
-                <MudText Typo="Typo.subtitle2" Class="mb-4" Style="font-weight: 700; color: #023d28; text-transform: uppercase;">
-                    Source Breakdown
+                <MudText Typo="Typo.caption" Class="mb-3" Style="font-weight: 800; color: #023d28; text-transform: uppercase; letter-spacing: 1px;">
+                    SOURCE BREAKDOWN
                 </MudText>
 
-                <div class="d-flex flex-column gap-2">
+                <MudStack Spacing="2" Class="mt-1">
                     @if (_filteredExpenses.Any())
                     {
                         @foreach (var group in _filteredExpenses.GroupBy(x => x.Account?.AccountNumber ?? "Default").Take(2))
                         {
-                            <div style="background: #f8fafc; border-radius: 12px; padding: 10px 14px; border: 1px solid #f1f5f9;" 
+                            <div style="background: #f8fafc; border-radius: 12px; padding: 12px 16px; border: 1px solid #f1f5f9;" 
                                  class="d-flex justify-space-between align-center">
-                                <MudText Typo="Typo.body2" Style="font-weight:bold; color: #023d28;">@group.Key</MudText>
-                                <MudText Typo="Typo.body2" Style="font-weight:800; color: #023d28;">@group.Sum(x => x.Amount).ToString("n0")</MudText>
+                                <MudText Typo="Typo.body2" Style="font-weight:700; color: #475569;">@group.Key</MudText>
+                                <MudText Typo="Typo.body1" Style="font-weight:900; color: #023d28;">@group.Sum(x => x.Amount).ToString("n0")</MudText>
                             </div>
                         }
                     }
-                </div>
+                    else
+                    {
+                        <MudText Typo="Typo.body2" Class="mud-text-secondary mt-2">No data available</MudText>
+                    }
+                </MudStack>
             </MudPaper>
         </MudItem>
         
-        @* Stats Card *@
+        @* 3. Total Transactions Card (Dark Green) *@
         <MudItem xs="12" md="4">
             <MudPaper Elevation="0" Class="pa-6 d-flex flex-column justify-center align-center" 
-                      Style="height: 100%; border-radius: 24px; background: #023d28; color: white;">
-                <MudIcon Icon="@Icons.Material.Filled.ReceiptLong" Size="Size.Large" Class="mb-2" Style="color: #023d28;" />
-                <MudText Typo="Typo.h4" Style="font-weight: 900;">@_filteredExpenses.Count</MudText>
-                <MudText Typo="Typo.caption" Style="opacity: 0.8; text-transform: uppercase;">Total Transactions</MudText>
+                      Style="height: 160px; border-radius: 20px; background: #023d28; color: white; position: relative; overflow: hidden;">
+                
+                @* Texture Overlay effect *@
+                <div style="position: absolute; bottom: -20px; left: -20px; opacity: 0.1;">
+                     <MudIcon Icon="@Icons.Material.Filled.ReceiptLong" Style="font-size: 100px; color: white;" />
+                </div>
+                
+                 <MudText Typo="Typo.caption" Style="opacity: 0.9; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; z-index: 1;">
+                    Total Transactions
+                </MudText>
+
+                <MudText Typo="Typo.h2" Style="font-weight: 900; z-index: 1;">@_filteredExpenses.Count</MudText>
+               
             </MudPaper>
         </MudItem>
     </MudGrid>
 
-    @* YOUR ORIGINAL DATA GRID (UNTOUCHED) *@
+    @* DATA GRID (Remains exactly as you provided) *@
     <MudDataGrid T="Expense" Items="@_filteredExpenses" MultiSelection="true" SortMode="SortMode.Multiple" Filterable="true" Hideable="true" Dense="true" Hover="true" Striped="true" Bordered="true" Class="elevation-1" Style="border-radius:12px; overflow:hidden;">
         <ToolBarContent>
             <MudText Typo="Typo.h5" Color="Color.Primary" Style="font-weight:700;">Expenses</MudText>
@@ -134,23 +151,23 @@
 @code {
     private List<Expense> _allExpenses = new();
     private List<Expense> _filteredExpenses = new();
-     private readonly DialogOptions _closeButton = new() { CloseButton = true };
-      private async Task LoadAllData()
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
+    
+    private async Task LoadAllData()
     {
         _allExpenses = await ExpenseService.GetAllExpensesAsync();
         _allExpensesPlanned = await BudgetService.GetBudgetsAsync();
         UpdateFilteredData();
     }
 
-      protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         await LoadAllData();
     }
 
- private async Task OpenCreateDialog()
+    private async Task OpenCreateDialog()
     {
         DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
-
         var dialog = await DialogService.ShowAsync<CreateExpenseDialog>("Add Expense", options);
         var result = await dialog.Result;
 
@@ -160,15 +177,14 @@
             await LoadAllData();
         }
     }
-   
+    
     private List<GetBudgetDTO> _allExpensesPlanned = new();
-
     private decimal _filteredTotalSpent = 0;
     private DateTime? _selectedDate = DateTime.Now;
-
     private decimal _monthlyBudget = 0;
     private decimal _budgetUsage = 0;
 
+    // Remaining logic properties
     private double[] _categoryData = { };
     private string[] _categoryLabels = { };
     private List<CategoryMetric> _categoryPercentages = new();
@@ -181,12 +197,6 @@
         public string Color { get; set; }
     }
 
-   
-
-   
-
-
-   
     private void UpdateFilteredData()
     {
         if (_selectedDate.HasValue)
@@ -228,6 +238,4 @@
             Color = _activePalette[index % _activePalette.Length]
         }).ToList();
     }
-
-   
 }

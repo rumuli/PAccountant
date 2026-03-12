@@ -1,10 +1,183 @@
 ﻿@page "/"
+@using Domain.Entities
+@using Application.Services.Incomes
+@using Application.Services.Expenses
+@using MudBlazor
 @using Microsoft.AspNetCore.Authorization
+
 @attribute [Authorize]
 
-<PageTitle>Dashboard</PageTitle>
+@inject IIncomeService IncomeService
+@inject IExpenseService ExpenseService
 
+<PageTitle>Financial Analytics</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8 mb-8">
+    
+    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-8">
+        <MudStack Spacing="0">
+            <MudText Typo="Typo.h4" Style="font-weight:800;">Financial Overview</MudText>
+            <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">Viewing data for the year @_selectedYear</MudText>
+        </MudStack>
 
-Welcome to your new app.
+        <MudSelect T="int" 
+                   Label="Fiscal Year" 
+                   Value="_selectedYear" 
+                   ValueChanged="OnYearChanged"
+                   Variant="Variant.Outlined" 
+                   Dense="true" 
+                   Margin="Margin.Dense"
+                   Style="width:180px; background-color: white;">
+            @foreach (var year in _years)
+            {
+                <MudSelectItem Value="@year">@year</MudSelectItem>
+            }
+        </MudSelect>
+    </MudStack>
+
+    <MudGrid Spacing="4">
+        
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Elevation="4" Class="pa-6" Style="border-left: 6px solid #2E7D32; border-radius: 12px;">
+                <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">TOTAL INCOME</MudText>
+                <MudText Typo="Typo.h4" Style="font-weight:900; color:#2E7D32;" Class="mt-2">
+                    @_yearIncome.ToString("N0")
+                </MudText>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Elevation="4" Class="pa-6" Style="border-left: 6px solid #C62828; border-radius: 12px;">
+                <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">TOTAL EXPENSES</MudText>
+                <MudText Typo="Typo.h4" Style="font-weight:900; color:#C62828;" Class="mt-2">
+                    @_yearExpense.ToString("N0")
+                </MudText>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="4">
+            <MudPaper Elevation="4" Class="pa-6" Style="border-left: 6px solid var(--mud-palette-info); border-radius: 12px;">
+                <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">NET CASH FLOW</MudText>
+                <MudText Typo="Typo.h4" Style="font-weight:900;" Class="mt-2">
+                    @((_yearIncome - _yearExpense).ToString("N0"))
+                </MudText>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudPaper Elevation="4" Class="pa-8" Style="border-radius:16px;">
+                <MudStack Row="true" Class="mb-4" AlignItems="AlignItems.Center">
+                    <MudText Typo="Typo.h6" Style="font-weight:700">Monthly Cash Flow</MudText>
+                    <MudSpacer />
+                    <MudChip T="string" Variant="Variant.Filled" Style="background-color:#2E7D32; color:white;" Size="Size.Small">Income</MudChip>
+                    <MudChip T="string" Variant="Variant.Filled" Style="background-color:#C62828; color:white;" Size="Size.Small">Expenses</MudChip>
+                </MudStack>
+
+                @if (_hasData)
+                {
+                    <MudChart ChartType="ChartType.Line"
+                              XAxisLabels="_months"
+                              ChartSeries="_series"
+                              ChartOptions="_chartOptions"
+                              Width="100%"
+                              Height="400px" />
+                }
+                else
+                {
+                    <div class="d-flex flex-column align-center justify-center" style="height:350px;">
+                        <MudIcon Icon="@Icons.Material.Filled.BarChart" 
+                                 Style="font-size: 5rem;" 
+                                 Color="Color.Default" 
+                                 Class="mud-text-disabled" />
+                        <MudText Class="mud-text-disabled" Typo="Typo.h6">
+                            No transactions found for @_selectedYear
+                        </MudText>
+                    </div>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private List<Income> _incomes = new();
+    private List<Expense> _expenses = new();
+    private List<int> _years = new();
+    private int _selectedYear = DateTime.Now.Year;
+
+    private decimal _yearIncome = 0;
+    private decimal _yearExpense = 0;
+    private bool _hasData = false;
+
+    private string[] _months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+    
+    private List<ChartSeries> _series = new();
+    
+    private ChartOptions _chartOptions = new()
+    {
+        InterpolationOption = InterpolationOption.Straight, 
+        YAxisTicks = 5000000, 
+        ShowLegend = false,
+        // THIS IS THE FIX: This forces the chart lines to match your chips
+        ChartPalette = new[] { "#2E7D32", "#C62828" } 
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        _incomes = await IncomeService.GetAllIncomesAsync() ?? new();
+        _expenses = await ExpenseService.GetAllExpensesAsync() ?? new();
+
+        LoadAvailableYears();
+        await LoadYearData(_selectedYear);
+    }
+
+    private void LoadAvailableYears()
+    {
+        var incomeYears = _incomes.Select(x => x.Date.Year);
+        var expenseYears = _expenses.Where(x => x.Date.HasValue).Select(x => x.Date.Value.Year);
+
+        _years = incomeYears.Union(expenseYears)
+                            .Distinct()
+                            .OrderByDescending(x => x)
+                            .ToList();
+
+        if (!_years.Contains(DateTime.Now.Year))
+            _years.Add(DateTime.Now.Year);
+            
+        _years = _years.OrderByDescending(x => x).ToList();
+    }
+
+    private async Task OnYearChanged(int year)
+    {
+        _selectedYear = year;
+        await LoadYearData(year);
+    }
+
+    private async Task LoadYearData(int year)
+    {
+        var incomeMonthly = new double[12];
+        var expenseMonthly = new double[12];
+
+        var yearIncomes = _incomes.Where(x => x.Date.Year == year).ToList();
+        var yearExpenses = _expenses.Where(x => x.Date.HasValue && x.Date.Value.Year == year).ToList();
+
+        _yearIncome = yearIncomes.Sum(x => x.AmountPaid);
+        _yearExpense = yearExpenses.Sum(x => x.Amount);
+
+        foreach (var inc in yearIncomes) 
+            incomeMonthly[inc.Date.Month - 1] += (double)inc.AmountPaid;
+
+        foreach (var exp in yearExpenses) 
+            expenseMonthly[exp.Date.Value.Month - 1] += (double)exp.Amount;
+
+        _series = new List<ChartSeries>
+        {
+            new ChartSeries { Name = "Income", Data = incomeMonthly },
+            new ChartSeries { Name = "Expenses", Data = expenseMonthly }
+        };
+
+        _hasData = _yearIncome > 0 || _yearExpense > 0;
+        
+        StateHasChanged();
+    }
+}

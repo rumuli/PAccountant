@@ -110,12 +110,37 @@
 </MudDialog>
 
 @code {
-    [CascadingParameter] private IDialogReference DialogReference { get; set; } = default!;
-    [Parameter] public EventCallback OnDebtCreated { get; set; }
-    
+    [CascadingParameter] 
+     private IMudDialogInstance MudDialog { get; set; }
+
     private CreateDebtDTO Model { get; set; } = new();
-    private List<DebtType> DebtTypes = new();
+    [Parameter] 
+    public EventCallback OnDebtCreated { get; set; }
+    
+    private readonly DialogOptions _closeButton = new() { CloseButton = true };
+
     private bool ShowErrors { get; set; } = false;
+    private List<DebtType> DebtTypes = new();
+    
+
+     private async Task OnValidSubmit()
+    {
+        try
+        {
+            await DebtService.CreateDebtAsync(Model);
+            MudDialog.Close(DialogResult.Ok(true));
+
+           }
+           catch
+           {
+
+               ShowErrors = true;
+
+           }
+    }
+    private void Cancel() => MudDialog.Cancel(); 
+    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -124,23 +149,7 @@
         if (Model.DateIncurred == null) Model.DateIncurred = DateTime.Today;
     }
 
-    private async Task OnValidSubmit()
-    {
-        try
-        {
-            await DebtService.CreateDebtAsync(Model);
-            if (OnDebtCreated.HasDelegate) await OnDebtCreated.InvokeAsync();
-            DialogReference.Close(DialogResult.Ok(true));
-            NavigationManager.NavigateTo("/Debts");
-        }
-        catch (Exception ex)
-        {
-            ShowErrors = true;
-            Console.WriteLine($"Error saving debt: {ex.Message}");
-        }
-    }
 
-    private void Cancel() => DialogReference.Close(DialogResult.Cancel());
 
     private async Task GoToCreateDebtType()
     {

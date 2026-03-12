@@ -112,6 +112,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EndingAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ExpenseTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -130,6 +133,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExpenseTypeId");
 
                     b.ToTable("Budgets");
                 });
@@ -911,6 +916,13 @@ namespace Infrastructure.Migrations
                     b.Navigation("AccountType");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Budget", b =>
+                {
+                    b.HasOne("Domain.Entities.ExpenseType", null)
+                        .WithMany("Budgets")
+                        .HasForeignKey("ExpenseTypeId");
+                });
+
             modelBuilder.Entity("Domain.Entities.Debt", b =>
                 {
                     b.HasOne("Domain.Entities.DebtType", "DebtType")
@@ -1074,6 +1086,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.ExpenseType", b =>
+                {
+                    b.Navigation("Budgets");
                 });
 
             modelBuilder.Entity("Domain.Entities.PropertyCategory", b =>

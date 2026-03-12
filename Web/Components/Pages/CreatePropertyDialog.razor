@@ -21,21 +21,43 @@
 
 <MudDialog>
 <DialogContent>
-    @* <EditForm Model="Model" OnValidSubmit="onValidSubmit"> *@
-        <EditForm Model="Model" OnValidSubmit="onValidSubmit" FormName="CreatePropertyForm">
+   
+    <MudPaper Elevation="0" 
+                  Style="background: linear-gradient(135deg, #023d28 0%, #4bf5ba 100%);
+                         padding:14px 18px; margin-bottom:16px;">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+
+                <MudIcon Icon="@Icons.Material.Filled.HomeWork"
+                         Style="color:white; font-size:1.6rem;" />
+
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle1"
+                             Style="color:white; font-weight:700; line-height:1.2;">
+                        Create Account
+                    </MudText>
+
+                    <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.80);">
+                        Fill the form below to create a new account
+                    </MudText>
+                </MudStack>
+            </MudStack>
+    </MudPaper>
+
+    <EditForm Model="Model" OnValidSubmit="onValidSubmit" FormName="CreatePropertyForm">
         <DataAnnotationsValidator />
-        <MudGrid>
-             <MudStack Row="true" Spacing="2" Justify="Justify.Center">
-    <MudItem xs="12">
+        <MudGrid  Spacing="1" Class="align-items-center">
+             
+    <MudItem xs="6">
     <MudSelect T="int"
-            Label="Category" 
-                
+               Label="Category" 
                Placeholder="--Select Category Type--"
                @bind-Value="Model.CategoryId" 
                Variant="Variant.Outlined"
-               Style="width: 550px; 
+                Dense="true"
+               Margin="Margin.Dense"
+               AdornmentIcon="@Icons.Material.Filled.Category"
+               AdornmentColor="Color.Primary">
 
-               AnchorOrigin="Origin.BottomCenter">
                <MudSelectItem Value="0">--Select Category Type--</MudSelectItem>
          @if (acctype != null)
         {
@@ -45,15 +67,18 @@
             }
         }
     </MudSelect>
+    </MudItem>
+    <MudItem xs="6">
     <MudSelect T="int"
             Label="Person" 
-                
                Placeholder="--Select Person--"
                @bind-Value="Model.PersonId" 
                Variant="Variant.Outlined"
-               Style="width: 550px; 
+               Dense="true"
+               Margin="Margin.Dense"
+               AdornmentIcon="@Icons.Material.Filled.Category"
+               AdornmentColor="Color.Primary">
 
-               AnchorOrigin="Origin.BottomCenter">
                <MudSelectItem Value="0">--Select Person--</MudSelectItem>
          @if (person != null)
         {
@@ -63,42 +88,246 @@
             }
         }
     </MudSelect>
-</MudItem>
-            <MudIconButton
-            Icon="@Icons.Material.Filled.Add"
-            Color="Color.Secondary"
-            OnClick="openCategory"/>
-            </MudStack>
-          
-            <MudItem xs="12">
-                
-                <MudTextField Label="Name" @bind-Value="Model.Name" For="@(() => Model.Name)" />
+    </MudItem>
+    <MudItem xs="12">
+        
+                <!-- SECTION : PROPERTY INFO -->
+                <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600;
+                         letter-spacing:.08em; text-transform:uppercase;">
+                    Property Information
+                </MudText>
+    </MudItem>
+            <MudItem xs="6">
+                <MudTextField Label="Name/Model" Variant="Variant.Outlined" Margin="Margin.Dense"@bind-Value="Model.Name" For="@(() => Model.Name)" />
             </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="Value" @bind-Value="Model.Value" For="@(() => Model.Value)" />
+            <MudItem xs="6">
+                <MudTextField Label="Value" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="Model.Value" For="@(() => Model.Value)" />
             </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="Location" @bind-Value="Model.Location" For="@(() => Model.Location)" />
+            <MudItem xs="6">
+                <MudTextField Label="Location" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="Model.Location" For="@(() => Model.Location)" />
             </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="AssignedTo" @bind-Value="Model.AssignedTo" For="@(() => Model.AssignedTo)" />
+            <MudItem xs="6">
+                <MudTextField Label="AssignedTo"  Variant="Variant.Outlined" Margin="Margin.Dense"@bind-Value="Model.AssignedTo" For="@(() => Model.AssignedTo)" />
             </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="PurchasePrice" @bind-Value="Model.PurchasePrice" For="@(() => Model.PurchasePrice)" />
+            <MudItem xs="6">
+                <MudTextField Label="PurchasePrice" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="Model.PurchasePrice" For="@(() => Model.PurchasePrice)" />
             </MudItem>
-            <MudItem xs="12">
-                <MudTextField Label="Identification" @bind-Value="Model.Identification" For="@(() => Model.Identification)" />
+            <MudItem xs="6">
+                <MudTextField Label="Identification" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="Model.Identification" For="@(() => Model.Identification)" />
             </MudItem>            
             <MudItem xs="12" class="d-flex justify-content-end">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Add property</MudButton>
-                <MudButton Href="/Property" Variant="Variant.Filled" Color="Color.Error">Cancel</MudButton>
-
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" ButtonType="ButtonType.Submit">Add property</MudButton>
             </MudItem>
         </MudGrid>
 
     </EditForm>
 </DialogContent>
 </MudDialog>
+@* <MudDialog Style="border-radius:12px; overflow:hidden;">
+
+    <DialogContent>
+
+        <!-- ══════════ HEADER ══════════ -->
+        <MudPaper Elevation="0"
+                  Style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
+                         border-radius:8px; padding:14px 18px; margin-bottom:16px;">
+
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+
+                <MudIcon Icon="@Icons.Material.Filled.Home"
+                         Style="color:white; font-size:1.6rem;" />
+
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle1"
+                             Style="color:white; font-weight:700;">
+                        Add Property
+                    </MudText>
+
+                    <MudText Typo="Typo.caption"
+                             Style="color:rgba(255,255,255,0.80);">
+                        Register a new property in the system
+                    </MudText>
+                </MudStack>
+
+            </MudStack>
+
+        </MudPaper>
+
+
+        <!-- ══════════ FORM ══════════ -->
+        <EditForm Model="Model" OnValidSubmit="onValidSubmit" FormName="CreatePropertyForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudStack Spacing="2">
+
+                <!-- SECTION : CATEGORY -->
+                <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600;
+                         letter-spacing:.08em; text-transform:uppercase;">
+                    Classification
+                </MudText>
+
+                <MudGrid Spacing="2">
+
+                    <!-- Category -->
+                    <MudItem xs="11">
+
+                        <MudSelect T="int"
+                                   Label="Category"
+                                   Placeholder="--Select Category Type--"
+                                   @bind-Value="Model.CategoryId"
+                                   Variant="Variant.Outlined"
+                                   Dense="true"
+                                   Margin="Margin.Dense"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   Adornment="Adornment.Start"
+                                   AdornmentIcon="@Icons.Material.Filled.Category"
+                                   AdornmentColor="Color.Primary">
+
+                            <MudSelectItem Value="0">--Select Category Type--</MudSelectItem>
+
+                            @if (acctype != null)
+                            {
+                                foreach (var type in acctype)
+                                {
+                                    <MudSelectItem T="int" Value="@type.Id">@type.Name</MudSelectItem>
+                                }
+                            }
+
+                        </MudSelect>
+
+                    </MudItem>
+
+                    <!-- Add Category -->
+                    <MudItem xs="1" Class="d-flex justify-center">
+
+                        <MudTooltip Text="Add new category">
+                            <MudIconButton Icon="@Icons.Material.Filled.Add"
+                                           Color="Color.Primary"
+                                           Size="Size.Small"
+                                           Variant="Variant.Outlined"
+                                           OnClick="openCategory" />
+                        </MudTooltip>
+
+                    </MudItem>
+
+                </MudGrid>
+
+
+                <!-- Person -->
+                <MudSelect T="int"
+                           Label="Person"
+                           Placeholder="--Select Person--"
+                           @bind-Value="Model.PersonId"
+                           Variant="Variant.Outlined"
+                           Margin="Margin.Dense"
+                           Dense="true"
+                           Adornment="Adornment.Start"
+                           AdornmentIcon="@Icons.Material.Filled.Person"
+                           AdornmentColor="Color.Primary">
+
+                    <MudSelectItem Value="0">--Select Person--</MudSelectItem>
+
+                    @if (person != null)
+                    {
+                        foreach (var typess in person)
+                        {
+                            <MudSelectItem T="int" Value="@typess.Id">
+                                @typess.FirstName
+                            </MudSelectItem>
+                        }
+                    }
+
+                </MudSelect>
+
+
+                <MudDivider />
+
+
+                <!-- SECTION : PROPERTY INFO -->
+                <MudText Typo="Typo.caption"
+                         Style="color:#9E9E9E; font-weight:600;
+                         letter-spacing:.08em; text-transform:uppercase;">
+                    Property Information
+                </MudText>
+
+                <MudTextField Label="Name"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.Name"
+                              For="@(() => Model.Name)" />
+
+                <MudTextField Label="Value"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.Value"
+                              For="@(() => Model.Value)"
+                              InputType="InputType.Number" />
+
+                <MudTextField Label="Location"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.Location"
+                              For="@(() => Model.Location)" />
+
+                <MudTextField Label="Assigned To"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.AssignedTo"
+                              For="@(() => Model.AssignedTo)" />
+
+                <MudTextField Label="Purchase Price"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.PurchasePrice"
+                              For="@(() => Model.PurchasePrice)"
+                              InputType="InputType.Number" />
+
+                <MudTextField Label="Identification"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              @bind-Value="Model.Identification"
+                              For="@(() => Model.Identification)" />
+
+            </MudStack>
+
+        </EditForm>
+
+    </DialogContent>
+
+
+    <!-- ══════════ ACTIONS ══════════ -->
+    <DialogActions>
+
+        <MudStack Row="true" Spacing="2" Style="width:100%;" Class="px-2 pb-2">
+
+            <MudButton Variant="Variant.Filled"
+           Color="Color.Primary"
+           ButtonType="ButtonType.Submit"
+           Form="CreatePropertyForm">
+    Add property
+</MudButton>
+
+            <MudButton Href="/Property"
+                       Variant="Variant.Outlined"
+                       Color="Color.Error"
+                       Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.Cancel"
+                       Style="flex:1; border-radius:8px;">
+
+                Cancel
+
+            </MudButton>
+
+        </MudStack>
+
+    </DialogActions>
+
+</MudDialog> *@
+
+
 
 @code{
     private bool _fullWidth;
@@ -160,6 +389,3 @@ protected override void OnInitialized()
     }
 }
     }
-
-
-
