@@ -1,0 +1,179 @@
+
+@using System.ComponentModel.DataAnnotations;
+@using Application.DTO
+@using Application.Interfaces
+@using Application.Services.Debts
+@using Domain.Entities
+@using MudBlazor
+
+
+
+
+@inject IDebtService DebtService
+@inject ISnackbar Snackbar
+
+<MudDialog Style="border-radius:12px; overflow:hidden; max-width:400px;">
+    <DialogContent>
+        <MudPaper Elevation="0" Class="pa-4 mb-4" 
+                  Style="background: linear-gradient(135deg, #023d28 0%, #057a52 100%); color:white;">
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Material.Filled.Payments" Size="Size.Large" />
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.h6">Record Payment</MudText>
+                    <MudText Typo="Typo.caption">Updating your debt balance</MudText>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+
+        <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            
+            @if(!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Class="mb-3" Dense="true">@ErrorMessage</MudAlert>
+            }
+
+            <MudStack Spacing="3">
+                <MudTextField Label="Amount to Pay"
+                              Variant="Variant.Outlined"
+                              @bind-Value="Model.AmountPaid"
+                              For="@(() => Model.AmountPaid)"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.AttachMoney" />
+
+                <MudButton ButtonType="ButtonType.Submit"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           FullWidth="true"
+                           Style="height:48px; font-weight:bold;">
+                    CONFIRM REPAYMENT
+                </MudButton>
+            </MudStack>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } // Change this from MudDialogInstance to IMudDialogInstance
+     @* MudDialogInstance MudDialog { get; set; } *@
+    [Parameter] public int DebtId { get; set; }
+    
+    private DebtRepaymentDTO Model = new();
+    private string ErrorMessage;
+
+    private async Task OnValidSubmit()
+    {
+        try 
+        {
+            ErrorMessage = null;
+            await DebtService.DebtRepayment(DebtId, Model);
+            
+            Snackbar.Add("Payment successful!", Severity.Success);
+            
+            // Closing with 'Ok' tells the parent page to refresh the cards
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
+}
+
+
+@* @using System.ComponentModel.DataAnnotations;
+@using Application.DTO
+@using Application.Interfaces
+@using Application.Services.Debts
+@using Domain.Entities
+@using MudBlazor
+@inject IDebtService DebtService
+@inject ISnackbar Snackbar
+<MudDialog Style="overflow:hidden;">
+
+    <DialogContent>
+        <!-- ══════════ HEADER BANNER ══════════ -->
+        <MudPaper Elevation="0"
+                  Style="background: linear-gradient(135deg, #023d28 0%, #4bf5ba 100%);
+                         padding:14px 18px; margin-bottom:16px;">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+
+                <MudIcon Icon="@Icons.Material.Filled.AccountBalance"
+                         Style="color:white; font-size:1.6rem;" />
+
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle1"
+                             Style="color:white; font-weight:700; line-height:1.2;">
+                        Repay Debt
+                    </MudText>
+
+                    <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.80);">
+                        Fill the form below to record a debt repayment
+                    </MudText>
+                </MudStack>
+
+            </MudStack>
+        </MudPaper>
+
+
+        <!-- ══════════ FORM ══════════ -->
+        <EditForm Model="Model" OnValidSubmit="onValidSubmit" FormName="DebtRepaymentForm">
+            @if(!string.IsNullOrEmpty(ErrorMessage)){
+                <MudAlert Severity="Severity.Error" Elevation="0">@ErrorMessage</MudAlert>
+            }
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+                <MudGrid Spacing="1" Class="align-items-center">
+                <MudItem  xs="12">
+                <MudTextField Label="Amount Paid"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              InputType="InputType.Number"
+                              @bind-Value="Model.AmountPaid"
+                              For="@(() => Model.AmountPaid)" />
+                </MudItem>
+                <MudItem  xs="12">
+                <MudDatePicker Label="Payment Date"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.Dense"
+                               />
+                </MudItem>
+                
+                
+                <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                        Color="Color.Primary"
+                        Size="Size.Small"
+                        FullWidth="true"
+                        ButtonType="ButtonType.Submit"
+                        Style="height: 40px; font-weight: bold; margin-top:5px; margin-bottom:5px;">
+                    Add Repayment
+                </MudButton>
+                </MudItem>
+
+            </MudGrid>
+
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+@code{
+    [Parameter]
+    public int DebtId { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private DebtRepaymentDTO Model = new DebtRepaymentDTO();
+
+    private async Task onValidSubmit()
+    {
+        try
+        {
+            await DebtService.DebtRepayment(DebtId, Model);
+            Snackbar.Add("Debt repayment recorded successfully!", Severity.Success);
+        }
+        catch(Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
+} *@

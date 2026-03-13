@@ -1,3 +1,5 @@
+using Domain.ValueObjects;
+
 namespace Domain.Entities
 {
     public class Debt
@@ -8,7 +10,12 @@ namespace Domain.Entities
         public int DebtTypeId { get; set; }
         public DebtType DebtType { get; set; } = default!;
 
-        public decimal Amount { get; set; }
+        public decimal PrincipalAmount { get; set; }
+        public decimal InterestRate { get; set; } 
+        public decimal TotalAmount {get;set;}
+        public decimal AmountPaid { get; set; }
+        public decimal RemainingAmount { get; set; }
+        public DebtStatus Status { get; set; }
         public string Creditor { get; set; }
 
         public DateTime DueDate { get; set; }

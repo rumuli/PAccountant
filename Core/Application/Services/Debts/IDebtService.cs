@@ -10,5 +10,6 @@ namespace Application.Services.Debts
         Task<List<Debt>> GetAllDebtsAsync();
         Task<Debt?> GetDebtByIdAsync(int id);   
         Task<int> CreateDebtAsync(CreateDebtDTO debtDTO);
+        Task DebtRepayment(int id, DebtRepaymentDTO dto);
     }
 }

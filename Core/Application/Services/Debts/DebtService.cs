@@ -26,6 +26,10 @@ namespace Application.Services.Debts
         {
             return await _debt.CreateDebtAsync(debtDTO);
         }
+        public async Task DebtRepayment(int id, DebtRepaymentDTO dto)
+        {
+            await _debt.DebtRepayment(id, dto);
+        }
 
        
     }

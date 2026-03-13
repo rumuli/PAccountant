@@ -1,4 +1,4 @@
-@page "/Debts"
+@* @page "/Debts"
 @using Domain.Entities
 @using Application.Services.Debts
 @using MudBlazor
@@ -7,9 +7,9 @@
 @inject ISnackbar Snackbar
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
-    @* --- DASHBOARD SECTION --- *@
+   
     <MudGrid Class="mb-6">
-        @* Total Count Card *@
+       
         <MudItem xs="12" sm="6" md="3">
             <MudPaper Elevation="4" Class="pa-4" Style="background-color: var(--mud-palette-primary); color: white;">
                 <MudText Typo="Typo.h6">Total Debts</MudText>
@@ -17,7 +17,7 @@
             </MudPaper>
         </MudItem>
 
-        @* Full List Summary Card *@
+        
         <MudItem xs="12" sm="6" md="9">
             <MudPaper Elevation="4" Class="pa-4" Style="max-height: 150px; overflow-y: auto;">
                 <MudText Typo="Typo.subtitle2" Class="mb-2"><b>Quick List (All Items)</b></MudText>
@@ -25,7 +25,7 @@
                     @foreach (var debt in _debts)
                     {
                         <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Info">
-                            ID: @debt.Id | @debt.Amount.ToString("n")
+                            ID: @debt.Id | @debt.TotalAmount.ToString("n")
                         </MudChip>
                     }
                     @if (!_debts.Any())
@@ -37,7 +37,7 @@
         </MudItem>
     </MudGrid>
 
-    @* --- YOUR ORIGINAL DATA GRID --- *@
+    
     <MudDataGrid T="Debt"
                  Items="@_debts"
                  MultiSelection="true"
@@ -64,7 +64,7 @@
 
             <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.DebtType.DebtTypeName" Title="Debt Type" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
-            <PropertyColumn Property="x => x.Amount" Title="Amount" Format="n" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
+            <PropertyColumn Property="x => x.PrincipalAmount" Title="Amount" Format="n" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.Creditor" Title="Creditor" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.DueDate" Title="Start Date" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
             <PropertyColumn Property="x => x.DateIncurred" Title="End Date" Format="dd MMM yyyy" Sortable="true" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" />
@@ -87,6 +87,7 @@
                     <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
                         <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => Snackbar.Add($"Viewing {context.Item.Id}", Severity.Info))">Details</MudMenuItem>
                         <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Snackbar.Add($"Editing {context.Item.Id}", Severity.Info))">Edit</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => OpenRepaymentDialog(context.Item.Id))">Repay</MudMenuItem>
                     </MudMenu>
                 </CellTemplate>
             </TemplateColumn>
@@ -124,6 +125,176 @@
         {
             await Task.Delay(50);
             await LoadDebts();
+        }
+    }
+    private async Task OpenRepaymentDialog(int debtId)
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var parameters = new DialogParameters { ["DebtId"] = debtId };
+
+        var dialog = await DialogService.ShowAsync<DedtRepayement>("Record Repayment", parameters, options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await Task.Delay(50);
+            await LoadDebts();
+        }
+    }
+} *@
+
+@page "/Debts"
+@using Domain.Entities
+@using Application.Services.Debts
+@using MudBlazor
+@inject IDebtService DebtService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    @* --- DASHBOARD SECTION --- *@
+    <MudGrid Class="mb-6">
+        @* Total Count Card *@
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="4" Class="pa-4" Style="background-color: var(--mud-palette-primary); color: white; border-radius:12px;">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <MudStack Spacing="0">
+                        <MudText Typo="Typo.subtitle2">Total Debts</MudText>
+                        <MudText Typo="Typo.h4"><b>@_debts.Count</b></MudText>
+                    </MudStack>
+                    <MudIcon Icon="@Icons.Material.Filled.ListAlt" Size="Size.Large" Style="opacity:0.5" />
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+
+        @* --- REMAINING BALANCE CARD --- *@
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="4" Class="pa-4" Style="background-color: #d32f2f; color: white; border-radius:12px;">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <MudStack Spacing="0">
+                        <MudText Typo="Typo.subtitle2">Remaining Balance</MudText>
+                        <MudText Typo="Typo.h4"><b>@TotalRemainingBalance.ToString("N0")</b></MudText>
+                    </MudStack>
+                    <MudIcon Icon="@Icons.Material.Filled.AccountBalanceWallet" Size="Size.Large" Style="opacity:0.5" />
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+
+        @* Full List Summary Card *@
+        <MudItem xs="12" sm="12" md="6">
+            <MudPaper Elevation="4" Class="pa-4" Style="max-height: 100px; overflow-y: auto; border-radius:12px;">
+                <MudText Typo="Typo.subtitle2" Class="mb-2"><b>Quick List</b></MudText>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var debt in _debts.Take(5))
+                    {
+                        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Info">
+                            @debt.Creditor: @debt.RemainingAmount.ToString("N0")
+                        </MudChip>
+                    }
+                    @if (_debts.Count > 5) { <MudText Typo="Typo.caption" Class="mt-1"> +@(_debts.Count - 5) more...</MudText> }
+                </div>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+    @* --- DATA GRID --- *@
+    <MudDataGrid T="Debt"
+                 Items="@_debts"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 Filterable="true"
+                 Dense="true"
+                 Hover="true"
+                 Striped="true"
+                 Bordered="true"
+                 Class="elevation-1">
+
+        <ToolBarContent>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Debt Management</MudText>
+            <MudSpacer />
+            <MudMenu Label="Add Debt" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
+                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="OpenCreateDialog">Single</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
+            </MudMenu>
+        </ToolBarContent>
+
+        <Columns>
+            <SelectColumn T="Debt" />
+            <PropertyColumn Property="x => x.Id" Title="ID" />
+            <PropertyColumn Property="x => x.DebtType.DebtTypeName" Title="Type" />
+            <PropertyColumn Property="x => x.TotalAmount" Title="Total" Format="N2" />
+            <PropertyColumn Property="x => x.RemainingAmount" Title="Balance" Format="N2" ItemStyle="color: #d32f2f; font-weight:bold;" />
+            <PropertyColumn Property="x => x.Creditor" Title="Creditor" />
+            
+            <TemplateColumn Title="Status">
+                <CellTemplate>
+                    <MudChip T="string"
+                             Color="@(context.Item.IsActive ? Color.Success : Color.Error)"
+                             Size="Size.Small"
+                             Variant="Variant.Text">
+                        @(context.Item.IsActive ? "Active" : "Paid")
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Actions">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
+                        <MudMenuItem Icon="@Icons.Material.Filled.Payment" OnClick="@(() => OpenRepaymentDialog(context.Item.Id))">Repay</MudMenuItem>
+                        <MudMenuItem Icon="@Icons.Material.Filled.Edit">Edit</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="Debt" />
+        </PagerContent>
+    </MudDataGrid>
+</MudContainer>
+
+@code {
+    private List<Debt> _debts = new();
+
+    // --- Calculated property for the new card ---
+    private decimal TotalRemainingBalance => _debts.Sum(x => x.RemainingAmount);
+
+    private async Task LoadDebts()
+    {
+        _debts = await DebtService.GetAllDebtsAsync();
+        StateHasChanged(); // Ensures UI updates when data is reloaded
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDebts();
+    }
+
+    private async Task OpenCreateDialog()
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = await DialogService.ShowAsync<CreateDebtDialog>("Add Debt", options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await LoadDebts();
+        }
+    }
+
+    private async Task OpenRepaymentDialog(int debtId)
+    {
+        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+        var parameters = new DialogParameters { ["DebtId"] = debtId };
+
+        // Ensure the component name matches your actual file (DedtRepayement or DebtRepayment)
+        var dialog = await DialogService.ShowAsync<DedtRepayement>("Record Repayment", parameters, options);
+        var result = await dialog.Result;
+
+        if (result != null && !result.Canceled)
+        {
+            await LoadDebts(); // This refreshes the grid AND the card total
         }
     }
 }

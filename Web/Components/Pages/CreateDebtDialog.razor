@@ -65,7 +65,12 @@
                     </MudStack>
 
                     <MudStack Spacing="3">
-                        <MudTextField T="decimal" Label="Total Amount" @bind-Value="Model.Amount"
+                        <MudTextField T="decimal" Label="Total Amount" @bind-Value="Model.PrincipalAmount"
+                                      Variant="Variant.Outlined" Margin="Margin.Dense"
+                                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" AdornmentColor="Color.Primary" />
+                    </MudStack>
+                    <MudStack Spacing="3">
+                    <MudTextField T="decimal" Label="Interest Rate" @bind-Value="Model.InterestRate"
                                       Variant="Variant.Outlined" Margin="Margin.Dense"
                                       Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" AdornmentColor="Color.Primary" />
                     </MudStack>

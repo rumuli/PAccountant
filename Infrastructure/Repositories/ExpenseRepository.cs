@@ -109,7 +109,6 @@ namespace Infrastructure.Repositories
     account.Balance -= expenseDTO.Amount;
 
     await _dbContext.SaveChangesAsync();
-
 }
         public async Task<decimal> GetRemainingBudgetAsync(int expenseTypeId, DateTime date)
         {

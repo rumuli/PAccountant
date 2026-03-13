@@ -324,7 +324,7 @@
     {
         totalAccountBalance = accounts.Sum(a => a.Balance);
         totalproertyvalue= properties.Sum(a => a.Value);
-        totalLiabilities = debts.Sum(d => d.Amount);
+        totalLiabilities = debts.Sum(d => d.RemainingAmount);
         netWorth = (totalAccountBalance + totalproertyvalue) - totalLiabilities;
         totalAccounts = accounts.Count;
 
