@@ -16,6 +16,7 @@ namespace Application.DTO
         public string CreatedBy {get;set;}
         public string CreatedAt {get;set;}
         public PropertyStatus Status {get;set;}
+        public string Manufacturer{get;set;}
     }
     public class PropertyUpdateDTO
     {
@@ -27,5 +28,7 @@ namespace Application.DTO
         public string Identification{get;set;}
         public DateTime PurchaseDate{get;set;}
         public string UpdateBy{get;set;}
+        public string Manufacturer{get;set;}
+
     }
 }

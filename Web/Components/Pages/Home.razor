@@ -1,105 +1,214 @@
-@page "/"
+@page "/home"
 @using Domain.Entities
 @using Application.Services.Incomes
 @using Application.Services.Expenses
+@using Application.Services.Accounts
+@using Application.Services.Debts
+@using Application.DTO
+@using Application.Services.Properties
+@using Application.DTO.Budget
+@using Application.Services.BudgetServices
 @using MudBlazor
+@using System.Linq
+@using Components.Pages
+@using Web.Components.Shared
 @using Microsoft.AspNetCore.Authorization
 
 @attribute [Authorize]
 
 @inject IIncomeService IncomeService
 @inject IExpenseService ExpenseService
+@inject IAccountService AccountService
+@inject IDebtService DebtService
+@inject IBudgetService BudgetService
+@inject IPropertyService PropertyService
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
 
 <PageTitle>Financial Analytics</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8 mb-8">
-    
-    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-8">
-        <MudStack Spacing="0">
-            <MudText Typo="Typo.h4" Style="font-weight:800;">Financial Overview</MudText>
-            <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">Viewing data for the year @_selectedYear</MudText>
-        </MudStack>
 
-        <MudSelect T="int" 
-                   Label="Fiscal Year" 
-                   Value="_selectedYear" 
+<MudStack Spacing="4">
+
+    <!-- TOP CARDS -->
+    <MudGrid Justify="Justify.Center">
+
+        <MudItem xs="12" sm="6" md="2">
+            <StatCards 
+                Title="Net Worth"
+                TrendIcon="@GetTrendIcon(netWorthTrend)"
+                TrendColor="@GetTrendColor(netWorthTrend)"
+                Value="@netWorth.ToString("N")"
+                ValueColor="Color.Success"
+                Icon="@Icons.Material.Filled.AccountBalanceWallet"
+                IconColor="Color.Primary"/>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="2">
+            <StatCards 
+                Title="Total Account Balance"
+                TrendColor="@GetTrendColor(assetTrend)"
+                TrendIcon="@GetTrendIcon(assetTrend)"
+                Value="@totalAccountBalance.ToString("N")"
+                ValueColor="Color.Success"
+                Icon="@Icons.Material.Filled.AccountBalanceWallet"
+                IconColor="Color.Primary"/>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="2">
+            <StatCards 
+                Title="Total Liabilities"
+                TrendColor="@GetTrendColor(liabilityTrend)"
+                TrendIcon="@GetTrendIcon(liabilityTrend)"
+                Value="@totalLiabilities.ToString("N")"
+                ValueColor="Color.Error"
+                Icon="@Icons.Material.Filled.AccountBalanceWallet"
+                IconColor="Color.Secondary"/>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="2">
+            <StatCards 
+                Title="Total Income"
+                Value="@_yearIncome.ToString("N")"
+                ValueColor="Color.Success"
+                Icon="@Icons.Material.Filled.AccountBalanceWallet"
+                IconColor="Color.Primary"/>
+        </MudItem>
+
+        @* <MudItem xs="12" sm="6" md="2">
+            <MudPaper Elevation="4" Class="pa-6 stat-card"
+                      Style="border-left:6px solid #C62828; border-radius:12px;">
+                <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">
+                    TOTAL EXPENSES
+                </MudText>
+
+                <MudText Typo="Typo.h4"
+                         Style="font-weight:900;color:#C62828;"
+                         Class="mt-2">
+                    @_yearExpense.ToString("N0")
+                </MudText>
+            </MudPaper>
+        </MudItem> *@
+
+        <MudItem xs="12" sm="6" md="2">
+            <StatCards 
+                Title="Total Expenses"
+                Value="@_yearExpense.ToString("N")"
+                ValueColor="Color.Success"
+                Icon="@Icons.Material.Filled.AccountBalanceWallet"
+                IconColor="Color.Primary"/>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="2">
+            <StatCards 
+                Title="Total Property Value"
+                Value="@totalproertyvalue.ToString("N")"
+                ValueColor="Color.Success"
+                Icon="@Icons.Material.Filled.AccountBalanceWallet"
+                IconColor="Color.Primary"/>
+        </MudItem>
+
+    </MudGrid>
+
+
+    <!-- FINANCIAL OVERVIEW HEADER -->
+    <MudStack Row="true" AlignItems="AlignItems.Center">
+
+        <div>
+            <MudText Typo="Typo.h4" Style="font-weight:800;">
+                Financial Overview
+            </MudText>
+
+            <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">
+                Viewing data for the year @_selectedYear
+            </MudText>
+        </div>
+
+        <MudSpacer />
+
+        <MudSelect T="int"
+                   Label="Fiscal Year"
+                   Value="_selectedYear"
                    ValueChanged="OnYearChanged"
-                   Variant="Variant.Outlined" 
-                   Dense="true" 
+                   Variant="Variant.Outlined"
+                   Dense="true"
                    Margin="Margin.Dense"
-                   Style="width:180px; background-color: white;">
+                   Style="width:100px; background-color:white;">
+
             @foreach (var year in _years)
             {
                 <MudSelectItem Value="@year">@year</MudSelectItem>
             }
+
         </MudSelect>
+
     </MudStack>
 
-    <MudGrid Spacing="4">
-        
-        <MudItem xs="12" sm="6" md="4">
-            <MudPaper Elevation="4" Class="pa-6" Style="border-left: 6px solid #2E7D32; border-radius: 12px;">
-                <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">TOTAL INCOME</MudText>
-                <MudText Typo="Typo.h4" Style="font-weight:900; color:#2E7D32;" Class="mt-2">
-                    @_yearIncome.ToString("N0")
+
+    <!-- MONTHLY CASH FLOW CHART -->
+    <MudPaper Elevation="4" Class="pa-8" Style="border-radius:16px;">
+
+        <MudStack Row="true" Class="mb-4" AlignItems="AlignItems.Center">
+
+            <MudText Typo="Typo.h6" Style="font-weight:700">
+                Monthly Cash Flow
+            </MudText>
+
+            <MudSpacer />
+
+            <MudChip T="string"
+                     Style="background-color:#2E7D32;color:white;"
+                     Size="Size.Small">
+                Income
+            </MudChip>
+
+            <MudChip T="string"
+                     Style="background-color:#C62828;color:white;"
+                     Size="Size.Small">
+                Expenses
+            </MudChip>
+
+        </MudStack>
+
+
+        @if (_hasData)
+        {
+            <MudChart ChartType="ChartType.Line"
+                      XAxisLabels="_months"
+                      ChartSeries="_series"
+                      ChartOptions="_chartOptions"
+                      Width="100%"
+                      Height="400px"/>
+        }
+        else
+        {
+            <div class="d-flex flex-column align-center justify-center"
+                 style="height:350px;">
+
+                <MudIcon Icon="@Icons.Material.Filled.BarChart"
+                         Style="font-size:5rem;"
+                         Color="Color.Default"
+                         Class="mud-text-disabled"/>
+
+                <MudText Class="mud-text-disabled" Typo="Typo.h6">
+                    No transactions found for @_selectedYear
                 </MudText>
-            </MudPaper>
-        </MudItem>
 
-        <MudItem xs="12" sm="6" md="4">
-            <MudPaper Elevation="4" Class="pa-6" Style="border-left: 6px solid #C62828; border-radius: 12px;">
-                <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">TOTAL EXPENSES</MudText>
-                <MudText Typo="Typo.h4" Style="font-weight:900; color:#C62828;" Class="mt-2">
-                    @_yearExpense.ToString("N0")
-                </MudText>
-            </MudPaper>
-        </MudItem>
+            </div>
+        }
 
-        <MudItem xs="12" sm="12" md="4">
-            <MudPaper Elevation="4" Class="pa-6" Style="border-left: 6px solid var(--mud-palette-info); border-radius: 12px;">
-                <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">NET CASH FLOW</MudText>
-                <MudText Typo="Typo.h4" Style="font-weight:900;" Class="mt-2">
-                    @((_yearIncome - _yearExpense).ToString("N0"))
-                </MudText>
-            </MudPaper>
-        </MudItem>
+    </MudPaper>
 
-        <MudItem xs="12">
-            <MudPaper Elevation="4" Class="pa-8" Style="border-radius:16px;">
-                <MudStack Row="true" Class="mb-4" AlignItems="AlignItems.Center">
-                    <MudText Typo="Typo.h6" Style="font-weight:700">Monthly Cash Flow</MudText>
-                    <MudSpacer />
-                    <MudChip T="string" Variant="Variant.Filled" Style="background-color:#2E7D32; color:white;" Size="Size.Small">Income</MudChip>
-                    <MudChip T="string" Variant="Variant.Filled" Style="background-color:#C62828; color:white;" Size="Size.Small">Expenses</MudChip>
-                </MudStack>
+</MudStack>
 
-                @if (_hasData)
-                {
-                    <MudChart ChartType="ChartType.Line"
-                              XAxisLabels="_months"
-                              ChartSeries="_series"
-                              ChartOptions="_chartOptions"
-                              Width="100%"
-                              Height="400px" />
-                }
-                else
-                {
-                    <div class="d-flex flex-column align-center justify-center" style="height:350px;">
-                        <MudIcon Icon="@Icons.Material.Filled.BarChart" 
-                                 Style="font-size: 5rem;" 
-                                 Color="Color.Default" 
-                                 Class="mud-text-disabled" />
-                        <MudText Class="mud-text-disabled" Typo="Typo.h6">
-                            No transactions found for @_selectedYear
-                        </MudText>
-                    </div>
-                }
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
 </MudContainer>
 
 @code {
+
+     private List<CountStatusBudgetDTO> budgetStatusCounts = new();
+     private List<GetBudgetDTO> budgets = new();
+     private List<Property> properties = new List<Property>();
+     private List<Debt> debts = new();
+    private List<Account> accounts = new();
     private List<Income> _incomes = new();
     private List<Expense> _expenses = new();
     private List<int> _years = new();
@@ -107,6 +216,9 @@
 
     private decimal _yearIncome = 0;
     private decimal _yearExpense = 0;
+
+    private decimal _allIncome = 0;
+    private decimal _allExpense = 0;
     private bool _hasData = false;
 
     private string[] _months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
@@ -129,6 +241,8 @@
 
         LoadAvailableYears();
         await LoadYearData(_selectedYear);
+        await LoadDataAsync();
+        await AllExpensesAndIncome();
     }
 
     private void LoadAvailableYears()
@@ -151,6 +265,14 @@
     {
         _selectedYear = year;
         await LoadYearData(year);
+    }
+    private async Task AllExpensesAndIncome()
+    {
+        var Incomes = _incomes.ToList();
+        var Expenses = _expenses.ToList();
+        _allIncome = Incomes.Sum(x => x.AmountPaid);
+        _allExpense = Expenses.Sum(x => x.Amount);
+        
     }
 
     private async Task LoadYearData(int year)
@@ -179,5 +301,65 @@
         _hasData = _yearIncome > 0 || _yearExpense > 0;
         
         StateHasChanged();
+    }
+     @* protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    } *@
+     private async Task LoadDataAsync()
+    {
+        properties = (await PropertyService.GetAllPropertysAsync()) ?? new List<Property>();
+        accounts = (await AccountService.GetAllAccountsAsync()) ?? new List<Account>();
+        debts = (await DebtService.GetAllDebtsAsync()) ?? new List<Debt>();
+        budgets = (await BudgetService.GetBudgetsAsync()) ?? new List<GetBudgetDTO>();
+        budgetStatusCounts = (await BudgetService.CountBudgetByStatusAsync()) ?? new List<CountStatusBudgetDTO>();
+
+        // Debug output
+        Console.WriteLine($"Loaded {accounts.Count} accounts,{debts.Count} debts, {budgets.Count} budgets, {budgetStatusCounts.Count} budget status counts");
+
+        ComputeSummaries();
+        @* PrepareTransactions(); *@
+    }
+    private void ComputeSummaries()
+    {
+        totalAccountBalance = accounts.Sum(a => a.Balance);
+        totalproertyvalue= properties.Sum(a => a.Value);
+        totalLiabilities = debts.Sum(d => d.Amount);
+        netWorth = (totalAccountBalance + totalproertyvalue) - totalLiabilities;
+        totalAccounts = accounts.Count;
+
+        // trends are not calculated yet; keep zero for now
+        netWorthTrend = assetTrend = liabilityTrend = accountTrend = 0;
+    }
+//roald card
+   private decimal totalAccountBalance = 0;
+    private decimal totalLiabilities = 0;
+    private decimal totalproertyvalue=0;
+    private decimal netWorth = 0;
+    private int totalAccounts = 0;
+
+      private double netWorthTrend = 0;
+    private double assetTrend = 0;
+    private double liabilityTrend = 0;
+    private double accountTrend = 0;
+    private string GetTrendIcon(double trend)
+    {
+        if (trend > 0) return Icons.Material.Filled.TrendingUp;
+        if (trend < 0) return Icons.Material.Filled.TrendingDown;
+        return Icons.Material.Filled.TrendingFlat;
+    }
+
+    private Color GetTrendColor(double trend)
+    {
+        if (trend > 0) return Color.Success;
+        if (trend < 0) return Color.Error;
+        return Color.Default;
+    }
+
+    private string GetTrendArrow(double trend)
+    {
+        if (trend > 0) return "↑";
+        if (trend < 0) return "↓";
+        return "";
     }
 }

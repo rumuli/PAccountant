@@ -4,21 +4,29 @@ using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Domain.ValueObjects;
+using Infrastructure.Identity;
 
 namespace Infrastructure.Repositories
 {
     public class ExpensePlanningRepository:IExpensePlanning
     {
         private readonly ApplicationDbContext _dbcontext;
-        public ExpensePlanningRepository (ApplicationDbContext context)
+        private readonly UserContext _userContext;
+        public ExpensePlanningRepository (ApplicationDbContext context, UserContext userContext)
         {
             _dbcontext= context;
+            _userContext = userContext;
         }
         public async Task<List<ExpensePlanning>> GetExpensePlanningsAsync()
         {
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
             return await _dbcontext.ExpensePlannings
-            // .Include(e => e.Budget)
-            // .Include(e => e.ExpenseType)
+            .Include(e => e.Budget)
+            .Include(e => e.ExpenseType)
+            .Where(x => x.Budget.PersonId == _userContext.Id)
             .ToListAsync();
         }
         public async Task AddExpensePlanningAsync(CreateExpensePlanningDTO dto)
@@ -57,9 +65,7 @@ namespace Infrastructure.Repositories
             };
 
             budget.PlannedExpense += dto.Amount;
-            budget.Status= BudgetStatus.Running;
             _dbcontext.ExpensePlannings.Add(newexpenseplanning);
-            _dbcontext.Entry(budget).Property(x => x.Status).IsModified = true;
             await _dbcontext.SaveChangesAsync();
 
         }
@@ -79,5 +85,20 @@ namespace Infrastructure.Repositories
             })
             .ToListAsync();
         } 
+        public async Task<List<ExpensePlanning>>GetExpenseTypePlannedByMonthAsync( DateTime date)
+        {
+            return await _dbcontext.ExpensePlannings
+                    .Include(e => e.Budget)
+                    .Include(e => e.ExpenseType)
+                    .Where(e => e.Budget.StartingAt <= date && e.Budget.EndingAt >= date)
+                    .GroupBy(e => e.ExpenseType.Id)
+                    .Select(g => new ExpensePlanning
+                    {
+                        ExpenseTypeId = g.FirstOrDefault().ExpenseType.Id,
+                        ExpenseType = g.FirstOrDefault().ExpenseType,
+                        Amount = g.Sum(e => e.Amount),
+                    })
+                    .ToListAsync();
+        }
     }
 }

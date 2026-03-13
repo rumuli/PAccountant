@@ -16,6 +16,8 @@ namespace Domain.Entities
         public int PaymentMethodId { get; set; }
         public PaymentMethod PaymentMethod { get; set; } = default!;
 
+        // public Person Person {get;set;}
+        // public int PersonId {get;set;}
         // Link to Account
         public int AccountId { get; set; }
         public Account Account { get; set; } = default!;

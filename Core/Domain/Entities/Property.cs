@@ -5,7 +5,8 @@ namespace Domain.Entities
     {
         public int Id {get;set;}
         public PropertyCategory PropertyCategory {get; set;} = new PropertyCategory();
-        public Person Person {get;set;} = new Person();
+        public Person Person {get;set;}
+        public int PersonId {get;set;}
         public string Name {get;set;}
         public decimal Value {get;set;}
         public string Location {get;set;}
@@ -17,6 +18,7 @@ namespace Domain.Entities
         public PropertyStatus Status {get;set;}
         public DateTime CreatedAt {get;set;}=DateTime.Now;
         public string UpdateBy{get;set;}
+        public string Manufacturer{get;set;}
 
     }
 }

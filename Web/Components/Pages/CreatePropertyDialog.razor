@@ -68,27 +68,9 @@
         }
     </MudSelect>
     </MudItem>
-    <MudItem xs="6">
-    <MudSelect T="int"
-            Label="Person" 
-               Placeholder="--Select Person--"
-               @bind-Value="Model.PersonId" 
-               Variant="Variant.Outlined"
-               Dense="true"
-               Margin="Margin.Dense"
-               AdornmentIcon="@Icons.Material.Filled.Category"
-               AdornmentColor="Color.Primary">
-
-               <MudSelectItem Value="0">--Select Person--</MudSelectItem>
-         @if (person != null)
-        {
-            foreach (var typess in person)
-            {
-                <MudSelectItem T="int" Value="@typess.Id">@typess.FirstName</MudSelectItem>
-            }
-        }
-    </MudSelect>
-    </MudItem>
+            <MudItem xs="6">
+                <MudTextField Label="Name/Manufacturer" Variant="Variant.Outlined" Margin="Margin.Dense"@bind-Value="Model.Manufacturer" For="@(() => Model.Manufacturer)" />
+            </MudItem>
     <MudItem xs="12">
         
                 <!-- SECTION : PROPERTY INFO -->

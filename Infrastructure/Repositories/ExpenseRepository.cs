@@ -3,25 +3,33 @@ using Application.DTO;
 using Application.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Identity;
 
 namespace Infrastructure.Repositories
 {
     public class ExpenseRepository : IExpense
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserContext _userContext;
 
-        public ExpenseRepository(ApplicationDbContext context)
+        public ExpenseRepository(ApplicationDbContext context, UserContext userContext)
         {
             _dbContext = context;
+            _userContext = userContext;
         }
 
         // Get all expenses with related ExpenseType and Account
         public async Task<List<Expense>> GetAllExpensesAsync()
         {
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }     
             return await _dbContext.Expenses
                 .Include(e => e.ExpenseType)
                 .Include(e => e.Account)
-                .ToListAsync();
+                .Where(x => x.Account.PersonId == _userContext.Id)
+                .ToListAsync(); 
         }
 
         // Get single expense by ID

@@ -1,7 +1,7 @@
 using Domain.Entities;
 using Application.DTO;
 using Application.Interfaces;
-using Application.Interfaces;
+using Infrastructure.Identity;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,19 +10,26 @@ namespace Infrastructure.Repositories
     public class IncomeRepository : IIncome
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserContext _userContext;
 
-        public IncomeRepository(ApplicationDbContext context)
+        public IncomeRepository(ApplicationDbContext context, UserContext userContext)
         {
             _dbContext = context;
+            _userContext = userContext;
         }
 
         // Get all incomes with related IncomeType, PaymentMethod, and AccountType
         public async Task<List<Income>> GetAllIncomesAsync()
         {
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
             return await _dbContext.Incomes
                 .Include(i => i.IncomeType)
                 .Include(i => i.PaymentMethod)
                 .Include(i => i.Account)
+                .Where(x => x.Account.PersonId == _userContext.Id)
                 .ToListAsync();
         }
 

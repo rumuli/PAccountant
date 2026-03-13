@@ -1,9 +1,10 @@
-@* @page "/" *@
+@page "/"
 @page "/account/login"
 @layout Layout.AuthLayout
 
 @using MudBlazor
 @using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
@@ -112,34 +113,42 @@
             <MudText Typo="Typo.h5" Style="font-weight: 700; color: #023d28;">PAccountant</MudText>
         </div>
 
-                <MudText Typo="Typo.h5" Class="mb-6" Style="font-weight: 700;">Sign In</MudText>
+        <div style="max-width: 400px; width: 100%;">
+            <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-2" Style="font-weight: 800;">Welcome Back</MudText>
+            @* <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary" Class="mb-8">
+                Enter your email and password to access your account.
+            </MudText> *@
+        @if (!string.IsNullOrEmpty(Error))
+        {
+            <MudAlert Severity="Severity.Error" Class="mb-4">
+                @Error
+            </MudAlert>
+        }
 
-                <form method="post" action="/api/account/login">
-                    <AntiforgeryToken />
-                    <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+            <form method="post" action="/api/account/login" >
+                <AntiforgeryToken />
+                  <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+                <MudText Typo="Typo.body2" Class="mb-1 ml-1" Style="font-weight: 600;">Email</MudText>
+                <MudTextField @bind-Value="email"
+                              name="email"
+                              InputType="InputType.Email" 
+                              Variant="Variant.Outlined" 
+                              Placeholder="crmstore@company.com" 
+                              Margin="Margin.Dense"
+                              Class="mb-4" />
 
-                    @if (!string.IsNullOrEmpty(Error))
-                    {
-                        <MudAlert Severity="Severity.Error" Dense="true" Class="mb-4" Variant="Variant.Outlined">@Error</MudAlert>
-                    }
-
-                    <MudTextField @bind-Value="email"
-                                  Label="Email or Username"
-                                  name="email"
-                                  InputType="InputType.Email" 
-                                  Variant="Variant.Outlined" 
-                                  Margin="Margin.Dense"
-                                  Class="mb-4" />
-
-                    <MudTextField @bind-Value="password" 
-                                  Label="Password"
-                                  name="password"
-                                  InputType="@_passwordInput"
-                                  Variant="Variant.Outlined" 
-                                  Margin="Margin.Dense"
-                                  Adornment="Adornment.End" 
-                                  AdornmentIcon="@_passwordInputIcon" 
-                                  OnAdornmentClick="TogglePasswordVisibility" />
+                <div class="d-flex justify-space-between align-center mb-1 ml-1">
+                    <MudText Typo="Typo.body2" Style="font-weight: 600;">Password</MudText>
+                </div>
+                <MudTextField @bind-Value="password" 
+                              name="password"
+                              InputType="@_passwordInput"
+                              Variant="Variant.Outlined" 
+                              Placeholder="5ellostore." 
+                              Margin="Margin.Dense"
+                              Adornment="Adornment.End" 
+                              AdornmentIcon="@_passwordInputIcon" 
+                              OnAdornmentClick="TogglePasswordVisibility" />
 
                 @* <div class="d-flex align-center justify-space-between mt-2 mb-6">
                     <MudCheckBox @bind-Value="rememberMe" name="rememberMe" Label="Remember Me" Color="Color.Primary" Dense="true" T="bool" />

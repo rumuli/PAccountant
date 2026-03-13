@@ -13,7 +13,6 @@ namespace Application.Services.ExpenseTypes
             _expenseType = expenseType;
         }
 
-
         public async Task<ExpenseType?> GetExpenseTypeByIdAsync(int id)
         {
             return await _expenseType.GetExpenseTypeByIdAsync(id);
@@ -29,11 +28,19 @@ namespace Application.Services.ExpenseTypes
             return await _expenseType.CreateExpenseTypeAsync(expenseTypeDTO);
         }
 
-         // Add implementation
-       public async Task<List<ExpenseType>> GetExpenseTypesByMonthAsync(int month, int year)
-       {
-        return await _expenseType.GetExpenseTypesByMonthAsync(month, year);
-       }
-        
+        public async Task<List<ExpenseType>> GetExpenseTypesByMonthAsync(int month, int year)
+        {
+            return await _expenseType.GetExpenseTypesByMonthAsync(month, year);
+        }
+
+        /// <summary>
+        /// IMPLEMENTATION ADDED:
+        /// This passes the full date through to the repository to handle 
+        /// custom budget start dates (like the 5th of the month).
+        /// </summary>
+        public async Task<List<ExpenseType>> GetExpenseTypesByDateAsync(DateTime selectedDate)
+        {
+            return await _expenseType.GetExpenseTypesByDateAsync(selectedDate);
+        }
     }
 }

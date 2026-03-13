@@ -5,6 +5,7 @@ namespace Application.Interfaces{
         Task <List<ExpensePlanning>> GetExpensePlanningsAsync();
         Task AddExpensePlanningAsync(CreateExpensePlanningDTO dto);
         Task <List<ExpensePlanning>> GetSummaryExpensePlanningAsync(int BudgetId);
+        Task <List<ExpensePlanning>> GetExpenseTypePlannedByMonthAsync(DateTime date);
 
     }
 }

@@ -1,3 +1,4 @@
+
  // This points to YOUR interface
 using Domain.Entities;
 using Infrastructure.Data;
@@ -84,7 +85,7 @@ public class AccountRepository : IAccount
                 account.Provider = accountDTO.Provider;
                 account.Balance = accountDTO.Balance;
                 account.Status = accountDTO.Status;
-                account.UpdateBy = "Admin";
+                account. UpdateBy = _userContext.FullName ?? "System";
                 dbContext.SaveChanges();
             }
         }

@@ -1,0 +1,299 @@
+@using Web.Components.Shared
+@using Application.Services.IncomePlanningServices
+@using Application.Services.Incomes
+@using Application.Services.ExpensePlanningServices
+@using Application.Services.Expenses
+@using Domain.Entities
+@using Application.DTO.ExpensePlanning
+@using Application.DTO.IncomePlanning
+@inject IIncomeService IncomeService
+@inject IExpenseService ExpenseService
+@inject IIncomePlanningService IncomePlanningService
+@inject IExpensePlanningService ExpensePlanningService
+
+
+<MudDrawer @bind-Open="@Open" Anchor="@Anchor" Width="@Width" Height="@Height" Elevation="1" Variant="@DrawerVariant.Temporary" OverlayAutoClose="true">
+    <MudGrid Spacing="3" Class="mb-4 px-4">
+        <MudItem xs="12" md="12" sm="12">
+                <LinearProgress Title="Savings Goal" 
+                                Subtitle="Target: $5,000" 
+                                Value="75" 
+                                Color="Color.Primary" />
+        </MudItem>
+    </MudGrid>
+    <MudTabs  TabPanelsClass="pa-6">
+        <MudTabPanel Text="Income">    
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="6" Class="pa-4">
+                <MudItem xs="4" Class="d-flex justify-center">
+                    @{
+                        var totalPlanned = _incomeplanning.Sum(x => x.Amount);
+                        var totalActual = _incomeplanning.Sum(item => 
+                            _allIncomes.Where(x => x.IncomeTypeId == item.IncomeTypeId).Sum(x => x.AmountPaid));
+                        
+                        var totalPercentage = totalPlanned > 0 ? (double)((totalActual / totalPlanned) * 100) : 0;
+                        var displayPercentage = Math.Min(100, (int)totalPercentage);
+                    }
+                    <CircularProgress Value="@displayPercentage" 
+                                    Label="Realized Income" 
+                                    Color="Color.Primary" 
+                                    Thickness="6" 
+                                    ValueTypo="Typo.body1" />
+                </MudItem> 
+
+                <MudItem xs="6" Class="d-flex justify-center">
+                    <DonutChart Data="@_incomeData" 
+                                Labels="@_incomeLabels"
+                                Width="150px" 
+                                Height="150px"
+                                Options="@Options" />
+                </MudItem>
+            </MudStack>  
+            <MudPaper Elevation="1" Class="flex-grow-1" Style="border: 1px solid #e0e0e0; margin: 16px">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-4 pa-2">
+                <MudText Typo="Typo.subtitle1"><b>Income Breakdown</b></MudText>
+                <MudText Typo="Typo.caption" Style="color: #9e9e9e;">Planned vs Actual</MudText>
+                </MudStack>
+
+                <MudSimpleTable Hover="true" Bordered="false" Striped="false" Dense="true" Style="overflow-x: auto;">
+                    <thead>
+                        <tr>
+                            <th style="white-space: nowrap;"><MudText Typo="Typo.overline"><b>Category</b></MudText></th>
+                            <th style="white-space: nowrap;"><MudText Typo="Typo.overline"><b>Planned</b></MudText></th>
+                            <th style="white-space: nowrap;"><MudText Typo="Typo.overline"><b>Actual</b></MudText></th>
+                            <th style="white-space: nowrap;"><MudText Typo="Typo.overline"><b>Status</b></MudText></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                                @if (_incomeplanning != null)
+                                    {
+                                        @foreach (var item in _incomeplanning)
+                                        {
+                                            // Fix: Calculate actual amount by summing matching incomes from the loaded list
+                                            var actualAmount = _allIncomes
+                                                .Where(x => x.IncomeTypeId == item.IncomeTypeId)
+                                                .Sum(x => x.AmountPaid);
+
+                                            var percentage = item.Amount > 0 ? (actualAmount / item.Amount) * 100 : 0;
+                                            var isWarning = percentage < 50;
+
+                                            <tr>
+                                                <td style="white-space: nowrap;">@item.IncomeType?.IncomeTypeName</td>
+                                                <td style="white-space: nowrap; color: #757575;">@item.Amount.ToString("N")</td>
+                                                <td style="white-space: nowrap;"><b>@actualAmount.ToString("N")</b></td>
+                                                <td style="white-space: nowrap;">
+                                                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                                                        <MudIcon Icon="@(isWarning ? Icons.Material.Filled.ErrorOutline : Icons.Material.Filled.CheckCircleOutline)" 
+                                                                Color="@(isWarning ? Color.Error : Color.Success)" Size="Size.Small" />
+                                                        <MudText Typo="Typo.body2" Color="@(isWarning ? Color.Error : Color.Success)">
+                                                            <b>@Math.Round(percentage)%</b>
+                                                        </MudText>
+                                                    </MudStack>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                    </tbody>
+                </MudSimpleTable>
+                </MudPaper>
+        </MudTabPanel>
+        <MudTabPanel Text="Expenses">    
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="6" Class="pa-4">
+                
+                <MudItem xs="4" Class="d-flex justify-center">
+            @{
+                var totalPlannedExp = _expenseplanning.Sum(x => x.Amount);
+                
+                // Ensure item.ExpenseTypeId matches x.ExpenseTypeId in your Expense table
+                var totalActualExp = _expenseplanning.Sum(item => 
+                    _allexpenses.Where(x => x.ExpenseTypeId == item.ExpenseTypeId).Sum(x => x.Amount));
+                
+                var expPercentage = totalPlannedExp > 0 ? (double)((totalActualExp / totalPlannedExp) * 100) : 0;
+                var displayExpPercentage = Math.Min(100, (int)expPercentage);
+            }
+            <CircularProgress Value="@displayExpPercentage"
+                              Label="Already Spent" 
+                              Color="Color.Primary" 
+                              Thickness="6" 
+                              ValueTypo="Typo.body1" />  
+                </MudItem> 
+
+                <MudItem xs="6" Class="d-flex justify-center">
+                    <DonutChart Data="@_expenseData" 
+                                Labels="@_expenseLabels"
+                                Width="150px" 
+                                Height="150px"
+                                Options="@Options" />
+                </MudItem>
+            </MudStack> 
+            <MudPaper Elevation="1" Class="flex-grow-1" Style="border: 1px solid #e0e0e0; margin: 16px">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-4 pa-2">
+                <MudText Typo="Typo.subtitle1"><b>Expense Breakdown</b></MudText>
+                <MudText Typo="Typo.caption" Style="color: #9e9e9e;">Planned vs Actual</MudText>
+                </MudStack>
+
+                <MudSimpleTable Hover="true" Bordered="false" Striped="false" Dense="true" Style="overflow-x: auto;">
+                    <thead>
+                        <tr>
+                            <th style="white-space: nowrap;"><MudText Typo="Typo.overline"><b>Category</b></MudText></th>
+                            <th style="white-space: nowrap;"><MudText Typo="Typo.overline"><b>Planned</b></MudText></th>
+                            <th style="white-space: nowrap;"><MudText Typo="Typo.overline"><b>Actual</b></MudText></th>
+                            <th style="white-space: nowrap;"><MudText Typo="Typo.overline"><b>Status</b></MudText></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                                @if (_expenseplanning != null)
+                                    {
+                                        @foreach (var item in _expenseplanning)
+                                        {
+                                            // Fix: Calculate actual amount by summing matching expenses from the loaded list
+                                            var actualAmount = _allexpenses
+                                                .Where(x => x.ExpenseTypeId == item.ExpenseTypeId)
+                                                .Sum(x => x.Amount);
+
+                                            var percentage = item.Amount > 0 ? (actualAmount / item.Amount) * 100 : 0;
+                                            var isWarning = percentage < 50;
+
+                                            <tr>
+                                                <td style="white-space: nowrap;">@item.ExpenseType?.ExpenseTypeName</td>
+                                                <td style="white-space: nowrap; color: #757575;">@item.Amount.ToString("N")</td>
+                                                <td style="white-space: nowrap;"><b>@actualAmount.ToString("N")</b></td>
+                                                <td style="white-space: nowrap;">
+                                                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                                                        <MudIcon Icon="@(isWarning ? Icons.Material.Filled.ErrorOutline : Icons.Material.Filled.CheckCircleOutline)" 
+                                                                Color="@(isWarning ? Color.Error : Color.Success)" Size="Size.Small" />
+                                                        <MudText Typo="Typo.body2" Color="@(isWarning ? Color.Error : Color.Success)">
+                                                            <b>@Math.Round(percentage)%</b>
+                                                        </MudText>
+                                                    </MudStack>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                    </tbody>
+                </MudSimpleTable>
+            </MudPaper>
+        </MudTabPanel>
+    </MudTabs>
+</MudDrawer>
+@code{ 
+    
+   private bool _open;
+[Parameter]
+public bool Open
+{
+get => _open;
+set
+{
+if (_open == value) return;
+_open = value;
+OpenChanged.InvokeAsync(value);
+}
+}
+
+[Parameter] public int? BudgetId { get; set; }
+[Parameter] public EventCallback<bool> OpenChanged { get; set; }
+[Parameter] public Anchor Anchor { get; set; } = Anchor.End;
+[Parameter] public string Width { get; set; } = "500px";
+[Parameter] public string Height { get; set; } = "100%";
+ private List<ChartSeries> Series = new(); // Keep if you use it for other charts
+// Income Chart Data
+private double[] _incomeData = Array.Empty<double>();
+private string[] _incomeLabels = Array.Empty<string>();
+
+// Expense Chart Data
+private double[] _expenseData = Array.Empty<double>();
+private string[] _expenseLabels = Array.Empty<string>();
+
+private List<IncomePlanning> _incomeplanning = new();
+private List<ExpensePlanning> _expenseplanning = new();
+
+@* private List<IncomePlanning> _summaryIncomePlanning = new(); *@
+private List<Income> _allIncomes = new();
+private List<Expense> _allexpenses = new();
+
+private bool _isLoading = false;
+private int? _lastLoadedBudgetId;
+
+// Rule 1: Do NOT load data in OnInitializedAsync to avoid collision with the parent page's DbContext usage.
+protected override async Task OnParametersSetAsync()
+{
+    // Rule 2: Only load data if the drawer is OPEN and we haven't loaded this specific budget yet.
+    if (Open && BudgetId.HasValue && BudgetId != _lastLoadedBudgetId)
+    {
+        await LoadData();
+        await LoadSummaryIncomePlanning();
+        await LoadSummaryExpensePlanning();
+    }
+}
+
+private async Task LoadData()
+{
+    if (_isLoading) return;
+    
+    try 
+    {
+        _isLoading = true;
+        _lastLoadedBudgetId = BudgetId;
+        
+        // We await these one by one to ensure the DbContext is never shared concurrently.
+        await LoadIncomePlanning();
+        await LoadExpenses();
+        await LoadIncomes();
+    }
+    catch (Exception ex)
+    {
+        // Reset ID on error so we can retry
+        _lastLoadedBudgetId = null;
+        Console.WriteLine($"Error loading analytics: {ex.Message}");
+    }
+    finally 
+    {
+        _isLoading = false;
+        StateHasChanged();
+    }
+}
+
+private async Task LoadIncomePlanning()
+{
+    var result = await IncomePlanningService.GetIncomePlanningsAsync();
+    _incomeplanning = result?.Where(x => x.BudgetId == BudgetId).ToList() ?? new List<IncomePlanning>();
+}
+
+private async Task LoadExpenses()
+{
+    var result = await ExpenseService.GetAllExpensesAsync();
+    _allexpenses = result?.ToList() ?? new List<Expense>();
+}  
+private async Task LoadIncomes()
+{
+    var result = await IncomeService.GetAllIncomesAsync();
+    _allIncomes = result?.ToList() ?? new List<Income>();
+}
+
+    private ChartOptions Options = new ChartOptions
+    {
+        @* YAxisLines = true,
+        XAxisLines = false, *@
+
+        ChartPalette = new[] { 
+            "#606c38", "#71877e", "#023d28", "#5cf1bd", "#71877e", 
+            "#606c38", "#283618", "#dda15e", "#606c38" 
+        }
+
+    };
+   private async Task LoadSummaryIncomePlanning()
+    {
+        _incomeplanning = await IncomePlanningService.GetSummaryIncomePlanningAsync(BudgetId.Value);
+        _incomeData = _incomeplanning.Select(t => (double)t.Amount).ToArray();
+        _incomeLabels = _incomeplanning.Select(t => t.IncomeType?.IncomeTypeName ?? "Other").ToArray();
+        StateHasChanged();
+    }
+
+    private async Task LoadSummaryExpensePlanning()
+    {
+        _expenseplanning = await ExpensePlanningService.GetSummaryExpensePlanningAsync(BudgetId.Value);
+        _expenseData = _expenseplanning.Select(t => (double)t.Amount).ToArray();
+        _expenseLabels = _expenseplanning.Select(t => t.ExpenseType?.ExpenseTypeName ?? "Other").ToArray();
+        StateHasChanged();
+    }
+}

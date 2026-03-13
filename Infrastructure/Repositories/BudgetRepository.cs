@@ -5,32 +5,39 @@ using Application.Interfaces;
 using Domain.Entities;
 using Domain.ValueObjects;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
-
 namespace Infrastructure.Repositories
 {
     public class BudgetRepository : IBudget
     {
         private readonly ApplicationDbContext _dbcontext;
-        
-        public BudgetRepository(ApplicationDbContext context)
+        private readonly UserContext _userContext;
+        public BudgetRepository(ApplicationDbContext context, UserContext userContext)
         {
             _dbcontext = context;
+            _userContext = userContext;
         }
-
         public async Task<List<GetBudgetDTO>> GetBudgetsAsync()
         {
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
+            
             return await _dbcontext.Budgets
+                    .Where(b => b.PersonId == _userContext.Id)
                     .Select(b => new GetBudgetDTO 
                     {
                         Id = b.Id,
                         Name = b.Name,
                         StartingAt = b.StartingAt,
                         EndingAt = b.EndingAt,
-                        // Fix: Sending the actual database value to the UI
+                        // Status=b.Status,
                         PlannedExpense = b.PlannedExpense 
                     })
                     .ToListAsync();
+                    
         }
         
         public async Task<GetBudgetDTO> AddBudgetAsync(CreateBudgetDTO dto)
@@ -45,6 +52,7 @@ namespace Infrastructure.Repositories
             
             if (exist)
             {
+                
                 throw new Exception($"Budget for {startdate.ToString("MMMM yyyy")} already exists.");
             }
 
@@ -52,15 +60,32 @@ namespace Infrastructure.Repositories
             {
                 throw new Exception("Interval between starting and ending date is less than month.");
             }
+            //useContext
+           if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
 
+            // Fix: We need the PersonId linked to this User, not the UserId itself
+            var user = await _dbcontext.Users
+                .FirstOrDefaultAsync(u => u.Id == _userContext.Id);
+
+            if (user == null)
+            {
+                throw new Exception("User record not found");
+            }
             // 2. Mapping to Entity (This was the error!)
             // Use the actual Domain Entity class here, not the DTO
             var budgetEntity = new Domain.Entities.Budget 
             {
                 Name = $"Budget {startdate.ToString("MMMM yyyy")}",
+                PersonId = user.PersonId,
                 StartingAt = startdate,
                 EndingAt = enddate,
-                Status = BudgetStatus.Planned
+                Status = BudgetStatus.Planned,
+                PlannedIncome = 0,
+                // Fix: Saving the user's input from the DTO instead of hardcoding 0
+                PlannedExpense = 0
                 // Add PlannedIncome/Expense here if they exist on your Entity
             };
 
@@ -78,26 +103,33 @@ namespace Infrastructure.Repositories
                 Status = budgetEntity.Status
             };
         }
-
         public async Task<GetBudgetByIdDTO?> GetBudgetByIdAsync(int id)
         {
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
             return await _dbcontext.Budgets
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == id && x.PersonId == _userContext.Id)
                 .Select(x => new GetBudgetByIdDTO
                 {
                     Id = x.Id,
                     Name = x.Name,
                     StartingAt = x.StartingAt,
-                    EndingAt = x.EndingAt,
-                    // Fix: Map the expense for the detail view
-                    PlannedExpense = x.PlannedExpense
+                    EndingAt= x.EndingAt,
+                    PlannedExpense = x.PlannedExpense,
+                    PlannedIncome = x.PlannedIncome
                 })
                 .FirstOrDefaultAsync();
         }
-
         public async Task<List<CountStatusBudgetDTO>> CountBudgetByStatusAsync()
         {
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
             return await _dbcontext.Budgets
+                .Where(b => b.PersonId == _userContext.Id)
                 .GroupBy(b=>b.Status)
                 .Select(g => new CountStatusBudgetDTO
                 {
@@ -106,5 +138,6 @@ namespace Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
+        
     }
 }

@@ -3,6 +3,7 @@ using Application.DTO;
 using Application.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Identity;
 
 namespace Infrastructure.Repositories
 {

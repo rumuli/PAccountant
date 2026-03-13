@@ -1,0 +1,22 @@
+<MudChart ChartType="ChartType.Donut" 
+          LegendPosition="@LegendPosition" 
+          Width="@Width" 
+          Height="@Height"
+          InputData="@Data" 
+          InputLabels="@Labels"
+          ChartOptions="@Options">
+    <CustomGraphics>
+        @ChildContent
+    </CustomGraphics>
+</MudChart>
+
+@code {
+    [Parameter] public double[] Data { get; set; } = Array.Empty<double>();
+    [Parameter] public string[] Labels { get; set; } = Array.Empty<string>();
+    
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public Position LegendPosition { get; set; } = Position.Bottom;
+    [Parameter] public string Width { get; set; } = "170px";
+    [Parameter] public ChartOptions Options { get; set; } = new();
+    [Parameter] public string Height { get; set; } = "170px";
+}

@@ -5,12 +5,15 @@ namespace Domain.Entities{
 public class Budget
 {
         public int Id {get;set;}
+        public Person Person {get;set;}
+        public int PersonId {get;set;}
         public DateTime StartingAt{get;set;}
         public DateTime EndingAt {get;set;}
         public string Name {get;set;}
         public BudgetStatus Status{get;set;}
         public decimal PlannedIncome {get;set;}
         public decimal PlannedExpense{get;set;}
+
 }
 }
 

@@ -20,5 +20,10 @@ namespace Application.Services.ExpensePlanningServices{
         {
             return await _expensePlanning.GetSummaryExpensePlanningAsync(BudgetId);
         }
+        public async Task <List<ExpensePlanning>> GetExpenseTypePlannedByMonthAsync(DateTime date)
+        {
+            return await _expensePlanning.GetExpenseTypePlannedByMonthAsync(date);
+            
+        }
     }
 }

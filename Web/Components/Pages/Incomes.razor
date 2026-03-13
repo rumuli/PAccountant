@@ -76,21 +76,14 @@
                  Filterable="true"
                  Hideable="true"
                  Dense="true"
-                 MultiSelection="true"
-                 SortMode="SortMode.Multiple"
-                 Filterable="true"
-                 Hideable="true"
-                 Dense="true"
                  Hover="true"
                  Striped="true"
                  Bordered="true"
                  Class="elevation-1">
         <ToolBarContent>
             <MudText Typo="Typo.h5" Color="Color.Primary">Incomes</MudText>
-            <MudText Typo="Typo.h5" Color="Color.Primary">Incomes</MudText>
             <MudSpacer />
             <MudMenu Label="Add Income" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary">
-                <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="GoToCreateIncome">Single</MudMenuItem>
                 <MudMenuItem Icon="@Icons.Material.Filled.Add" OnClick="GoToCreateIncome">Single</MudMenuItem>
                 <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
             </MudMenu>
@@ -103,17 +96,8 @@
             <PropertyColumn Property="x => x.AmountPaid" Title="Amount Paid" Format="n" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
             <PropertyColumn Property="x => x.Source" Title="Source" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
             <PropertyColumn Property="x => x.Account.AccountNumber" Title="Deposited Account" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.Id" Title="ID" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.IncomeType.IncomeTypeName" Title="Income Type" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.Date" Title="Date" Format="dd MMM yyyy" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.AmountPaid" Title="Amount Paid" Format="n" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.Source" Title="Source" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
-            <PropertyColumn Property="x => x.Account.AccountNumber" Title="Deposited Account" HeaderStyle="white-space:nowrap" ItemStyle="white-space:nowrap" Sortable="true" />
             <TemplateColumn Title="Status">
                 <CellTemplate>
-                    <MudChip T="string" Color="@(context.Item.IsActive ? Color.Success : Color.Error)" Size="Size.Small" Variant="Variant.Text">
-                        @(context.Item.IsActive ? "Active" : "Inactive")
-                    </MudChip>
                     <MudChip T="string" Color="@(context.Item.IsActive ? Color.Success : Color.Error)" Size="Size.Small" Variant="Variant.Text">
                         @(context.Item.IsActive ? "Active" : "Inactive")
                     </MudChip>
@@ -125,16 +109,9 @@
                         <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => Snackbar.Add($"Viewing {context.Item.Id}", Severity.Info))">Details</MudMenuItem>
                         <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Snackbar.Add($"Editing {context.Item.Id}", Severity.Info))">Edit</MudMenuItem>
                     </MudMenu>
-                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true" Size="Size.Small">
-                        <MudMenuItem Icon="@Icons.Material.Filled.Info" OnClick="@(() => Snackbar.Add($"Viewing {context.Item.Id}", Severity.Info))">Details</MudMenuItem>
-                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" OnClick="@(() => Snackbar.Add($"Editing {context.Item.Id}", Severity.Info))">Edit</MudMenuItem>
-                    </MudMenu>
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
-        <PagerContent>
-            <MudDataGridPager T="Income" />
-        </PagerContent>
         <PagerContent>
             <MudDataGridPager T="Income" />
         </PagerContent>
@@ -154,27 +131,6 @@
         _incomes = await IncomeService.GetAllIncomesAsync();
         StateHasChanged();
     }
-
-    private async Task GoToCreateIncome()
-    {
-        DialogOptions options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall, FullWidth = true };
-        var dialog = await DialogService.ShowAsync<CreateIncomeDialog>("Add Income", options);
-        var result = await dialog.Result;
-
-        if (result != null && !result.Canceled)
-        {
-            await Task.Delay(100);
-            await LoadIncomes();
-        }
-    }
-
-    private List<ChartSeries> _series = new() 
-    { 
-        new ChartSeries { Name = "Activity", Data = new double[] { 12, 45, 30, 60, 40, 80, 50 } } 
-    };
-
-    private ChartOptions _chartOptions = new() { InterpolationOption = InterpolationOption.Straight };
-}
 
     private async Task GoToCreateIncome()
     {

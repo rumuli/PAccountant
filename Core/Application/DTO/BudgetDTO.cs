@@ -14,7 +14,7 @@ namespace Application.DTO.Budget{
 
     }
     public class CreateBudgetDTO{
-        public decimal PlannedExpense;
+        // public decimal PlannedExpense;
 
         public DateTime? StartingAt{get;set;}
         public DateTime? EndingAt{get;set;}
@@ -34,7 +34,11 @@ namespace Application.DTO.Budget{
         public DateTime? StartingAt{get;set;}
         public DateTime? EndingAt {get;set;}
         public string Name {get;set;}
+        public BudgetStatus Status{get;set;}
+        public int PersonId {get;set;}
         public decimal PlannedExpense { get; set; }
+        public decimal PlannedIncome { get; set; }
+
     }
     public class CountStatusBudgetDTO
     {

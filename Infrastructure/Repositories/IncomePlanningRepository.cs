@@ -5,17 +5,25 @@ using Application.Interfaces;
 using Domain.Entities;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Identity;
 using Domain.ValueObjects;
 namespace Infrastructure.Repositories{
     public class IncomePlanningRepository : IIncomePlanning {
         private readonly ApplicationDbContext _context;
-        public IncomePlanningRepository(ApplicationDbContext context){
+        private readonly UserContext _userContext;
+        public IncomePlanningRepository(ApplicationDbContext context, UserContext userContext){
             _context= context;
+            _userContext = userContext;
         }
         public async Task <List<IncomePlanning>> GetIncomePlanningsAsync(){
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
             return await _context.IncomePlannings
-            // .Include(x=> x.IncomeType)
-            // .Include(x =>x.Budget)
+            .Include(x=> x.IncomeType)
+            .Include(x =>x.Budget)
+            .Where(x => x.Budget.PersonId == _userContext.Id)
             .ToListAsync();
         }
         public async Task AddIncomePlanning(CreateIncomePlanningDTO dto){

@@ -1,11 +1,7 @@
 @page "/Expense"
-@page "/Expense"
 @using Domain.Entities
 @using Application.Services.Expenses
 @using MudBlazor
-@using Application.Services.BudgetServices
-@using Application.DTO.Budget
-@inject IBudgetService BudgetService
 @using Application.Services.BudgetServices
 @using Application.DTO.Budget
 @inject IBudgetService BudgetService
@@ -13,7 +9,6 @@
 @inject IDialogService DialogService
 @inject IDialogService Dialog
 
-<PageTitle>Expense</PageTitle>
 <PageTitle>Expense</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
@@ -137,15 +132,7 @@
                 <MudMenuItem Icon="@Icons.Material.Filled.ImportExport">Import</MudMenuItem>
             </MudMenu>
         </ToolBarContent>
-        </ToolBarContent>
         <Columns>
-            <SelectColumn T="Expense" />
-            <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" />
-            <PropertyColumn Property="x => x.ExpenseType.ExpenseTypeName" Title="Type" Sortable="true" />
-            <PropertyColumn Property="x => x.Date" Title="Date" Format="dd MMM yyyy" Sortable="true" />
-            <PropertyColumn Property="x => x.Amount" Title="Amount" Format="C" Sortable="true" />
-            <PropertyColumn Property="x => x.PaidTo" Title="Recipient" Sortable="true" />
-            <PropertyColumn Property="x => x.Account.AccountNumber" Title="Source" Sortable="true" />
             <SelectColumn T="Expense" />
             <PropertyColumn Property="x => x.Id" Title="ID" Sortable="true" />
             <PropertyColumn Property="x => x.ExpenseType.ExpenseTypeName" Title="Type" Sortable="true" />
@@ -157,11 +144,7 @@
         <PagerContent>
             <MudDataGridPager T="Expense" />
         </PagerContent>
-        <PagerContent>
-            <MudDataGridPager T="Expense" />
-        </PagerContent>
     </MudDataGrid>
-
 
 </MudContainer>
 

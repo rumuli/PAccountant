@@ -5,6 +5,7 @@ using Application.DTO;
 using Application.Interfaces;
 using Application.Services.Properties;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Identity;
 
 
 
@@ -14,18 +15,29 @@ namespace Infrastructure.Repositories
 public class PropertyRepository : IProperty
 
   {
-      private readonly ApplicationDbContext dbContext;
+      private readonly ApplicationDbContext dbContext ;
+      private readonly UserContext _userContext;
 
-        public PropertyRepository(ApplicationDbContext context)
+        public PropertyRepository(ApplicationDbContext context, UserContext userContext)
         {
            dbContext= context; 
+           _userContext= userContext; 
         }
+        
         // Repository for retrieving accounts data
         public async Task<List<Property>> GetAllPropertysAsync()
         {
-          return await dbContext.Properties
-          .Include(x=> x.PropertyCategory)
-          .ToListAsync();
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
+
+
+                return await dbContext.Properties
+                .Where(u => u.Id == _userContext.Id)
+                .SelectMany(u => u.Person.Properties)
+                .Include(a => a.PropertyCategory)
+                .ToListAsync();
         }
         public async Task <Property> GetPropertyById(int Id)
         {
@@ -33,12 +45,26 @@ public class PropertyRepository : IProperty
         }
        public async Task CreateProperty(PropertyCreateDTO propertyDTO)
         {
+            if (_userContext.Id == null)
+            {
+                throw new Exception("User not authenticated");
+            }
+
+            var user = await dbContext.Users
+                .FirstOrDefaultAsync(u => u.Id == _userContext.Id);
+            if (user == null)
+            {
+                throw new Exception("User record not found");
+            }
+            
+
              var property = await dbContext.PropertyCategories.FindAsync(propertyDTO.CategoryId);
              var _person = await dbContext.Persons.FindAsync(propertyDTO.PersonId);
 
+
             var _property = new Property
             {
-                 Person=_person,
+                 PersonId = user.PersonId, 
                  PropertyCategory = property,
                  Name = propertyDTO.Name,
                  Value = propertyDTO.Value,
@@ -46,11 +72,12 @@ public class PropertyRepository : IProperty
                  AssignedTo = propertyDTO.AssignedTo,
                  PurchasePrice = propertyDTO.PurchasePrice,
                  Identification = propertyDTO.Identification,
-                 CreatedBy = "Admin",
-                 UpdateBy = "Admin",
+                 CreatedBy = user.UserName ?? "System",
+                 UpdateBy = user.UserName ?? "System",
                  Status = propertyDTO.Status,
                  PurchaseDate = DateTime.Now,
                  CreatedAt = DateTime.Now,
+                    Manufacturer = propertyDTO.Manufacturer
                
             };
             await dbContext.Properties.AddAsync(_property);
@@ -71,6 +98,7 @@ public class PropertyRepository : IProperty
                 _property.Identification = propertyDTO.Identification;
                 _property.PurchaseDate = DateTime.Now;
                 _property.UpdateBy = "Admin";
+                _property.Manufacturer = propertyDTO.Manufacturer;
                 
                 await dbContext.SaveChangesAsync();
             }

@@ -19,9 +19,9 @@ namespace Domain.Entities
         public DateTime CreatedAt {get;set;}
         public string UpdateBy {get;set;}
         public List<Account> Accounts {get;set;} 
-       
-
-
+        public List<Property> Properties {get;set;}
+        public List<Budget> Budgets {get;set;}
+    
 
     }
 }
